@@ -1,10 +1,7 @@
-package com.rainbowpunch.interfaces.limiters;
+package com.rainbowpunch.jtdg.core.limiters;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * This limiter allows the user to add objects that are permitted for injection into a field.

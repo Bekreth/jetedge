@@ -1,4 +1,4 @@
-package com.rainbowpunch.interfaces.falseDomain;
+package com.rainbowpunch.jtdg.core.falseDomain;
 
 /**
  * False pojo for testing

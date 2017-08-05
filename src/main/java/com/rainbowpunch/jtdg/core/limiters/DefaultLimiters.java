@@ -1,6 +1,6 @@
-package com.rainbowpunch.interfaces.limiters;
+package com.rainbowpunch.jtdg.core.limiters;
 
-import com.rainbowpunch.interfaces.PojoGenerator;
+import com.rainbowpunch.jtdg.core.PojoGenerator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,14 +11,14 @@ import java.util.function.Supplier;
  * Maps classes to limiters
  */
 public enum DefaultLimiters {
-    SHORT(null, short.class, Short.class),
+    //SHORT(null, short.class, Short.class),
     INT(new IntegerLimiter(), int.class, Integer.class),
-    FLOAT(null),
-    DOUBLE(null),
-    LONG(null),
-    STRING(new StringLimiter(), String.class),
-    CHAR(null),
-    ARRAY(null);
+    //FLOAT(null),
+    //DOUBLE(null),
+    //LONG(null),
+    STRING(new StringLimiter(), String.class);
+    //CHAR(null),
+    //ARRAY(null);
 
     private List<Class<?>> clazz;
     private Limiter<?> limiter;

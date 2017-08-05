@@ -1,6 +1,7 @@
-package com.rainbowpunch.interfaces;
+package com.rainbowpunch.jtdg.core;
 
-import com.rainbowpunch.interfaces.limiters.Limiter;
+import com.rainbowpunch.jtdg.api.DataGenerator;
+import com.rainbowpunch.jtdg.core.limiters.Limiter;
 
 import java.util.List;
 import java.util.stream.Collectors;

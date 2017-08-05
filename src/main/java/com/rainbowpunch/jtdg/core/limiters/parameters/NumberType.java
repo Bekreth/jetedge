@@ -1,4 +1,4 @@
-package com.rainbowpunch.interfaces.limiters.parameters;
+package com.rainbowpunch.jtdg.core.limiters.parameters;
 
 /**
  *

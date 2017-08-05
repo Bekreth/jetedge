@@ -1,7 +1,9 @@
-package com.rainbowpunch.interfaces;
+package com.rainbowpunch.jtdg.api;
 
-import com.rainbowpunch.interfaces.limiters.Limiter;
-import com.rainbowpunch.interfaces.limiters.DefaultLimiters;
+import com.rainbowpunch.jtdg.core.FieldSetter;
+import com.rainbowpunch.jtdg.core.PojoAttributes;
+import com.rainbowpunch.jtdg.core.limiters.Limiter;
+import com.rainbowpunch.jtdg.core.limiters.DefaultLimiters;
 
 import java.util.Map;
 import java.util.Random;

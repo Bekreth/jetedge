@@ -1,6 +1,6 @@
-package com.rainbowpunch.interfaces.limiters;
+package com.rainbowpunch.jtdg.core.limiters;
 
-import com.rainbowpunch.interfaces.limiters.parameters.NumberType;
+import com.rainbowpunch.jtdg.core.limiters.parameters.NumberType;
 
 import java.util.Random;
 import java.util.function.Supplier;
