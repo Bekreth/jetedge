@@ -1,4 +1,4 @@
-package com.rainbowpunch.jtdg.api;
+package com.rainbowpunch.jtdg.core;
 
 import com.rainbowpunch.jtdg.core.FieldSetter;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
@@ -30,17 +30,17 @@ public class DataGenerator<T> {
     }
 
     public void populateSuppliers(PojoAttributes<T> attributes) {
-        Map<String, Limiter<?>> limiters = attributes.getLimiters();
+        Map<Class, Map<String, Limiter<?>>> limiters = attributes.getLimiters();
+        Map<String, Limiter<?>> currentLevelLimiters = limiters.get(attributes.getPojoClazz());
 
         attributes.fieldSetterStream()
-                .filter(entry -> shouldCreateSupplier(limiters.get(entry.getKey())))
+                .filter(entry -> shouldCreateSupplier(currentLevelLimiters.get(entry.getKey())))
                 .sorted(this::alphabetical)
                 .forEach(entry -> {
                     String entryName = entry.getKey().substring(3).toLowerCase();
                     updateFieldSetterWithSupplier(entry.getValue(),
-                            limiters.getOrDefault(entryName,
-                                    DefaultLimiters.getSimpleLimiter(entry.getValue().getClazz()))); // TODO: 7/29/17 get or default
-                    System.out.println(limiters.get(entryName));
+                            currentLevelLimiters.getOrDefault(entryName,
+                                    DefaultLimiters.getSimpleLimiter(entry.getValue().getClazz(), attributes))); // TODO: 7/29/17 get or default
                 });
     }
 

@@ -62,6 +62,4 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
             }
         };
     }
-
-
 }

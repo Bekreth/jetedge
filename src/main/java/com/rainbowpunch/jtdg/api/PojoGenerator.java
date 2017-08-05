@@ -1,6 +1,9 @@
-package com.rainbowpunch.jtdg.core;
+package com.rainbowpunch.jtdg.api;
 
-import com.rainbowpunch.jtdg.api.DataGenerator;
+import com.rainbowpunch.jtdg.core.DataGenerator;
+import com.rainbowpunch.jtdg.core.DefaultPojoAnalyzer;
+import com.rainbowpunch.jtdg.core.PojoAnalyzer;
+import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
 
 import java.util.List;
@@ -23,10 +26,10 @@ public class PojoGenerator<T> {
         this.pojo = clazz;
         pojoAnalyzer = new DefaultPojoAnalyzer<>();
         dataGenerator = new DataGenerator();
-        pojoAttributes = new PojoAttributes<>();
+        pojoAttributes = new PojoAttributes<>(clazz);
     }
 
-    public PojoGenerator andLimitField(String fieldName, Limiter<?> limiter) {
+    public PojoGenerator<T> andLimitField(String fieldName, Limiter<?> limiter) {
         pojoAttributes.putFieldLimiter(fieldName, limiter);
         return this;
     }
@@ -36,7 +39,7 @@ public class PojoGenerator<T> {
      *      necessary to create Pojos on demand.
      * @return
      */
-    public PojoGenerator analyzePojo() {
+    public PojoGenerator<T> analyzePojo() {
         pojoAnalyzer.parsePojo(pojo, pojoAttributes);
         dataGenerator.populateSuppliers(pojoAttributes);
         return this;
