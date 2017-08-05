@@ -1,6 +1,6 @@
-package com.rainbowpunch.interfaces;
+package com.rainbowpunch.jtdg.core;
 
-import com.rainbowpunch.interfaces.limiters.Limiter;
+import com.rainbowpunch.jtdg.core.limiters.Limiter;
 
 import java.util.HashMap;
 import java.util.Map;

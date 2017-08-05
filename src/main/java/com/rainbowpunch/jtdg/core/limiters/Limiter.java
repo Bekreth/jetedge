@@ -1,4 +1,4 @@
-package com.rainbowpunch.interfaces.limiters;
+package com.rainbowpunch.jtdg.core.limiters;
 
 import java.util.Random;
 import java.util.function.Supplier;

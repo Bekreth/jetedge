@@ -1,4 +1,4 @@
-package com.rainbowpunch.interfaces;
+package com.rainbowpunch.jtdg.core;
 
 import sun.reflect.generics.tree.Tree;
 

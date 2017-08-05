@@ -1,16 +1,8 @@
-package com.rainbowpunch.interfaces;
+package com.rainbowpunch.jtdg.core;
 
-import com.rainbowpunch.interfaces.falseDomain.Employee;
+import com.rainbowpunch.jtdg.core.falseDomain.Employee;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import static org.junit.Assert.*;
 
 /**
  *

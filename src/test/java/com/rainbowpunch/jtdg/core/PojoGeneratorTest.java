@@ -1,8 +1,8 @@
-package com.rainbowpunch.interfaces;
+package com.rainbowpunch.jtdg.core;
 
-import com.rainbowpunch.interfaces.falseDomain.Employee;
-import com.rainbowpunch.interfaces.limiters.IntegerLimiter;
-import com.rainbowpunch.interfaces.limiters.parameters.NumberType;
+import com.rainbowpunch.jtdg.core.falseDomain.Employee;
+import com.rainbowpunch.jtdg.core.limiters.IntegerLimiter;
+import com.rainbowpunch.jtdg.core.limiters.parameters.NumberType;
 import org.junit.Test;
 
 import java.util.Random;

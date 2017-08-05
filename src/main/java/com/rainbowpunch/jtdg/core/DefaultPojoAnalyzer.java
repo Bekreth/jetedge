@@ -1,16 +1,11 @@
-package com.rainbowpunch.interfaces;
+package com.rainbowpunch.jtdg.core;
 
 import java.lang.reflect.Method;
 import java.util.AbstractMap;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  *

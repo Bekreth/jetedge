@@ -1,7 +1,4 @@
-package com.rainbowpunch.interfaces;
-
-import java.util.List;
-import java.util.function.BiConsumer;
+package com.rainbowpunch.jtdg.core;
 
 /**
  * This class takes a generic class along with a map of the limiters and creates a list of consumers for that
