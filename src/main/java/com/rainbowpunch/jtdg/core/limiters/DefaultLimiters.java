@@ -1,35 +1,44 @@
 package com.rainbowpunch.jtdg.core.limiters;
 
 import com.rainbowpunch.jtdg.api.PojoGenerator;
+import com.rainbowpunch.jtdg.core.FieldSetter;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
+import com.rainbowpunch.jtdg.core.limiters.collections.ListLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primative.IntegerLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primative.ShortLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primative.StringLimiter;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * Maps classes to limiters
  */
 public enum DefaultLimiters {
-    //SHORT(null, short.class, Short.class),
+    SHORT(new ShortLimiter(), short.class, Short.class),
     INT(new IntegerLimiter(), int.class, Integer.class),
     //FLOAT(null),
     //DOUBLE(null),
     //LONG(null),
-    STRING(new StringLimiter(), String.class);
     //CHAR(null),
-    //ARRAY(null);
+    STRING(new StringLimiter(), String.class),
+    LIST(ListLimiter::createListLimiter, List.class);
 
     private List<Class<?>> clazz;
     private Limiter<?> limiter;
+    private Function<Limiter<?>, Limiter<?>> function;
 
     DefaultLimiters(Limiter<?> limiter, Class<?>... clazz) {
         this.limiter = limiter;
         this.clazz = Arrays.asList(clazz);
+    }
+
+    DefaultLimiters(Function<Limiter<?>, Limiter<?>> function, Class<?> clazz) {
+        this.clazz = Arrays.asList(clazz);
+        this.function = function;
     }
 
     private static DefaultLimiters defaultLimiters(Class clazz) {
@@ -43,15 +52,26 @@ public enum DefaultLimiters {
         return defaultLimiters;
     }
 
-    public static boolean isPrimativeData(Class clazz) {
-        return defaultLimiters(clazz) != null;
-    }
-
-    public static Limiter<?> getSimpleLimiter(Class clazz, PojoAttributes attributes) {
+    public static Limiter<?> getSimpleLimiter(Class clazz, FieldSetter fieldSetter, PojoAttributes attributes) {
         DefaultLimiters defaultLimiters = defaultLimiters(clazz);
-        Limiter limiter = defaultLimiters == null ? new LocalLimiter(clazz, attributes) : defaultLimiters.limiter;
+        Limiter limiter = null;
+        if (defaultLimiters != null) {
+            if (defaultLimiters.function == null) {
+                limiter = defaultLimiters.limiter;
+            } else {
+                Class genClass = (Class) fieldSetter.getGenericFields().get(0);
+                DefaultLimiters genDefaultLimiter = defaultLimiters(genClass);
+                Limiter<?> intermediateLimiter = genDefaultLimiter == null
+                        ? new LocalLimiter<>(genClass, attributes) : genDefaultLimiter.limiter;
+                limiter = defaultLimiters.function.apply(intermediateLimiter);
+            }
+        }
+        if (limiter == null) {
+            limiter = new LocalLimiter(clazz, attributes);
+        }
         return limiter;
     }
+
 
     private static class LocalLimiter<T extends Object> implements Limiter<T> {
 

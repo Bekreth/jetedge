@@ -1,6 +1,7 @@
 package com.rainbowpunch.jtdg.core;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Map;
@@ -48,9 +49,14 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
         return true; // TODO: 7/29/17
     }
 
-    private Map.Entry<Method, Class> getMethodParameters(Map.Entry<Method, String> entry) {
-        // TODO: 7/29/17 Throw error if not a simple setter
-        return new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getKey().getParameterTypes()[0]);
+    private Map.Entry<Method, Type> getMethodParameters(Map.Entry<Method, String> entry) {
+        Type type = null;
+        try {
+            type = entry.getKey().getGenericParameterTypes()[0];
+        } catch (Exception e) {
+            type = entry.getKey().getParameterTypes()[0];
+        }
+        return new AbstractMap.SimpleEntry<>(entry.getKey(), type);
     }
 
     private BiConsumer<T, ?> createBiConsumer(Method method) {

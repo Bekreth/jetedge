@@ -1,4 +1,6 @@
-package com.rainbowpunch.jtdg.core.limiters;
+package com.rainbowpunch.jtdg.core.limiters.primative;
+
+import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
 
 import java.util.List;
 import java.util.Random;
@@ -24,6 +26,7 @@ public class StringLimiter extends ObjectLimiter<String> {
 
     @Override
     public Supplier<String> generateSupplier(Random random) {
+        // TODO: 8/7/17 Make this more effecient by using collectionLimiter instead of objectLimiter
         return () -> {
             return IntStream.range(0, length)
                     .sequential()

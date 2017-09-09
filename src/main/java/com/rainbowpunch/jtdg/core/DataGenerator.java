@@ -1,9 +1,7 @@
 package com.rainbowpunch.jtdg.core;
 
-import com.rainbowpunch.jtdg.core.FieldSetter;
-import com.rainbowpunch.jtdg.core.PojoAttributes;
-import com.rainbowpunch.jtdg.core.limiters.Limiter;
 import com.rainbowpunch.jtdg.core.limiters.DefaultLimiters;
+import com.rainbowpunch.jtdg.core.limiters.Limiter;
 
 import java.util.Map;
 import java.util.Random;
@@ -31,16 +29,21 @@ public class DataGenerator<T> {
 
     public void populateSuppliers(PojoAttributes<T> attributes) {
         Map<Class, Map<String, Limiter<?>>> limiters = attributes.getLimiters();
-        Map<String, Limiter<?>> currentLevelLimiters = limiters.get(attributes.getPojoClazz());
+        Map<String, Limiter<?>> limiterOfCurrentObjects = limiters.get(attributes.getPojoClazz());
 
         attributes.fieldSetterStream()
-                .filter(entry -> shouldCreateSupplier(currentLevelLimiters.get(entry.getKey())))
+                .filter(entry -> shouldCreateSupplier(limiterOfCurrentObjects.get(entry.getKey())))
                 .sorted(this::alphabetical)
                 .forEach(entry -> {
-                    String entryName = entry.getKey().substring(3).toLowerCase();
-                    updateFieldSetterWithSupplier(entry.getValue(),
-                            currentLevelLimiters.getOrDefault(entryName,
-                                    DefaultLimiters.getSimpleLimiter(entry.getValue().getClazz(), attributes))); // TODO: 7/29/17 get or default
+                    String entryName = entry.getKey().substring(3);
+                    entryName = entryName.substring(0, 1).toLowerCase() + entryName.substring(1);
+
+                    Limiter defaultLimiter = DefaultLimiters.getSimpleLimiter(entry.getValue().getClazz(),
+                            entry.getValue(), attributes);
+
+                    Limiter limiter = limiterOfCurrentObjects.getOrDefault(entryName, defaultLimiter);
+
+                    updateFieldSetterWithSupplier(entry.getValue(), limiter); // TODO: 7/29/17 get or default
                 });
     }
 
