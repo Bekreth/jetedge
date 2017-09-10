@@ -1,4 +1,4 @@
-package com.rainbowpunch.jtdg.core.limiters.primative;
+package com.rainbowpunch.jtdg.core.limiters.primitive;
 
 import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
 

@@ -18,7 +18,6 @@ public class FieldSetter<T, U> {
     private Supplier<U> supplier;
     private List<Class<?>> genericFields;
 
-
     public static <V> FieldSetter makeFieldSetter(Type type) {
         FieldSetter fieldSetter = null;
 
@@ -35,6 +34,7 @@ public class FieldSetter<T, U> {
         }
 
         if (clazz == Integer.class || clazz == int.class) fieldSetter = new FieldSetter<V, Integer>();
+        else if (clazz == Boolean.class || clazz == boolean.class) fieldSetter = new FieldSetter<V, Boolean>();
         else if (clazz == Short.class || clazz == short.class) fieldSetter = new FieldSetter<V, Short>();
         else if (clazz == Float.class || clazz == float.class) fieldSetter = new FieldSetter<V, Float>();
         else if (clazz == Double.class  || clazz == double.class) fieldSetter = new FieldSetter<V, Double>();

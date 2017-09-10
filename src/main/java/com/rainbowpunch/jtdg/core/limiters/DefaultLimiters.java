@@ -1,14 +1,13 @@
 package com.rainbowpunch.jtdg.core.limiters;
 
-import com.rainbowpunch.jtdg.api.PojoGenerator;
+import com.rainbowpunch.jtdg.spi.PojoGenerator;
 import com.rainbowpunch.jtdg.core.FieldSetter;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.collections.ListLimiter;
-import com.rainbowpunch.jtdg.core.limiters.primative.IntegerLimiter;
-import com.rainbowpunch.jtdg.core.limiters.primative.ShortLimiter;
-import com.rainbowpunch.jtdg.core.limiters.primative.StringLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.IntegerLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.ShortLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.StringLimiter;
 
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -62,22 +61,22 @@ public enum DefaultLimiters {
                 Class genClass = (Class) fieldSetter.getGenericFields().get(0);
                 DefaultLimiters genDefaultLimiter = defaultLimiters(genClass);
                 Limiter<?> intermediateLimiter = genDefaultLimiter == null
-                        ? new LocalLimiter<>(genClass, attributes) : genDefaultLimiter.limiter;
+                        ? new DefaultPojoLimiter<>(genClass, attributes) : genDefaultLimiter.limiter;
                 limiter = defaultLimiters.function.apply(intermediateLimiter);
             }
         }
         if (limiter == null) {
-            limiter = new LocalLimiter(clazz, attributes);
+            limiter = new DefaultPojoLimiter(clazz, attributes);
         }
         return limiter;
     }
 
 
-    private static class LocalLimiter<T extends Object> implements Limiter<T> {
+    private static class DefaultPojoLimiter<T extends Object> implements Limiter<T> {
 
         private PojoGenerator<T> generator;
 
-        public LocalLimiter(Class<T> clazz, PojoAttributes<T> parentAttributes) {
+        public DefaultPojoLimiter(Class<T> clazz, PojoAttributes<T> parentAttributes) {
             this.generator = new PojoGenerator<>(clazz);
             parentAttributes.getLimiters()
                     .entrySet()

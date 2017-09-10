@@ -1,4 +1,4 @@
-package com.rainbowpunch.jtdg.api;
+package com.rainbowpunch.jtdg.spi;
 
 import com.rainbowpunch.jtdg.core.DataGenerator;
 import com.rainbowpunch.jtdg.core.DefaultPojoAnalyzer;
@@ -20,7 +20,6 @@ public class PojoGenerator<T> {
     private PojoAnalyzer<T> pojoAnalyzer;
     private DataGenerator dataGenerator;
     private PojoAttributes<T> pojoAttributes;
-    private int count;
 
     public PojoGenerator(Class<T> clazz) {
         this.pojo = clazz;
@@ -50,7 +49,7 @@ public class PojoGenerator<T> {
                 .mapToObj(this::generatePojo);
     }
 
-    public List<T> generatePojoList() {
+    public List<T> generatePojoList(int count) {
         return generatePojoStream()
                 .limit(count)
                 .collect(Collectors.toList());

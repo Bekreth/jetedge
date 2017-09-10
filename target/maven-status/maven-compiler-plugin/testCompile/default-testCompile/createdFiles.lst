@@ -1,4 +1,5 @@
-com/rainbowpunch/jtdg/core/falseDomain/Address.class
+com/rainbowpunch/jtdg/core/falseDomain/ClassD.class
+com/rainbowpunch/jtdg/core/falseDomain/ClassC.class
+com/rainbowpunch/jtdg/core/falseDomain/ClassA.class
+com/rainbowpunch/jtdg/core/falseDomain/ClassB.class
 com/rainbowpunch/jtdg/core/PojoGeneratorTest.class
-com/rainbowpunch/jtdg/core/falseDomain/HomeState.class
-com/rainbowpunch/jtdg/core/falseDomain/Employee.class
