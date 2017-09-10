@@ -17,10 +17,6 @@ public abstract class ObjectLimiter<T> implements Limiter<T> {
 
     protected abstract List<T> configureObjectList();
 
-    protected void configureObjectList(List<T> objectList) {
-        this.acceptableObjectList = objectList;
-    }
-
     @Override
     public Supplier<T> generateSupplier(Random random) {
         return () -> {

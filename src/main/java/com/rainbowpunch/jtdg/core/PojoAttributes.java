@@ -1,9 +1,10 @@
 package com.rainbowpunch.jtdg.core;
 
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
+import com.rainbowpunch.jtdg.core.limiters.NestedLimiter;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -12,11 +13,14 @@ import java.util.stream.Stream;
 public class PojoAttributes<T> {
 
     private Class<T> pojoClazz;
-    private Map<String, Limiter<?>> limiters;
+    private Map<Class, Map<String, Limiter<?>>> masterLimiterMap;
     private Map<String, FieldSetter<T, ?>> fieldSetterMap;
 
-    public PojoAttributes() {
-        this.limiters = new HashMap<>();
+    public PojoAttributes(Class pojoClazz) {
+        this.pojoClazz = pojoClazz;
+
+        this.masterLimiterMap = new HashMap<>();
+        this.masterLimiterMap.put(this.pojoClazz, new HashMap<>());
         this.fieldSetterMap = new HashMap<>();
     }
 
@@ -24,12 +28,8 @@ public class PojoAttributes<T> {
         return pojoClazz;
     }
 
-    public void setPojoClazz(Class<T> pojoClazz) {
-        this.pojoClazz = pojoClazz;
-    }
-
-    public Map<String, Limiter<?>> getLimiters() {
-        return limiters;
+    public Map<Class, Map<String, Limiter<?>>> getLimiters() {
+        return masterLimiterMap;
     }
 
     public FieldSetter<T, ?> getFieldSetter(String fieldName) {
@@ -41,7 +41,17 @@ public class PojoAttributes<T> {
     }
 
     public void putFieldLimiter(String fieldName, Limiter limiter) {
-        limiters.put(fieldName, limiter);
+        if (limiter instanceof NestedLimiter) {
+            Class clazz = ((NestedLimiter) limiter).getClazz();
+            if (!masterLimiterMap.containsKey(clazz)) masterLimiterMap.put(clazz, new HashMap<>());
+            masterLimiterMap.get(clazz).put(fieldName.toLowerCase(), limiter);
+        } else {
+            masterLimiterMap.get(pojoClazz).put(fieldName.toLowerCase(), limiter);
+        }
+    }
+
+    public void putFieldLimiter(String fieldName, NestedLimiter limiter) {
+        masterLimiterMap.get(limiter.getClazz()).put(fieldName, limiter);
     }
 
     public Stream<Map.Entry<String, FieldSetter<T, ?>>> fieldSetterStream() {
@@ -50,7 +60,6 @@ public class PojoAttributes<T> {
 
     public void apply(T pojo) {
         fieldSetterMap.entrySet()
-                .stream()
                 .forEach(entry -> {
                     entry.getValue().apply(pojo);
                 });
