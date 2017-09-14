@@ -17,6 +17,10 @@ PojoGenerator class, it recursively scans through your POJO down
 to its primatives (int, String, boolean, etc...).  After it has 
 scanned your POJO, it populates it with generators for each field.
 
+If you want the JTDG to populate your POJO it *must* have a setter 
+method for that field.The method can be private, but they 
+*must* exist.
+
 After you've created your the generator, there are 3 ways to get 
 data.
 
@@ -71,22 +75,36 @@ PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class)
 Combine this with the `NestedLimiter` in order to dig down into
 the POJO structure.
 
+Pretending for a moment that you need to reliably create the same 15
+random POJOs, you can easily clone your generator for reuse.
+
+```
+PojoGenerator<YourClass> generator1 = new PojoGenerator<>(YourClass.class);
+PojoGenerator<YourClass> generator2 = generator1.clone();
+
+generator1 = generator1.analyzePojo();
+generator2 = generator2.analyzePojo();
+```
+I'm certain on the most observant of you noticed that you call to analyze
+your pojo AFTER you clone.  This is because during the analysis phase,
+suppliers are created with the a `Random` and it is quite cumbersome to 
+replace all these values.
 
 ## Default Limiters ##
-These are the `Limiter`s that I am/will provide for you in the near
+These are the `Limiters` that I am/will provide for you in the near
 future. 
 
 Limiter | Currently Supported
 ---|---
 IntegerLimiter | True
 StringLimiter | True
-ShortLimiter | Kinda
-BooleanLimiter | False
+ShortLimiter | False
+BooleanLimiter | True
 FloatLimiter | False
 DoubleLimiter | False
 LongLimiter | False
 CharLimiter | False
-ListLimiter | Kinda
+ListLimiter | True
 RegexLimiter | False
 
 Looking at this list, you may realize that not much is currently 

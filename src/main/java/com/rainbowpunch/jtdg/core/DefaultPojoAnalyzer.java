@@ -18,7 +18,7 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
     @Override
     public void parsePojo(Class<T> clazz, PojoAttributes<T> attributes) {
         try {
-            Method[] methods = clazz.getMethods();
+            Method[] methods = clazz.getDeclaredMethods();
 
             Arrays.asList(methods)
                     .stream()
@@ -62,6 +62,7 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
     private BiConsumer<T, ?> createBiConsumer(Method method) {
         return (instance, value) -> {
             try {
+                method.setAccessible(true);
                 method.invoke(instance, value);
             } catch (Exception e) {
                 throw new RuntimeException(e); // TODO: 7/29/17

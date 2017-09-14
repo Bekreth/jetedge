@@ -14,18 +14,26 @@ import java.util.stream.Stream;
 /**
  *
  */
-public class PojoGenerator<T> {
+public class PojoGenerator<T> implements Cloneable {
 
     private Class<T> pojo;
+    private Integer randomSeed;
+
     private PojoAnalyzer<T> pojoAnalyzer;
     private DataGenerator dataGenerator;
     private PojoAttributes<T> pojoAttributes;
 
     public PojoGenerator(Class<T> clazz) {
+        this(clazz, null);
+    }
+
+    public PojoGenerator(Class<T> clazz, Integer randomSeed) {
         this.pojo = clazz;
+        this.randomSeed = randomSeed;
+
         pojoAnalyzer = new DefaultPojoAnalyzer<>();
-        dataGenerator = new DataGenerator();
         pojoAttributes = new PojoAttributes<>(clazz);
+        dataGenerator = randomSeed == null ? new DataGenerator() : new DataGenerator(randomSeed);
     }
 
     public PojoGenerator<T> andLimitField(String fieldName, Limiter<?> limiter) {
@@ -59,6 +67,11 @@ public class PojoGenerator<T> {
         return generatePojo(0);
     }
 
+    @Override
+    public PojoGenerator<T> clone() {
+        return new PojoGenerator<T>(pojo, randomSeed);
+    }
+
     private T generatePojo(int i) {
         try {
             T newInstance = pojo.newInstance();
@@ -68,6 +81,5 @@ public class PojoGenerator<T> {
             throw new RuntimeException(e);
         }
     }
-
 
 }

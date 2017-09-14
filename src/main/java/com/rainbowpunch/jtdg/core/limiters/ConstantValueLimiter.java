@@ -7,11 +7,11 @@ import java.util.function.Supplier;
 /**
  * This limiter allows you to set a single value to be used instead of any random value.
  */
-public class ConstantLimiter<T> extends ObjectLimiter<T> {
+public class ConstantValueLimiter<T> extends ObjectLimiter<T> {
 
     private T object;
 
-    public ConstantLimiter(T object) {
+    public ConstantValueLimiter(T object) {
         this.object = object;
     }
 
