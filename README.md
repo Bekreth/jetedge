@@ -103,7 +103,7 @@ BooleanLimiter | True
 FloatLimiter | False
 DoubleLimiter | False
 LongLimiter | False
-CharLimiter | False
+CharLimiter | True
 ListLimiter | True
 RegexLimiter | False
 
