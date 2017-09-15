@@ -36,7 +36,7 @@ public class DataGenerator<T> {
                 .sorted(this::alphabetical)
                 .forEach(entry -> {
                     String entryName = entry.getKey().substring(3);
-                    entryName = entryName.substring(0, 1).toLowerCase() + entryName.substring(1);
+                    entryName = entryName.toLowerCase();
 
                     Limiter defaultLimiter = DefaultLimiters.getSimpleLimiter(entry.getValue().getClazz(),
                             entry.getValue(), attributes);

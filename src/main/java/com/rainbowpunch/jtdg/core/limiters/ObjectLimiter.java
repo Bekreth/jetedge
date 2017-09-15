@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 /**
- * Created by bekreth on 7/30/17.
+ * This limiter is used to specify a list of objects to get an Object from to populate a field.
  */
 public abstract class ObjectLimiter<T> implements Limiter<T> {
 
@@ -22,6 +22,15 @@ public abstract class ObjectLimiter<T> implements Limiter<T> {
         return () -> {
             int randomObject = random.nextInt(acceptableObjectList.size());
             return acceptableObjectList.get(randomObject); // TODO: 7/30/17
+        };
+    }
+
+    public static <U extends Object> ObjectLimiter<U> ofObjects(List<U> objects) {
+        return new ObjectLimiter<U>() {
+            @Override
+            protected List<U> configureObjectList() {
+                return objects;
+            }
         };
     }
 

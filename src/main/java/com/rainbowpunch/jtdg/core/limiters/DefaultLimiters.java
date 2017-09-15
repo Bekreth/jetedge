@@ -1,12 +1,10 @@
 package com.rainbowpunch.jtdg.core.limiters;
 
+import com.rainbowpunch.jtdg.core.limiters.primitive.*;
 import com.rainbowpunch.jtdg.spi.PojoGenerator;
 import com.rainbowpunch.jtdg.core.FieldSetter;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.collections.ListLimiter;
-import com.rainbowpunch.jtdg.core.limiters.primitive.IntegerLimiter;
-import com.rainbowpunch.jtdg.core.limiters.primitive.ShortLimiter;
-import com.rainbowpunch.jtdg.core.limiters.primitive.StringLimiter;
 
 import java.util.*;
 import java.util.function.Function;
@@ -19,10 +17,11 @@ import java.util.stream.Stream;
 public enum DefaultLimiters {
     SHORT(new ShortLimiter(), short.class, Short.class),
     INT(new IntegerLimiter(), int.class, Integer.class),
-    //FLOAT(null),
-    //DOUBLE(null),
-    //LONG(null),
-    //CHAR(null),
+    BOOLEAN(new BooleanLimiter(), boolean.class, Boolean.class),
+    FLOAT(new FloatLimiter(), float.class, Float.class),
+    DOUBLE(new DoubleLimiter(), double.class, Double.class),
+    LONG(new LongLimiter(), long.class, Long.class),
+    CHAR(new CharacterLimiter(), char.class, Character.class),
     STRING(new StringLimiter(), String.class),
     LIST(ListLimiter::createListLimiter, List.class);
 
