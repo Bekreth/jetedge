@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="81aebf85-3d7a-459f-a61d-94abda3b299d" name="Default" comment="">
+<<<<<<< Updated upstream
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassD.java" />
       <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/api/PojoGenerator.java" afterPath="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/spi/PojoGenerator.java" />
       <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primative/IntegerLimiter.java" afterPath="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/IntegerLimiter.java" />
@@ -21,6 +22,16 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" />
+=======
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassE.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/DataGenerator.java" afterPath="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/DataGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/ObjectLimiter.java" afterPath="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/ObjectLimiter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/PojoGeneratorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/PojoGeneratorTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassA.java" afterPath="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassA.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
+>>>>>>> Stashed changes
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.rainbowpunch.jtdg.core.PojoGeneratorTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.rainbowpunch.jtdg.core.PojoGeneratorTest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/com.rainbowpunch.jtdg.core.PojoGeneratorTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/com.rainbowpunch.jtdg.core.PojoGeneratorTest.txt" />
     </list>
@@ -36,36 +47,91 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+<<<<<<< Updated upstream
       <file leaf-file-name="PojoGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/spi/PojoGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="220">
               <caret line="54" column="34" lean-forward="false" selection-start-line="54" selection-start-column="34" selection-end-line="54" selection-end-column="34" />
+=======
+      <file leaf-file-name="PojoGeneratorTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/PojoGeneratorTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="500">
+              <caret line="36" column="46" lean-forward="true" selection-start-line="36" selection-start-column="46" selection-end-line="36" selection-end-column="46" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="PojoGenerator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/spi/PojoGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="311">
+              <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DataGenerator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/DataGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="233">
+              <caret line="34" column="56" lean-forward="true" selection-start-line="34" selection-start-column="56" selection-end-line="34" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ShortLimiter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/ShortLimiter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="160">
+              <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+>>>>>>> Stashed changes
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+<<<<<<< Updated upstream
       <file leaf-file-name="PojoGeneratorTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/PojoGeneratorTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="100">
               <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+=======
+      <file leaf-file-name="StringLimiter.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/StringLimiter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="280">
+              <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+>>>>>>> Stashed changes
               <folding />
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< Updated upstream
       <file leaf-file-name="IntegerLimiter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/IntegerLimiter.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="223">
               <caret line="29" column="11" lean-forward="false" selection-start-line="29" selection-start-column="11" selection-end-line="29" selection-end-column="11" />
+=======
+      <file leaf-file-name="ObjectLimiter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/ObjectLimiter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="280">
+              <caret line="20" column="23" lean-forward="false" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+>>>>>>> Stashed changes
               <folding />
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< Updated upstream
       <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
@@ -75,6 +141,26 @@
                 <folding />
               </first_editor>
               <second_editor />
+=======
+      <file leaf-file-name="PojoAttributes.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/PojoAttributes.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="173">
+              <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ClassA.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassA.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="260">
+              <caret line="16" column="24" lean-forward="false" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
@@ -92,6 +178,7 @@
       <file leaf-file-name="ObjectLimiter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/ObjectLimiter.java">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="260">
               <caret line="17" column="53" lean-forward="false" selection-start-line="17" selection-start-column="53" selection-end-line="17" selection-end-column="53" />
               <folding />
@@ -115,6 +202,27 @@
             <state relative-caret-position="140">
               <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
               <folding />
+=======
+            <state relative-caret-position="431">
+              <caret line="52" column="29" lean-forward="false" selection-start-line="52" selection-start-column="29" selection-end-line="52" selection-end-column="29" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <marker date="1505348854968" expanded="true" signature="3671:3812" ph="{...}" />
+              </folding>
+>>>>>>> Stashed changes
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="253">
+                <caret line="53" column="38" lean-forward="true" selection-start-line="53" selection-start-column="38" selection-end-line="53" selection-end-column="38" />
+                <folding />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -167,7 +275,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/parameters/NumberSign.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primative/IntegerLimiter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primative/ShortLimiter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/ObjectLimiter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/collections/ArrayLimiter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/PojoAttributes.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/DefaultPojoAnalyzer.java" />
@@ -178,6 +285,7 @@
         <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/HomeState.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/Employee.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/Address.java" />
+<<<<<<< Updated upstream
         <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassA.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassB.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassC.java" />
@@ -187,6 +295,35 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/PojoGeneratorTest.java" />
         <option value="$PROJECT_DIR$/README.md" />
+=======
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/api/PojoGenerator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/collections/Test.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/IntegerLimiter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/ShortLimiter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/ConstantLimiter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/ConstantValueLimiter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/collections/ListLimiter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/BooleanLimiter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/BooleanLimiter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/DefaultPojoAnalyzer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/CharLimiter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/CharacterLimiter.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/spi/PojoGenerator.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassB.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassC.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassD.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/FieldSetter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/DefaultObjectLimiter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/ObjectLimiter.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassA.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassE.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/DefaultLimiters.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/DataGenerator.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/PojoGeneratorTest.java" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/StringLimiter.java" />
+>>>>>>> Stashed changes
       </list>
     </option>
   </component>
@@ -212,9 +349,12 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+<<<<<<< Updated upstream
       <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="PackagesPane" />
+=======
+>>>>>>> Stashed changes
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -469,6 +609,12 @@
           </PATH>
         </subPane>
       </pane>
+<<<<<<< Updated upstream
+=======
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="Scratches" />
+>>>>>>> Stashed changes
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -477,6 +623,9 @@
     <property name="SearchEverywhereHistoryKey" value="defau&#9;FILE&#9;file:///home/bekreth/Desktop/gitRepos/java-test-data-generator/src/main/java/com/rainbowpunch/jtdg/core/limiters/DefaultLimiters.java&#10;param&#9;FILE&#9;jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/sun/reflect/generics/reflectiveObjects/ParameterizedTypeImpl.class&#10;class&#9;PSI&#9;JAVA://java.lang.Class&#10;paramettypim&#9;PSI&#9;JAVA://sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl&#10;Set&#9;FILE&#9;jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/util/Set.class&#10;Queue&#9;PSI&#9;JAVA://java.util.Queue&#10;List&#9;PSI&#9;JAVA://java.util.List&#10;Collect&#9;PSI&#9;JAVA://java.util.Collection" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.rainbowpunch.jtdg.core.limiters" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.rainbowpunch.jtdg.core" />
     </key>
@@ -836,6 +985,7 @@
     <servers />
   </component>
   <component name="TestHistory">
+<<<<<<< Updated upstream
     <history-entry file="PojoGeneratorTest_test - 2017.09.09 at 22h 21m 59s.xml">
       <configuration name="PojoGeneratorTest.test" configurationId="JUnit" />
     </history-entry>
@@ -856,6 +1006,28 @@
     </history-entry>
     <history-entry file="PojoGeneratorTest_test - 2017.09.09 at 22h 28m 05s.xml">
       <configuration name="PojoGeneratorTest.test" configurationId="JUnit" />
+=======
+    <history-entry file="PojoGeneratorTest_simpleDepthTest - 2017.09.15 at 18h 29m 34s.xml">
+      <configuration name="PojoGeneratorTest.simpleDepthTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PojoGeneratorTest_simpleDepthTest - 2017.09.15 at 18h 29m 54s.xml">
+      <configuration name="PojoGeneratorTest.simpleDepthTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PojoGeneratorTest_simpleDepthTest - 2017.09.15 at 18h 30m 25s.xml">
+      <configuration name="PojoGeneratorTest.simpleDepthTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PojoGeneratorTest_simpleDepthTest - 2017.09.15 at 18h 35m 54s.xml">
+      <configuration name="PojoGeneratorTest.simpleDepthTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PojoGeneratorTest_simpleDepthTest - 2017.09.15 at 18h 38m 04s.xml">
+      <configuration name="PojoGeneratorTest.simpleDepthTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PojoGeneratorTest_simpleDepthTest - 2017.09.15 at 18h 38m 26s.xml">
+      <configuration name="PojoGeneratorTest.simpleDepthTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PojoGeneratorTest_simpleDepthTest - 2017.09.15 at 18h 38m 32s.xml">
+      <configuration name="PojoGeneratorTest.simpleDepthTest" configurationId="JUnit" />
+>>>>>>> Stashed changes
     </history-entry>
     <history-entry file="PojoGeneratorTest_test - 2017.09.09 at 22h 28m 14s.xml">
       <configuration name="PojoGeneratorTest.test" configurationId="JUnit" />
@@ -878,7 +1050,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1360" y="24" width="1360" height="744" extended-state="6" />
+<<<<<<< Updated upstream
     <editor active="true" />
+=======
+>>>>>>> Stashed changes
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -892,7 +1067,11 @@
       <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24961948" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+<<<<<<< Updated upstream
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45402297" sideWeight="0.49695587" order="3" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35488507" sideWeight="0.49695587" order="3" side_tool="false" content_ui="tabs" />
+>>>>>>> Stashed changes
       <window_info id="Salesforce" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32902297" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3275862" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -902,8 +1081,12 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3275862" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3275862" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3275862" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+<<<<<<< Updated upstream
       <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25722983" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32902297" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Project" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26560122" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+>>>>>>> Stashed changes
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -911,6 +1094,10 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="10" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+<<<<<<< Updated upstream
+=======
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32902297" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+>>>>>>> Stashed changes
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -920,6 +1107,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
+<<<<<<< Updated upstream
           <url>file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/PojoGeneratorTest.java</url>
           <line>35</line>
           <properties />
@@ -927,6 +1115,15 @@
         </line-breakpoint>
       </breakpoints>
       <option name="time" value="104" />
+=======
+          <url>file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/PojoAttributes.java</url>
+          <line>43</line>
+          <properties />
+          <option name="timeStamp" value="122" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="124" />
+>>>>>>> Stashed changes
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -935,6 +1132,7 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+<<<<<<< Updated upstream
     <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/util/Arrays.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
@@ -993,6 +1191,8 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> Stashed changes
     <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/util/Set.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
@@ -1116,6 +1316,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/StringLimiter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
@@ -1124,6 +1325,24 @@
       </provider>
     </entry>
     <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/util/List.class">
+=======
+    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/Class.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="443">
+          <caret line="232" column="0" lean-forward="true" selection-start-line="232" selection-start-column="0" selection-end-line="232" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/reflect/Field.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="129" column="18" lean-forward="false" selection-start-line="129" selection-start-column="18" selection-end-line="129" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/collections/Test.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/ConstantValueLimiter.java">
+>>>>>>> Stashed changes
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="9" column="17" lean-forward="false" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
@@ -1138,6 +1357,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/PojoAttributes.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1080">
@@ -1147,6 +1367,16 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/DefaultPojoAnalyzer.java">
+=======
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12-sources.jar!/org/junit/Assert.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="710" column="23" lean-forward="false" selection-start-line="710" selection-start-column="23" selection-end-line="710" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12-sources.jar!/org/junit/internal/runners/model/ReflectiveCallable.java">
+>>>>>>> Stashed changes
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="500">
           <caret line="31" column="42" lean-forward="false" selection-start-line="31" selection-start-column="42" selection-end-line="31" selection-end-column="42" />
@@ -1182,6 +1412,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassA.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="560">
@@ -1223,6 +1454,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassD.java">
+=======
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/CharacterLimiter.java">
+>>>>>>> Stashed changes
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
           <caret line="10" column="31" lean-forward="false" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
@@ -1249,6 +1483,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/DefaultLimiters.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
@@ -1258,6 +1493,9 @@
       </provider>
     </entry>
     <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/Class.class">
+=======
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+>>>>>>> Stashed changes
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="443">
           <caret line="232" column="0" lean-forward="true" selection-start-line="232" selection-start-column="0" selection-end-line="232" selection-end-column="0" />
@@ -1265,6 +1503,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/FieldSetter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
@@ -1285,6 +1524,16 @@
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12-sources.jar!/org/junit/Assert.java">
+=======
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/Limiter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="26" lean-forward="false" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/IntegerLimiter.java">
+>>>>>>> Stashed changes
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="213">
           <caret line="710" column="23" lean-forward="false" selection-start-line="710" selection-start-column="23" selection-end-line="710" selection-end-column="23" />
@@ -1299,25 +1548,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/DataGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="140">
           <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
           <folding />
+=======
+        <state relative-caret-position="80">
+          <caret line="7" column="17" lean-forward="false" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/spi/PojoGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="220">
           <caret line="54" column="34" lean-forward="false" selection-start-line="54" selection-start-column="34" selection-end-line="54" selection-end-column="34" />
           <folding />
+=======
+        <state relative-caret-position="120">
+          <caret line="11" column="43" lean-forward="true" selection-start-line="11" selection-start-column="43" selection-end-line="11" selection-end-column="43" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/Limiter.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="180">
           <caret line="10" column="16" lean-forward="false" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
           <folding />
+=======
+        <state relative-caret-position="120">
+          <caret line="13" column="17" lean-forward="false" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
@@ -1329,7 +1593,29 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/pom.xml">
+=======
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassC.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="9" column="5" lean-forward="false" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassD.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="10" column="23" lean-forward="false" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/Object.class">
+>>>>>>> Stashed changes
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
           <caret line="8" column="16" lean-forward="false" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
@@ -1337,18 +1623,102 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/PojoGeneratorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
           <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding />
+=======
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassB.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/FieldSetter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="33" column="9" lean-forward="true" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/DefaultObjectLimiter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="10" column="16" lean-forward="true" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassE.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="7" column="23" lean-forward="false" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/DefaultPojoAnalyzer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/falseDomain/ClassA.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="16" column="24" lean-forward="false" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/DefaultLimiters.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="431">
+          <caret line="52" column="29" lean-forward="false" selection-start-line="52" selection-start-column="29" selection-end-line="52" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1505348854968" expanded="true" signature="3671:3812" ph="{...}" />
+          </folding>
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/IntegerLimiter.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="223">
           <caret line="29" column="11" lean-forward="false" selection-start-line="29" selection-start-column="11" selection-end-line="29" selection-end-column="11" />
+=======
+        <state relative-caret-position="311">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/PojoAttributes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/rainbowpunch/jtdg/core/PojoGeneratorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="36" column="46" lean-forward="true" selection-start-line="36" selection-start-column="46" selection-end-line="36" selection-end-column="46" />
+>>>>>>> Stashed changes
           <folding />
         </state>
       </provider>
@@ -1356,13 +1726,129 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
+<<<<<<< Updated upstream
           <first_editor relative-caret-position="299">
             <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+=======
+          <first_editor relative-caret-position="253">
+            <caret line="53" column="38" lean-forward="true" selection-start-line="53" selection-start-column="38" selection-end-line="53" selection-end-column="38" />
+>>>>>>> Stashed changes
             <folding />
           </first_editor>
           <second_editor />
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
+=======
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/DataGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="34" column="56" lean-forward="true" selection-start-line="34" selection-start-column="56" selection-end-line="34" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/ShortLimiter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/ObjectLimiter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="20" column="23" lean-forward="false" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rainbowpunch/jtdg/core/limiters/primitive/StringLimiter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>java-test-data-generator</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: junit:junit:4.12</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+>>>>>>> Stashed changes
   </component>
 </project>
