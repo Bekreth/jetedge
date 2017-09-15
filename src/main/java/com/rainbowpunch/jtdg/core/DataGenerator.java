@@ -19,12 +19,9 @@ public class DataGenerator<T> {
     }
 
     public DataGenerator(int generatorSeed) {
+        // TODO: 9/13/17 Effectively spread this seed to all limiters to allow for a testable return
         this.generatorSeed = generatorSeed;
         random = new Random(generatorSeed);
-    }
-
-    public void setGeneratorSeed(Integer seed) {
-        generatorSeed = seed;
     }
 
     public void populateSuppliers(PojoAttributes<T> attributes) {

@@ -1,14 +1,10 @@
 package com.rainbowpunch.jtdg.core;
 
-import org.junit.Test;
+import com.rainbowpunch.jtdg.core.falseDomain.ClassA;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassD;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassE;
 import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
 import com.rainbowpunch.jtdg.spi.PojoGenerator;
-import com.rainbowpunch.jtdg.core.falseDomain.ClassA;
-import com.rainbowpunch.jtdg.core.limiters.primitive.IntegerLimiter;
-import com.rainbowpunch.jtdg.core.limiters.NestedLimiter;
-import com.rainbowpunch.jtdg.core.limiters.parameters.NumberSign;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
