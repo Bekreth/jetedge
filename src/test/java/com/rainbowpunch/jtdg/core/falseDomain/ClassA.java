@@ -9,9 +9,10 @@ import java.util.List;
  */
 @Data
 public class ClassA {
+
     private String field1;
-    private Integer field2;
-    private Boolean field3;
+    private int field2;
     private ClassB objB;
     private List<ClassC> objC;
+    private ClassE objE;
 }

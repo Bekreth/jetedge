@@ -26,7 +26,6 @@ public class StringLimiter extends ObjectLimiter<String> {
 
     @Override
     public Supplier<String> generateSupplier(Random random) {
-        // TODO: 8/7/17 Make this more effecient by using collectionLimiter instead of objectLimiter
         return () -> {
             return IntStream.range(0, length)
                     .sequential()

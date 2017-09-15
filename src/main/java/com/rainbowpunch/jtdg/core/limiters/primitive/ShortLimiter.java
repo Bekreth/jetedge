@@ -9,10 +9,10 @@ import java.util.function.Supplier;
  *
  */
 public class ShortLimiter implements Limiter<Short> {
-
     @Override
     public Supplier<Short> generateSupplier(Random random) {
-        return null;
+        return () ->{
+            return (short) random.nextInt();
+        };
     }
-
 }

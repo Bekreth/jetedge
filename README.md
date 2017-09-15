@@ -17,10 +17,6 @@ PojoGenerator class, it recursively scans through your POJO down
 to its primatives (int, String, boolean, etc...).  After it has 
 scanned your POJO, it populates it with generators for each field.
 
-If you want the JTDG to populate your POJO it *must* have a setter 
-method for that field.The method can be private, but they 
-*must* exist.
-
 After you've created your the generator, there are 3 ways to get 
 data.
 
@@ -49,7 +45,7 @@ want numbers 0-9 to be randomly picked and put into the field
 "fieldName" in `YourClass` POJO. Currently, I plan on having a 
 reasonable `Limiter` for ALL the primitive classes.  As you can, 
 the current version is 0.1.0-SNAPSHOT: I don't have them all done
-yet.  At the moment, `Limiter`s exist for `Integer` and `String`.
+yet.  At the moment, `Limiters` exist for `Integer` and `String`.
 
 But now you're asking yourself, "I have a nested class, how do I
 configure a field in that nested class?"
@@ -75,9 +71,21 @@ PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class)
 Combine this with the `NestedLimiter` in order to dig down into
 the POJO structure.
 
-Pretending for a moment that you need to reliably create the same 15
-random POJOs, you can easily clone your generator for reuse.
-
+"But what if I don't want to make a Limiter?" I hear you asking,
+"I just want you to fill my POJOs with a set of classes I've 
+already made!"  Luckily for you, I've already gone through and
+given you the power to do this.
+```
+PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class)
+                .andLimitField("fieldYouWillLimit", ObjectLimiter.ofObjects(ListOfYourObjects))
+                .analyzePojo();
+```
+In addition to an easy-to-use static interface, you can also extend 
+the ObjectLimiter class if you plan on using the same list of Objects
+for several data generators. However if you need to reliably create 
+the same 15 random POJOs (And don't want to fill them out yourself
+as part of an ObjectLimiter), you can easily clone your generator 
+for reuse.
 ```
 PojoGenerator<YourClass> generator1 = new PojoGenerator<>(YourClass.class);
 PojoGenerator<YourClass> generator2 = generator1.clone();
@@ -85,33 +93,28 @@ PojoGenerator<YourClass> generator2 = generator1.clone();
 generator1 = generator1.analyzePojo();
 generator2 = generator2.analyzePojo();
 ```
+This produces 2 generators that will return the exact same objects when called.
 I'm certain on the most observant of you noticed that you call to analyze
 your pojo AFTER you clone.  This is because during the analysis phase,
 suppliers are created with the a `Random` and it is quite cumbersome to 
 replace all these values.
 
 ## Default Limiters ##
-These are the `Limiters` that I am/will provide for you in the near
+These are the `Limiter`s that I am/will provide for you in the near
 future. 
 
 Limiter | Currently Supported
 ---|---
 IntegerLimiter | True
 StringLimiter | True
-ShortLimiter | False
+ShortLimiter | True
 BooleanLimiter | True
-FloatLimiter | False
-DoubleLimiter | False
-LongLimiter | False
+FloatLimiter | True
+DoubleLimiter | True
+LongLimiter | True
 CharLimiter | True
 ListLimiter | True
 RegexLimiter | False
-
-Looking at this list, you may realize that not much is currently 
-supported in ways of `Limiter`s.  It was my main objective in 
-this first iteration to create the plumbing that does the hard 
-labor.  I will be regularly working on this project for the next
-few months to flush it out and make it much more robust.
 
 ## How to Contribute ##
 
