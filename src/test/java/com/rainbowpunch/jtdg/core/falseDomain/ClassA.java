@@ -11,6 +11,7 @@ import java.util.List;
 public class ClassA {
 
     private String field1;
+    private String phoneNumber;
     private int field2;
     private ClassB objB;
     private List<ClassC> objC;
