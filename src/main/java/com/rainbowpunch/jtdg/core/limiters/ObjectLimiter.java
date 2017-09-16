@@ -9,7 +9,7 @@ import java.util.function.Supplier;
  */
 public abstract class ObjectLimiter<T> implements Limiter<T> {
 
-    private List<T> acceptableObjectList;
+    protected List<T> acceptableObjectList;
 
     public ObjectLimiter() {
         acceptableObjectList = configureObjectList();

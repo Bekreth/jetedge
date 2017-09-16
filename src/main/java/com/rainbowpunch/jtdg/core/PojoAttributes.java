@@ -10,14 +10,20 @@ import java.util.stream.Stream;
 /**
  * An entity of all the Pojo's attributes
  */
-public class PojoAttributes<T> {
+public class PojoAttributes<T> implements Cloneable {
 
     private Class<T> pojoClazz;
     private Map<Class, Map<String, Limiter<?>>> masterLimiterMap;
     private Map<String, FieldSetter<T, ?>> fieldSetterMap;
+    private int randomSeed;
 
-    public PojoAttributes(Class pojoClazz) {
+    private PojoAttributes() {
+
+    }
+
+    public PojoAttributes(Class pojoClazz, int randomSeed) {
         this.pojoClazz = pojoClazz;
+        this.randomSeed = randomSeed;
 
         this.masterLimiterMap = new HashMap<>();
         this.masterLimiterMap.put(this.pojoClazz, new HashMap<>());
@@ -56,6 +62,25 @@ public class PojoAttributes<T> {
 
     public Stream<Map.Entry<String, FieldSetter<T, ?>>> fieldSetterStream() {
         return fieldSetterMap.entrySet().stream();
+    }
+
+    public int getRandomSeed() {
+        return randomSeed;
+    }
+
+    @Override
+    public PojoAttributes<T> clone() {
+        PojoAttributes<T> attributes = new PojoAttributes<>();
+
+        try {
+            attributes.pojoClazz = (Class<T>) Class.forName(this.pojoClazz.getName());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed cloning object: ", e);
+        }
+        attributes.masterLimiterMap = (Map) ((HashMap) this.masterLimiterMap).clone();
+        attributes.fieldSetterMap = (Map) ((HashMap) this.fieldSetterMap).clone();
+
+        return attributes;
     }
 
     public void apply(T pojo) {

@@ -23,20 +23,28 @@ public enum DefaultLimiters {
     LONG(new LongLimiter(), long.class, Long.class),
     CHAR(new CharacterLimiter(), char.class, Character.class),
     STRING(new StringLimiter(), String.class),
+    ENUM(EnumLimiter::createEnumLimiter, Enum.class, 0),
     LIST(ListLimiter::createListLimiter, List.class);
 
     private List<Class<?>> clazz;
     private Limiter<?> limiter;
-    private Function<Limiter<?>, Limiter<?>> function;
+    private Function<Limiter<?>, Limiter<?>> listLimiterFunction;
+    private Function<Class<?>, ObjectLimiter<?>> enumLimiterFunction;
 
     DefaultLimiters(Limiter<?> limiter, Class<?>... clazz) {
         this.limiter = limiter;
         this.clazz = Arrays.asList(clazz);
     }
 
-    DefaultLimiters(Function<Limiter<?>, Limiter<?>> function, Class<?> clazz) {
+    DefaultLimiters(Function<Class<?>, ObjectLimiter<?>> enumLimiterFunction, Class<?> clazz, int a) {
+        this.enumLimiterFunction = enumLimiterFunction;
         this.clazz = Arrays.asList(clazz);
-        this.function = function;
+    }
+
+
+    DefaultLimiters(Function<Limiter<?>, Limiter<?>> listLimiterFunction, Class<?> clazz) {
+        this.clazz = Arrays.asList(clazz);
+        this.listLimiterFunction = listLimiterFunction;
     }
 
     private static DefaultLimiters defaultLimiters(Class clazz) {
@@ -47,6 +55,9 @@ public enum DefaultLimiters {
                 break;
             }
         }
+        if (defaultLimiters == null && Enum.class.isAssignableFrom(clazz)) {
+            defaultLimiters = ENUM;
+        }
         return defaultLimiters;
     }
 
@@ -54,14 +65,22 @@ public enum DefaultLimiters {
         DefaultLimiters defaultLimiters = defaultLimiters(clazz);
         Limiter limiter = null;
         if (defaultLimiters != null) {
-            if (defaultLimiters.function == null) {
-                limiter = defaultLimiters.limiter;
-            } else {
+            if (defaultLimiters.listLimiterFunction != null) {
                 Class genClass = (Class) fieldSetter.getGenericFields().get(0);
                 DefaultLimiters genDefaultLimiter = defaultLimiters(genClass);
-                Limiter<?> intermediateLimiter = genDefaultLimiter == null
-                        ? new DefaultPojoLimiter<>(genClass, attributes) : genDefaultLimiter.limiter;
-                limiter = defaultLimiters.function.apply(intermediateLimiter);
+                Limiter<?> intermediateLimiter = null;
+                if (genDefaultLimiter == null) {
+                    intermediateLimiter = new DefaultPojoLimiter<>(genClass, attributes);
+                } else if (genDefaultLimiter.limiter != null) {
+                    intermediateLimiter = genDefaultLimiter.limiter;
+                } else if (genDefaultLimiter.enumLimiterFunction != null) {
+                    intermediateLimiter = genDefaultLimiter.enumLimiterFunction.apply(genClass);
+                }
+                limiter = defaultLimiters.listLimiterFunction.apply(intermediateLimiter);
+            } else if (defaultLimiters.enumLimiterFunction != null) {
+                limiter = defaultLimiters.enumLimiterFunction.apply(fieldSetter.getClazz());
+            } else {
+                limiter = defaultLimiters.limiter;
             }
         }
         if (limiter == null) {
@@ -76,7 +95,7 @@ public enum DefaultLimiters {
         private PojoGenerator<T> generator;
 
         public DefaultPojoLimiter(Class<T> clazz, PojoAttributes<T> parentAttributes) {
-            this.generator = new PojoGenerator<>(clazz);
+            this.generator = new PojoGenerator<>(clazz, parentAttributes.getRandomSeed());
             parentAttributes.getLimiters()
                     .entrySet()
                     .stream()
