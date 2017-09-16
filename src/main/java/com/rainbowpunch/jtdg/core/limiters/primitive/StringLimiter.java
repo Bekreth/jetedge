@@ -1,6 +1,7 @@
 package com.rainbowpunch.jtdg.core.limiters.primitive;
 
 import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
+import com.rainbowpunch.jtdg.util.ReadableCharList;
 
 import java.util.List;
 import java.util.Random;
@@ -17,10 +18,8 @@ public class StringLimiter extends ObjectLimiter<String> {
 
     @Override
     protected List<String> configureObjectList() {
-        return IntStream.range(32, 126)
-                .mapToObj(i -> {
-                    return Character.toString((char) i);
-                })
+        return ReadableCharList.LIST_OF_ALL_CHAR.stream()
+                .map(ch -> Character.toString(ch))
                 .collect(Collectors.toList());
     }
 

@@ -42,10 +42,22 @@ PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class)
 ```
 With this additional line of code, you've told JTDG that you only 
 want numbers 0-9 to be randomly picked and put into the field 
-"fieldName" in `YourClass` POJO. Currently, I plan on having a 
-reasonable `Limiter` for ALL the primitive classes.  As you can, 
-the current version is 0.1.0-SNAPSHOT: I don't have them all done
-yet.  At the moment, `Limiters` exist for `Integer` and `String`.
+"fieldName" in `YourClass` POJO. A simple limiter exists for all
+primitives, String, and List. In addition to these Limiters, I've
+also provided a RegexLimiter (of which I'm quite proud of)  
+
+```
+PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class)
+                .andLimitField("phoneNumber", new RegexLimiter("(\\d{3})-\\d{3}-\\d{4}"))
+                .analyzePojo();
+```
+This is a quick example of how to use the RegexLimiter to create 
+phonenumbers (A common use for regex).  This feature is not fully
+implemented, but it does provide special characters `\s\S\d\D .`,
+character ranges `[somechars]`, anti-character ranges `[^notthis]`,
+and quantity `{3,4}`, `{2}`, `{5,}`.  I figured this would be good
+enough to get you started on using Regex strings.
+
 
 But now you're asking yourself, "I have a nested class, how do I
 configure a field in that nested class?"
@@ -99,6 +111,11 @@ your pojo AFTER you clone.  This is because during the analysis phase,
 suppliers are created with the a `Random` and it is quite cumbersome to 
 replace all these values.
 
+## How Fast is JDTG? ##
+Damn fast.  With a reasonably complex POJO (multiple layers, lists, datatypes,
+and regex expressions), JDTG can whip out 1,000,000 POJOs in about 47 seconds.
+It can handle whatever you want to through at it.
+
 ## Default Limiters ##
 These are the `Limiter`s that I am/will provide for you in the near
 future. 
@@ -114,7 +131,7 @@ DoubleLimiter | True
 LongLimiter | True
 CharLimiter | True
 ListLimiter | True
-RegexLimiter | False
+RegexLimiter | True
 
 ## How to Contribute ##
 

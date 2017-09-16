@@ -9,6 +9,7 @@ import java.util.List;
  */
 @Data
 public class ClassC {
+    private String strangeString;
     private int field1;
     private List<Integer> field2;
 }
