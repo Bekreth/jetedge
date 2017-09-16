@@ -9,18 +9,15 @@ import java.util.Random;
 /**
  *
  */
-public class DataGenerator<T> {
+public class FieldDataGenerator<T> {
 
     private Random random;
-    private int generatorSeed;
 
-    public DataGenerator() {
+    public FieldDataGenerator() {
         random = new Random();
     }
 
-    public DataGenerator(int generatorSeed) {
-        // TODO: 9/13/17 Effectively spread this seed to all limiters to allow for a testable return
-        this.generatorSeed = generatorSeed;
+    public FieldDataGenerator(int generatorSeed) {
         random = new Random(generatorSeed);
     }
 

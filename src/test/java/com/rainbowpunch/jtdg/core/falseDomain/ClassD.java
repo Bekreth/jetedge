@@ -2,6 +2,8 @@ package com.rainbowpunch.jtdg.core.falseDomain;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * An entity of all the Pojo's attributes
  */
@@ -9,4 +11,5 @@ import lombok.Data;
 public class ClassD {
     private String field1;
     private int field2;
+    private List<EnumZ> enumZList;
 }

@@ -116,15 +116,27 @@ public class PojoGeneratorTest {
 
     @Test
     public void cloneTest() {
-        PojoGenerator<ClassD> baseGen = new PojoGenerator<>(ClassD.class, 123456);
 
-        PojoGenerator<ClassD> generator1 = baseGen.clone().analyzePojo();
-        PojoGenerator<ClassD> generator2 = baseGen.clone().analyzePojo();
+        ClassE e1 = new ClassE();
+        e1.setValue1("Hello");
+        e1.setValue2(99);
 
-        ClassD classD1 = generator1.generatePojo();
-        ClassD classD2 = generator2.generatePojo();
+        ClassE e2 = new ClassE();
+        e2.setValue1("World");
+        e2.setValue2(100);
 
-        assertEquals(classD1, classD2);
+        PojoGenerator<ClassA> baseGen = new PojoGenerator<>(ClassA.class, 196809462)
+                .andLimitField("phoneNumber", new RegexLimiter("(\\d{3})-\\d{3}-\\d{4}"))
+                .andLimitField("strangeString", new NestedLimiter<>(ClassC.class, new RegexLimiter("xy[acd]{1,4}.\\s\\d{2}[^peatd]\\[")))
+                .andLimitField("objE", ObjectLimiter.ofObjects(Arrays.asList(e1, e2)));
+
+        PojoGenerator<ClassA> generator1 = baseGen.clone().analyzePojo();
+        PojoGenerator<ClassA> generator2 = baseGen.clone().analyzePojo();
+
+        ClassA classA1 = generator1.generatePojo();
+        ClassA classA2 = generator2.generatePojo();
+
+        assertEquals(classA1, classA2);
     }
 
 

@@ -41,6 +41,7 @@ public class FieldSetter<T, U> {
         else if (clazz == Long.class || clazz == long.class) fieldSetter = new FieldSetter<V, Long>();
         else if (clazz == Character.class || clazz == char.class) fieldSetter = new FieldSetter<V, Character>();
         else if (clazz == String.class) fieldSetter = new FieldSetter<V, String>();
+        else if (clazz == Enum.class) fieldSetter = new FieldSetter<V, Enum>();
         else if (clazz == List.class) fieldSetter = new FieldSetter<V, List>();
         else fieldSetter = new FieldSetter<V, Object>();
 

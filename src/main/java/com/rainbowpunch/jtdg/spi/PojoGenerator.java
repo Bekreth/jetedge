@@ -1,12 +1,13 @@
 package com.rainbowpunch.jtdg.spi;
 
-import com.rainbowpunch.jtdg.core.DataGenerator;
+import com.rainbowpunch.jtdg.core.FieldDataGenerator;
 import com.rainbowpunch.jtdg.core.DefaultPojoAnalyzer;
 import com.rainbowpunch.jtdg.core.PojoAnalyzer;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -20,11 +21,18 @@ public class PojoGenerator<T> implements Cloneable {
     private Integer randomSeed;
 
     private PojoAnalyzer<T> pojoAnalyzer;
-    private DataGenerator dataGenerator;
+    private FieldDataGenerator fieldDataGenerator;
     private PojoAttributes<T> pojoAttributes;
 
+    /**
+     * Constructor is used internally for cloning purposes.
+     */
+    private PojoGenerator() {
+
+    }
+
     public PojoGenerator(Class<T> clazz) {
-        this(clazz, null);
+        this(clazz, new Random().nextInt());
     }
 
     public PojoGenerator(Class<T> clazz, Integer randomSeed) {
@@ -32,8 +40,8 @@ public class PojoGenerator<T> implements Cloneable {
         this.randomSeed = randomSeed;
 
         pojoAnalyzer = new DefaultPojoAnalyzer<>();
-        pojoAttributes = new PojoAttributes<>(clazz);
-        dataGenerator = randomSeed == null ? new DataGenerator() : new DataGenerator(randomSeed);
+        pojoAttributes = new PojoAttributes<>(clazz, randomSeed);
+        fieldDataGenerator = randomSeed == null ? new FieldDataGenerator() : new FieldDataGenerator(randomSeed);
     }
 
     public PojoGenerator<T> andLimitField(String fieldName, Limiter<?> limiter) {
@@ -48,7 +56,7 @@ public class PojoGenerator<T> implements Cloneable {
      */
     public PojoGenerator<T> analyzePojo() {
         pojoAnalyzer.parsePojo(pojo, pojoAttributes);
-        dataGenerator.populateSuppliers(pojoAttributes);
+        fieldDataGenerator.populateSuppliers(pojoAttributes);
         return this;
     }
 
@@ -69,7 +77,19 @@ public class PojoGenerator<T> implements Cloneable {
 
     @Override
     public PojoGenerator<T> clone() {
-        return new PojoGenerator<T>(pojo, randomSeed);
+        PojoGenerator generator = new PojoGenerator();
+
+        try {
+            generator.pojo = Class.forName(this.pojo.getName());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to clone objects: ", e);
+        }
+        generator.randomSeed = new Integer(this.randomSeed);
+        generator.pojoAnalyzer = new DefaultPojoAnalyzer<>();
+        generator.pojoAttributes = this.pojoAttributes.clone();
+        generator.fieldDataGenerator = new FieldDataGenerator(randomSeed);
+
+        return generator;
     }
 
     private T generatePojo(int i) {

@@ -111,6 +111,24 @@ your pojo AFTER you clone.  This is because during the analysis phase,
 suppliers are created with the a `Random` and it is quite cumbersome to 
 replace all these values.
 
+This is great and all, but what if you want to seed a single generator that 
+will then return the same object every time you hit it (you know, the way 
+`Random` does when you seed it)?  Welp, then all you have to do is seed your
+generator.
+```
+PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class, intSeed)
+                .analyzePojo();
+```
+If you define this generator in a `@Before` in your unit tests, it will then
+always return A, then B, then C and so on.  I will warn you though, 
+**IF YOU CHANGE YOUR POJO IN ANY WAY, THIS BREAKS DOWN!**
+
+I've done as much as I can to make this easy, but if you write a bunch of
+unit tests expecting a generator to pop out A->B->C and then change your
+POJO structure, all of those test will fail because the Random seed being
+passed around will have its path altered and instead your output will be
+K->?->3.
+
 ## How Fast is JDTG? ##
 Damn fast.  With a reasonably complex POJO (multiple layers, lists, datatypes,
 and regex expressions), JDTG can whip out 1,000,000 POJOs in about 47 seconds.

@@ -14,5 +14,6 @@ public class ClassB {
     private List<String> field2;
     private ClassD objD;
     private Character character;
+    private EnumZ enumZ;
 
 }
