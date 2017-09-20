@@ -1,6 +1,7 @@
 package com.rainbowpunch.jtdg.core;
 
 import com.rainbowpunch.jtdg.core.falseDomain.ClassA;
+import com.rainbowpunch.jtdg.core.falseDomain.ClassAchild;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassC;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassD;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassE;
@@ -34,12 +35,12 @@ public class PojoGeneratorTest {
         e2.setValue1("World");
         e2.setValue2(100);
 
-        PojoGenerator<ClassA> generator = new PojoGenerator<>(ClassA.class)
+        PojoGenerator<ClassAchild> generator = new PojoGenerator<>(ClassAchild.class)
                 .andLimitField("phoneNumber", new RegexLimiter("(\\d{3})-\\d{3}-\\d{4}"))
                 .andLimitField("strangeString", new NestedLimiter<>(ClassC.class, new RegexLimiter("xy[acd]{1,4}.\\s\\d{2}[^peatd]\\[")))
                 .andLimitField("objE", ObjectLimiter.ofObjects(Arrays.asList(e1, e2)))
                 .analyzePojo();
-        ClassA objA = generator.generatePojo();
+        ClassAchild objA = generator.generatePojo();
 
         classFieldsNotNull(objA);
         assertTrue(Pattern.compile("\\(\\d{3}\\)-\\d{3}-\\d{4}").matcher(objA.getPhoneNumber()).find());
@@ -55,7 +56,7 @@ public class PojoGeneratorTest {
     @Ignore
     @Test
     public void loadTest() {
-        int cycles = 1000000;
+        int cycles = 500000;
 
         ClassE e1 = new ClassE();
         e1.setValue1("Hello");
@@ -65,13 +66,13 @@ public class PojoGeneratorTest {
         e2.setValue1("World");
         e2.setValue2(100);
 
-        PojoGenerator<ClassA> generator = new PojoGenerator<>(ClassA.class)
+        PojoGenerator<ClassAchild> generator = new PojoGenerator<>(ClassAchild.class)
                 .andLimitField("phoneNumber", new RegexLimiter("(\\d{3})-\\d{3}-\\d{4}"))
                 .andLimitField("strangeString", new NestedLimiter<>(ClassC.class, new RegexLimiter("xy[acd]{1,4}.\\s\\d{2}[^peatd]\\[")))
                 .andLimitField("objE", ObjectLimiter.ofObjects(Arrays.asList(e1, e2)))
                 .analyzePojo();
 
-        List<ClassA> listOfObjA = new ArrayList<>();
+        List<ClassAchild> listOfObjA = new ArrayList<>();
         List<Long> buildTime = new ArrayList<>();
 
         for(int i = 0; i < cycles; i++) {
@@ -125,16 +126,16 @@ public class PojoGeneratorTest {
         e2.setValue1("World");
         e2.setValue2(100);
 
-        PojoGenerator<ClassA> baseGen = new PojoGenerator<>(ClassA.class, 196809462)
+        PojoGenerator<ClassAchild> baseGen = new PojoGenerator<>(ClassAchild.class, 196809462)
                 .andLimitField("phoneNumber", new RegexLimiter("(\\d{3})-\\d{3}-\\d{4}"))
                 .andLimitField("strangeString", new NestedLimiter<>(ClassC.class, new RegexLimiter("xy[acd]{1,4}.\\s\\d{2}[^peatd]\\[")))
                 .andLimitField("objE", ObjectLimiter.ofObjects(Arrays.asList(e1, e2)));
 
-        PojoGenerator<ClassA> generator1 = baseGen.clone().analyzePojo();
-        PojoGenerator<ClassA> generator2 = baseGen.clone().analyzePojo();
+        PojoGenerator<ClassAchild> generator1 = baseGen.clone().analyzePojo();
+        PojoGenerator<ClassAchild> generator2 = baseGen.clone().analyzePojo();
 
-        ClassA classA1 = generator1.generatePojo();
-        ClassA classA2 = generator2.generatePojo();
+        ClassAchild classA1 = generator1.generatePojo();
+        ClassAchild classA2 = generator2.generatePojo();
 
         assertEquals(classA1, classA2);
     }
