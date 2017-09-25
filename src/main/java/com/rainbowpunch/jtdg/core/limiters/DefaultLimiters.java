@@ -36,11 +36,11 @@ public enum DefaultLimiters {
         this.clazz = Arrays.asList(clazz);
     }
 
-    DefaultLimiters(Function<Class<?>, ObjectLimiter<?>> enumLimiterFunction, Class<?> clazz, int a) {
+    //The int here is to differentiate the enum.  This needs to be replaced with a better idea
+    DefaultLimiters(Function<Class<?>, ObjectLimiter<?>> enumLimiterFunction, Class<? extends Enum> clazz, int a) {
         this.enumLimiterFunction = enumLimiterFunction;
         this.clazz = Arrays.asList(clazz);
     }
-
 
     DefaultLimiters(Function<Limiter<?>, Limiter<?>> listLimiterFunction, Class<?> clazz) {
         this.clazz = Arrays.asList(clazz);

@@ -1,5 +1,6 @@
 package com.rainbowpunch.jtdg.core.limiters;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
@@ -23,6 +24,10 @@ public abstract class ObjectLimiter<T> implements Limiter<T> {
             int randomObject = random.nextInt(acceptableObjectList.size());
             return acceptableObjectList.get(randomObject); // TODO: 7/30/17
         };
+    }
+
+    public static <U extends Object> ObjectLimiter<U> ofObjects(U... objects) {
+        return ofObjects(Arrays.asList(objects));
     }
 
     public static <U extends Object> ObjectLimiter<U> ofObjects(List<U> objects) {
