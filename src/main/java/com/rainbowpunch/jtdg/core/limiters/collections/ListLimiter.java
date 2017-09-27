@@ -60,7 +60,7 @@ public class ListLimiter implements Limiter<List<Object>>, RequiresDefaultLimite
                         .mapToObj(i -> limiter.generateSupplier(random).get())
                         .collect(Collectors.toList());
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error creating list limiter", e);
             }
         };
     }

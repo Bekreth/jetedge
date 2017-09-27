@@ -62,7 +62,7 @@ public class FieldSetter<T, U> {
         try {
             return Class.forName(type.getTypeName());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error getting generic class", e);
         }
     }
 

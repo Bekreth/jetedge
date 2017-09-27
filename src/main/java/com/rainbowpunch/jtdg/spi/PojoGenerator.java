@@ -6,6 +6,7 @@ import com.rainbowpunch.jtdg.core.PojoAnalyzer;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -46,6 +47,12 @@ public class PojoGenerator<T> implements Cloneable {
 
     public PojoGenerator<T> andLimitField(String fieldName, Limiter<?> limiter) {
         pojoAttributes.putFieldLimiter(fieldName, limiter);
+        return this;
+    }
+
+    public PojoGenerator<T> andLimitAllFieldsOf(Limiter<?> limiter) {
+        Class clazz = ((Class) ((ParameterizedType) limiter.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0]);
+        pojoAttributes.putAllFieldLimiter(clazz, limiter);
         return this;
     }
 
@@ -98,7 +105,7 @@ public class PojoGenerator<T> implements Cloneable {
             pojoAttributes.apply(newInstance);
             return newInstance;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error generating pojo", e);
         }
     }
 

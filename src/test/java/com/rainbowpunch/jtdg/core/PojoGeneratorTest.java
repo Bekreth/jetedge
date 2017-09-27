@@ -5,6 +5,7 @@ import com.rainbowpunch.jtdg.core.falseDomain.ClassAchild;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassC;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassD;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassE;
+import com.rainbowpunch.jtdg.core.limiters.BigDecimalLimiter;
 import com.rainbowpunch.jtdg.core.limiters.NestedLimiter;
 import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
 import com.rainbowpunch.jtdg.core.limiters.RegexLimiter;
@@ -41,6 +42,7 @@ public class PojoGeneratorTest {
                 .andLimitField("strangeString", new NestedLimiter<>(ClassC.class, new RegexLimiter("xy[acd]{1,4}.\\s\\d{2}[^peatd]\\[")))
                 .andLimitField("objE", ObjectLimiter.ofObjects(Arrays.asList(e1, e2)))
                 .andLimitField("echildlist", new ListLimiter(2, 4))
+                .andLimitAllFieldsOf(new BigDecimalLimiter())
                 .analyzePojo();
         ClassAchild objA = generator.generatePojo();
 
@@ -131,6 +133,7 @@ public class PojoGeneratorTest {
         PojoGenerator<ClassAchild> baseGen = new PojoGenerator<>(ClassAchild.class, 196809462)
                 .andLimitField("phoneNumber", new RegexLimiter("(\\d{3})-\\d{3}-\\d{4}"))
                 .andLimitField("strangeString", new NestedLimiter<>(ClassC.class, new RegexLimiter("xy[acd]{1,4}.\\s\\d{2}[^peatd]\\[")))
+                .andLimitAllFieldsOf(new BigDecimalLimiter())
                 .andLimitField("objE", ObjectLimiter.ofObjects(Arrays.asList(e1, e2)));
 
         PojoGenerator<ClassAchild> generator1 = baseGen.clone().analyzePojo();

@@ -20,7 +20,8 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
     @Override
     public void parsePojo(Class<T> clazz, PojoAttributes<T> attributes) {
         try {
-                List<Method> methods = new ArrayList<>();
+            System.out.println("Processing class : " + clazz.toString());
+            List<Method> methods = new ArrayList<>();
 
             Class currentClazz = clazz;
             while (currentClazz != Object.class) {
@@ -34,13 +35,14 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
                 .filter(this::removeIgnored)
                 .map(this::getMethodParameters)
                 .forEach(method -> {
+                    System.out.println(method.toString());
                     FieldSetter fieldSetter = FieldSetter.makeFieldSetter(method.getValue());
                     fieldSetter.setConsumer(createBiConsumer(method.getKey()));
                     attributes.putFieldSetter(method.getKey().getName(), fieldSetter);
                 });
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error while parsing : ", e);
         }
     }
 
@@ -72,7 +74,7 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
                 method.setAccessible(true);
                 method.invoke(instance, value);
             } catch (Exception e) {
-                throw new RuntimeException(e); // TODO: 7/29/17
+                throw new RuntimeException("Error creating BiConsumer : ", e); // TODO: 7/29/17
             }
         };
     }

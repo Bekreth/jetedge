@@ -33,11 +33,13 @@ public class FieldDataGenerator<T> {
                 .forEach(entry -> {
                     String entryName = entry.getKey().substring(3);
                     entryName = entryName.toLowerCase();
+                    Class clazz = entry.getValue().getClazz();
 
-                    Limiter limiter = limiterOfCurrentObjects.get(entryName);
+                    Limiter limiter = attributes.getAllFieldLimiterMap().get(clazz);
+                    limiter = limiterOfCurrentObjects.getOrDefault(entryName, limiter);
 
                     if (limiter == null || requiresPopulation(limiter)) {
-                        Limiter defaultLimiter = DefaultLimiters.getSimpleLimiter(entry.getValue().getClazz(),
+                        Limiter defaultLimiter = DefaultLimiters.getSimpleLimiter(clazz,
                                 entry.getValue(), attributes);
                         if (limiter == null) {
                             limiter = defaultLimiter;
