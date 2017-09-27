@@ -2,6 +2,8 @@ package com.rainbowpunch.jtdg.core;
 
 import com.rainbowpunch.jtdg.core.limiters.DefaultLimiters;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
+import com.rainbowpunch.jtdg.core.limiters.RequiresDefaultLimiter;
+import com.rainbowpunch.jtdg.core.limiters.collections.ListLimiter;
 
 import java.util.Map;
 import java.util.Random;
@@ -31,11 +33,21 @@ public class FieldDataGenerator<T> {
                 .forEach(entry -> {
                     String entryName = entry.getKey().substring(3);
                     entryName = entryName.toLowerCase();
+                    Class clazz = entry.getValue().getClazz();
 
-                    Limiter defaultLimiter = DefaultLimiters.getSimpleLimiter(entry.getValue().getClazz(),
-                            entry.getValue(), attributes);
+                    Limiter limiter = attributes.getAllFieldLimiterMap().get(clazz);
+                    limiter = limiterOfCurrentObjects.getOrDefault(entryName, limiter);
 
-                    Limiter limiter = limiterOfCurrentObjects.getOrDefault(entryName, defaultLimiter);
+                    if (limiter == null || requiresPopulation(limiter)) {
+                        Limiter defaultLimiter = DefaultLimiters.getSimpleLimiter(clazz,
+                                entry.getValue(), attributes);
+                        if (limiter == null) {
+                            limiter = defaultLimiter;
+                        } else {
+                            limiter = ((RequiresDefaultLimiter) limiter).reconcile(defaultLimiter);
+                        }
+                    }
+
 
                     updateFieldSetterWithSupplier(entry.getValue(), limiter); // TODO: 7/29/17 get or default
                 });
@@ -53,5 +65,14 @@ public class FieldDataGenerator<T> {
 
     private void updateFieldSetterWithSupplier(FieldSetter<T, ?> fieldSetter, Limiter limiter) {
         fieldSetter.setSupplier(limiter.generateSupplier(random));
+    }
+
+    private boolean requiresPopulation(Limiter limiter) {
+        if (RequiresDefaultLimiter.class.isAssignableFrom(limiter.getClass())) {
+            RequiresDefaultLimiter innerLimiter = (RequiresDefaultLimiter) limiter;
+            return !innerLimiter.hasLimiter();
+        } else {
+            return false;
+        }
     }
 }

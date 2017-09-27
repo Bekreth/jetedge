@@ -3,7 +3,9 @@ package com.rainbowpunch.jtdg.core;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
@@ -18,22 +20,29 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
     @Override
     public void parsePojo(Class<T> clazz, PojoAttributes<T> attributes) {
         try {
-            Method[] methods = clazz.getDeclaredMethods();
+            System.out.println("Processing class : " + clazz.toString());
+            List<Method> methods = new ArrayList<>();
 
-            Arrays.asList(methods)
-                    .stream()
-                    .map(this::getMethodName)
-                    .filter(this::getSetterMethods)
-                    .filter(this::removeIgnored)
-                    .map(this::getMethodParameters)
-                    .forEach(method -> {
-                        FieldSetter fieldSetter = FieldSetter.makeFieldSetter(method.getValue());
-                        fieldSetter.setConsumer(createBiConsumer(method.getKey()));
-                        attributes.putFieldSetter(method.getKey().getName(), fieldSetter);
-                    });
+            Class currentClazz = clazz;
+            while (currentClazz != Object.class) {
+                methods.addAll(Arrays.asList(currentClazz.getDeclaredMethods()));
+                currentClazz = currentClazz.getSuperclass();
+            }
+
+            methods.stream()
+                .map(this::getMethodName)
+                .filter(this::getSetterMethods)
+                .filter(this::removeIgnored)
+                .map(this::getMethodParameters)
+                .forEach(method -> {
+                    System.out.println(method.toString());
+                    FieldSetter fieldSetter = FieldSetter.makeFieldSetter(method.getValue());
+                    fieldSetter.setConsumer(createBiConsumer(method.getKey()));
+                    attributes.putFieldSetter(method.getKey().getName(), fieldSetter);
+                });
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error while parsing : ", e);
         }
     }
 
@@ -65,7 +74,7 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
                 method.setAccessible(true);
                 method.invoke(instance, value);
             } catch (Exception e) {
-                throw new RuntimeException(e); // TODO: 7/29/17
+                throw new RuntimeException("Error creating BiConsumer : ", e); // TODO: 7/29/17
             }
         };
     }

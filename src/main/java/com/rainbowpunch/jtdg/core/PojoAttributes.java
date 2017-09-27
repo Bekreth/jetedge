@@ -15,6 +15,7 @@ public class PojoAttributes<T> implements Cloneable {
     private Class<T> pojoClazz;
     private Map<Class, Map<String, Limiter<?>>> masterLimiterMap;
     private Map<String, FieldSetter<T, ?>> fieldSetterMap;
+    private Map<Class, Limiter<?>> allFieldLimiterMap;
     private int randomSeed;
 
     private PojoAttributes() {
@@ -28,6 +29,7 @@ public class PojoAttributes<T> implements Cloneable {
         this.masterLimiterMap = new HashMap<>();
         this.masterLimiterMap.put(this.pojoClazz, new HashMap<>());
         this.fieldSetterMap = new HashMap<>();
+        this.allFieldLimiterMap = new HashMap<>();
     }
 
     public Class<T> getPojoClazz() {
@@ -56,12 +58,19 @@ public class PojoAttributes<T> implements Cloneable {
         }
     }
 
+    public void putAllFieldLimiter(Class clazz, Limiter<?> limiter) {
+        allFieldLimiterMap.put(clazz, limiter);
+    }
     public void putFieldLimiter(String fieldName, NestedLimiter limiter) {
         masterLimiterMap.get(limiter.getClazz()).put(fieldName, limiter);
     }
 
     public Stream<Map.Entry<String, FieldSetter<T, ?>>> fieldSetterStream() {
         return fieldSetterMap.entrySet().stream();
+    }
+
+    public Map<Class, Limiter<?>> getAllFieldLimiterMap() {
+        return allFieldLimiterMap;
     }
 
     public int getRandomSeed() {
@@ -79,6 +88,7 @@ public class PojoAttributes<T> implements Cloneable {
         }
         attributes.masterLimiterMap = (Map) ((HashMap) this.masterLimiterMap).clone();
         attributes.fieldSetterMap = (Map) ((HashMap) this.fieldSetterMap).clone();
+        attributes.allFieldLimiterMap = (Map) ((HashMap) this.allFieldLimiterMap).clone();
 
         return attributes;
     }
