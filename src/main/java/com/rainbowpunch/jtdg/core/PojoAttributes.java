@@ -14,8 +14,9 @@ public class PojoAttributes<T> implements Cloneable {
 
     private Class<T> pojoClazz;
     private Map<Class, Map<String, Limiter<?>>> masterLimiterMap;
-    private Map<String, FieldSetter<T, ?>> fieldSetterMap;
     private Map<Class, Limiter<?>> allFieldLimiterMap;
+    private Map<String, FieldSetter<T, ?>> fieldSetterMap;
+    private Set<String> fieldsToIgnore;
     private int randomSeed;
 
     private PojoAttributes() {
@@ -30,6 +31,7 @@ public class PojoAttributes<T> implements Cloneable {
         this.masterLimiterMap.put(this.pojoClazz, new HashMap<>());
         this.fieldSetterMap = new HashMap<>();
         this.allFieldLimiterMap = new HashMap<>();
+        this.fieldsToIgnore = new HashSet<>();
     }
 
     public Class<T> getPojoClazz() {
@@ -73,6 +75,14 @@ public class PojoAttributes<T> implements Cloneable {
         return allFieldLimiterMap;
     }
 
+    public void ignoreField(String fieldName) {
+        fieldsToIgnore.add("set" + fieldName.toLowerCase());
+    }
+
+    public boolean shouldIgnore(String fieldName) {
+        return fieldsToIgnore.contains(fieldName);
+    }
+
     public int getRandomSeed() {
         return randomSeed;
     }
@@ -89,6 +99,7 @@ public class PojoAttributes<T> implements Cloneable {
         attributes.masterLimiterMap = (Map) ((HashMap) this.masterLimiterMap).clone();
         attributes.fieldSetterMap = (Map) ((HashMap) this.fieldSetterMap).clone();
         attributes.allFieldLimiterMap = (Map) ((HashMap) this.allFieldLimiterMap).clone();
+        attributes.fieldsToIgnore = (Set) ((HashSet) this.fieldsToIgnore).clone();
 
         return attributes;
     }
