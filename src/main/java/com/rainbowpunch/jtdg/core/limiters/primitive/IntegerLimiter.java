@@ -14,11 +14,11 @@ public class IntegerLimiter implements Limiter<Integer> {
     private Integer offset;
 
     public IntegerLimiter() {
-        this(null, null);
+        this(null, 0);
     }
 
     public IntegerLimiter(Integer range) {
-        this(range, null);
+        this(range, 0);
     }
 
     public IntegerLimiter(Integer range, Integer offset) {

@@ -48,7 +48,6 @@ public class FieldDataGenerator<T> {
                         }
                     }
 
-
                     updateFieldSetterWithSupplier(entry.getValue(), limiter); // TODO: 7/29/17 get or default
                 });
     }

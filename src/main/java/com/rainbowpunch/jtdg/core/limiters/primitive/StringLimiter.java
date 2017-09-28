@@ -3,6 +3,7 @@ package com.rainbowpunch.jtdg.core.limiters.primitive;
 import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
 import com.rainbowpunch.jtdg.util.ReadableCharList;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
@@ -14,13 +15,35 @@ import java.util.stream.IntStream;
  */
 public class StringLimiter extends ObjectLimiter<String> {
 
-    private Integer length = 30;
+    private Integer length;
+
+    public StringLimiter() {
+        length = 30;
+    }
+
+    public StringLimiter(int length) {
+        this(ReadableCharList.LIST_OF_ALL_CHAR, length);
+    }
+
+    public StringLimiter(List<Character> charList) {
+        this(charList, 30);
+    }
+
+    public StringLimiter(List<Character> charList, int length) {
+        this.length = length;
+        List<String> stringList = charListToStringList(charList);
+        this.updateObjectList(stringList);
+    }
+
+    private List<String> charListToStringList(List<Character> charList) {
+        return charList.stream()
+                .map(ch -> Character.toString(ch))
+                .collect(Collectors.toList());
+    }
 
     @Override
     protected List<String> configureObjectList() {
-        return ReadableCharList.LIST_OF_ALL_CHAR.stream()
-                .map(ch -> Character.toString(ch))
-                .collect(Collectors.toList());
+        return charListToStringList(ReadableCharList.LIST_OF_ALL_CHAR);
     }
 
     @Override

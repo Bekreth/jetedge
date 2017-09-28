@@ -18,6 +18,11 @@ public abstract class ObjectLimiter<T> implements Limiter<T> {
 
     protected abstract List<T> configureObjectList();
 
+    public void updateObjectList(List<T> newList) {
+        acceptableObjectList.clear();
+        acceptableObjectList.addAll(newList);
+    }
+
     @Override
     public Supplier<T> generateSupplier(Random random) {
         return () -> {

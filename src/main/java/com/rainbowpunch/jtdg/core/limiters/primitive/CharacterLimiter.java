@@ -17,6 +17,14 @@ public class CharacterLimiter extends ObjectLimiter<Character> {
         return ReadableCharList.LIST_OF_ALL_CHAR;
     }
 
+    public CharacterLimiter() {
+
+    }
+
+    public CharacterLimiter(List<Character> charList) {
+        this.updateObjectList(charList);
+    }
+
     @Override
     public Supplier<Character> generateSupplier(Random random) {
         return () -> {
