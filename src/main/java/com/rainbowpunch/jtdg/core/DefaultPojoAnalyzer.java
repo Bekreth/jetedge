@@ -15,12 +15,14 @@ import java.util.regex.Pattern;
  */
 public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
 
+    private PojoAttributes<T> attributes;
     private static final Pattern pattern = Pattern.compile("set.*");
 
     @Override
     public void parsePojo(Class<T> clazz, PojoAttributes<T> attributes) {
         try {
             System.out.println("Processing class : " + clazz.toString());
+            this.attributes = attributes;
             List<Method> methods = new ArrayList<>();
 
             Class currentClazz = clazz;
@@ -55,7 +57,7 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
     }
 
     private boolean removeIgnored(Map.Entry<Method, String> entry) {
-        return true; // TODO: 7/29/17
+        return !attributes.shouldIgnore(entry.getValue().toLowerCase());
     }
 
     private Map.Entry<Method, Type> getMethodParameters(Map.Entry<Method, String> entry) {

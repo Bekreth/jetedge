@@ -104,6 +104,11 @@ public enum DefaultLimiters {
                     .forEach(entry -> {
                         generator.andLimitField(entry.getKey(), entry.getValue());
                     });
+            parentAttributes.getAllFieldLimiterMap()
+                    .entrySet()
+                    .stream()
+                    .map(Map.Entry::getValue)
+                    .forEach(generator::andLimitAllFieldsOf);
             generator.analyzePojo();
         }
 

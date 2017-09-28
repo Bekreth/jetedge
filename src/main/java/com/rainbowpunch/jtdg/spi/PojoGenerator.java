@@ -56,6 +56,11 @@ public class PojoGenerator<T> implements Cloneable {
         return this;
     }
 
+    public PojoGenerator<T> andIgnoreField(String fieldName) {
+        pojoAttributes.ignoreField(fieldName);
+        return this;
+    }
+
     /**
      * This method populates the PojoAttributes with the needed fieldSetters and dataGenerators
      *      necessary to create Pojos on demand.
