@@ -17,9 +17,20 @@ public class ReadableCharList {
 
     public static List<Character> LIST_OF_CHAR_NO_DIGITS = new ArrayList<>();
 
+    public static List<Character> LIST_OF_ALL_UPPER_CASE_CHAR = new ArrayList<>();
+
+    public static List<Character> LIST_OF_ALL_LOWER_CASE_CHAR = new ArrayList<>();
+
+    public static List<Character> LIST_OF_ALL_ALPHA_CHAR = new ArrayList<>();
+
     static {
         LIST_OF_CHAR_NO_DIGITS.addAll(LIST_OF_ALL_CHAR.subList(0, 15));
         LIST_OF_CHAR_NO_DIGITS.addAll(LIST_OF_ALL_CHAR.subList(27, LIST_OF_ALL_CHAR.size()));
+        LIST_OF_ALL_UPPER_CASE_CHAR.addAll(LIST_OF_ALL_CHAR.subList(33, 58));
+        LIST_OF_ALL_LOWER_CASE_CHAR.addAll(LIST_OF_ALL_CHAR.subList(65, 90));
+
+        LIST_OF_ALL_ALPHA_CHAR.addAll(LIST_OF_ALL_UPPER_CASE_CHAR);
+        LIST_OF_ALL_ALPHA_CHAR.addAll(LIST_OF_ALL_LOWER_CASE_CHAR);
     }
 
 }

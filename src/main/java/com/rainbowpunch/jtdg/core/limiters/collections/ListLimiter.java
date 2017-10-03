@@ -23,10 +23,10 @@ public class ListLimiter implements Limiter<List<Object>>, RequiresDefaultLimite
     }
 
     public ListLimiter(Limiter limiter) {
-        this(limiter, 5, 2);
+        this(limiter, 2, 5);
     }
 
-    public ListLimiter(Limiter limiter, int offset, int range) {
+    public ListLimiter(Limiter limiter, int range, int offset) {
         this.range = range;
         this.offset = offset;
         this.limiter = limiter;
@@ -48,7 +48,7 @@ public class ListLimiter implements Limiter<List<Object>>, RequiresDefaultLimite
 
     @Override
     public ListLimiter reconcile(ListLimiter baseLimiter) {
-        return new ListLimiter(baseLimiter.getLimiter(), this.offset, this.range);
+        return new ListLimiter(baseLimiter.getLimiter(), this.range, this.offset);
     }
 
     @Override
