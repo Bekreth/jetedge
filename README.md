@@ -1,6 +1,6 @@
 # Java Test Data Generator
 
-[![Build Status](https://travis-ci.org/jncornett/java-test-data-generator.svg?branch=master)](https://travis-ci.org/jncornett/java-test-data-generator)
+[![Build Status](https://travis-ci.org/Bekreth/java-test-data-generator.svg?branch=master)](https://travis-ci.org/Bekreth/java-test-data-generator)
 
 Welcome welcome.
 
