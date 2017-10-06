@@ -1,5 +1,8 @@
 package com.rainbowpunch.jtdg.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.AbstractMap;
@@ -14,6 +17,7 @@ import java.util.regex.Pattern;
  *
  */
 public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
+    private static Logger log = LoggerFactory.getLogger(DefaultPojoAnalyzer.class);
 
     private PojoAttributes<T> attributes;
     private static final Pattern pattern = Pattern.compile("set.*");
@@ -21,7 +25,7 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
     @Override
     public void parsePojo(Class<T> clazz, PojoAttributes<T> attributes) {
         try {
-            System.out.println("Processing class : " + clazz.toString());
+            log.info("Parsing class: {}", clazz.getCanonicalName());
             this.attributes = attributes;
             List<Method> methods = new ArrayList<>();
 
@@ -37,7 +41,7 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
                 .filter(this::removeIgnored)
                 .map(this::getMethodParameters)
                 .forEach(method -> {
-                    System.out.println(method.toString());
+                    log.debug("Setting field with: {}", method.getKey().getName());
                     FieldSetter fieldSetter = FieldSetter.makeFieldSetter(method.getValue());
                     fieldSetter.setConsumer(createBiConsumer(method.getKey()));
                     attributes.putFieldSetter(method.getKey().getName(), fieldSetter);
