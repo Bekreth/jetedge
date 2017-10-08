@@ -94,8 +94,6 @@ public class ClassAttributesTest {
     @Test
     public void testIsVoid() {
         assertFalse(unitUnderTest.isVoid());
-        final MethodAttributes methodAttributes = unitUnderTest.getMethods().get(0);
-        assertTrue(methodAttributes.getReturnType().isVoid());
     }
 
     @Test
