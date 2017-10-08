@@ -1,14 +1,14 @@
 package com.rainbowpunch.jtdg.core;
 
-import static java.util.stream.Collectors.toSet;
+import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
+import com.rainbowpunch.jtdg.core.reflection.MethodAttributes;
 
 import java.util.Optional;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
-import com.rainbowpunch.jtdg.core.reflection.MethodAttributes;
+import static java.util.stream.Collectors.toSet;
 
 /**
  *

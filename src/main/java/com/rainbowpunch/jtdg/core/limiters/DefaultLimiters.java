@@ -1,11 +1,5 @@
 package com.rainbowpunch.jtdg.core.limiters;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
 import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.collections.ListLimiter;
 import com.rainbowpunch.jtdg.core.limiters.primitive.BooleanLimiter;
@@ -17,6 +11,12 @@ import com.rainbowpunch.jtdg.core.limiters.primitive.LongLimiter;
 import com.rainbowpunch.jtdg.core.limiters.primitive.ShortLimiter;
 import com.rainbowpunch.jtdg.core.limiters.primitive.StringLimiter;
 import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 public class DefaultLimiters {
     private static final Limiter<Integer> INTEGER_LIMITER = new IntegerLimiter();

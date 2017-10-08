@@ -1,8 +1,5 @@
 package com.rainbowpunch.jtdg.core.reflection;
 
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -13,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 public class ClassAttributes {
     private final Class<?> clazz;

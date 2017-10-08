@@ -1,13 +1,13 @@
 package com.rainbowpunch.jtdg.core.limiters.primitive;
 
+import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
+import com.rainbowpunch.jtdg.util.ReadableCharList;
+
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
-import com.rainbowpunch.jtdg.util.ReadableCharList;
 
 /**
  *

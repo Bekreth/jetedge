@@ -1,12 +1,12 @@
 package com.rainbowpunch.jtdg.core.limiters;
 
+import com.rainbowpunch.jtdg.core.PojoAttributes;
+import com.rainbowpunch.jtdg.spi.PojoGenerator;
+
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import com.rainbowpunch.jtdg.core.PojoAttributes;
-import com.rainbowpunch.jtdg.spi.PojoGenerator;
 
 public class DefaultPojoLimiter<T> implements Limiter<T> {
 

@@ -1,11 +1,11 @@
 package com.rainbowpunch.jtdg.core;
 
-import java.util.Map;
-import java.util.Random;
-
 import com.rainbowpunch.jtdg.core.limiters.DefaultLimiters;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
 import com.rainbowpunch.jtdg.core.limiters.RequiresDefaultLimiter;
+
+import java.util.Map;
+import java.util.Random;
 
 /**
  *

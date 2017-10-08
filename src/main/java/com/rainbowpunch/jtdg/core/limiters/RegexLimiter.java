@@ -2,7 +2,10 @@ package com.rainbowpunch.jtdg.core.limiters;
 
 import com.rainbowpunch.jtdg.util.ReadableCharList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 

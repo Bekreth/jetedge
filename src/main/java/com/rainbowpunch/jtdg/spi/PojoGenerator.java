@@ -1,7 +1,7 @@
 package com.rainbowpunch.jtdg.spi;
 
-import com.rainbowpunch.jtdg.core.FieldDataGenerator;
 import com.rainbowpunch.jtdg.core.DefaultPojoAnalyzer;
+import com.rainbowpunch.jtdg.core.FieldDataGenerator;
 import com.rainbowpunch.jtdg.core.PojoAnalyzer;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
