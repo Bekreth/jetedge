@@ -9,7 +9,6 @@ public interface PojoAnalyzer<T> {
 
     /**
      * @param clazz  The class to be analyzed
-     * @return
      */
     void parsePojo(Class<T> clazz, PojoAttributes<T> attributes);
 

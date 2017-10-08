@@ -11,11 +11,7 @@ public class EnumLimiter<T extends Enum<T>> extends ObjectLimiter<T> {
     }
 
     public EnumLimiter(Class<T> enumType) {
-        List<T> enumList = new ArrayList<>();
-        for (T t : EnumSet.allOf(enumType)) {
-            enumList.add(t);
-        }
-        this.acceptableObjectList =  enumList;
+        this.acceptableObjectList = new ArrayList<>(EnumSet.allOf(enumType));
     }
 
     @Override

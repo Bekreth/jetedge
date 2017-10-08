@@ -27,8 +27,6 @@ public class CharacterLimiter extends ObjectLimiter<Character> {
 
     @Override
     public Supplier<Character> generateSupplier(Random random) {
-        return () -> {
-            return super.generateSupplier(random).get();
-        };
+        return () -> super.generateSupplier(random).get();
     }
 }

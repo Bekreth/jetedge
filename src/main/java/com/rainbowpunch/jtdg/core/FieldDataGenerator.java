@@ -1,19 +1,18 @@
 package com.rainbowpunch.jtdg.core;
 
+import java.util.Map;
+import java.util.Random;
+
 import com.rainbowpunch.jtdg.core.limiters.DefaultLimiters;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
 import com.rainbowpunch.jtdg.core.limiters.RequiresDefaultLimiter;
-import com.rainbowpunch.jtdg.core.limiters.collections.ListLimiter;
-
-import java.util.Map;
-import java.util.Random;
 
 /**
  *
  */
 public class FieldDataGenerator<T> {
 
-    private Random random;
+    private final Random random;
 
     public FieldDataGenerator() {
         random = new Random();
@@ -31,16 +30,17 @@ public class FieldDataGenerator<T> {
                 .filter(entry -> shouldCreateSupplier(limiterOfCurrentObjects.get(entry.getKey())))
                 .sorted(this::alphabetical)
                 .forEach(entry -> {
-                    String entryName = entry.getKey().substring(3);
-                    entryName = entryName.toLowerCase();
-                    Class clazz = entry.getValue().getClazz();
+                    String entryName = entry.getKey().toLowerCase();
+                    Class clazz = entry.getValue().getClassAttributes().getClazz();
 
                     Limiter limiter = attributes.getAllFieldLimiterMap().get(clazz);
                     limiter = limiterOfCurrentObjects.getOrDefault(entryName, limiter);
 
                     if (limiter == null || requiresPopulation(limiter)) {
-                        Limiter defaultLimiter = DefaultLimiters.getSimpleLimiter(clazz,
-                                entry.getValue(), attributes);
+                        Limiter defaultLimiter = DefaultLimiters.getDefaultLimiter(
+                                entry.getValue().getClassAttributes(),
+                                attributes
+                        );
                         if (limiter == null) {
                             limiter = defaultLimiter;
                         } else {
@@ -53,9 +53,8 @@ public class FieldDataGenerator<T> {
     }
 
     private boolean shouldCreateSupplier(Limiter limiter) {
-        boolean shouldCreateSupplier = true;
         // TODO: 7/30/17
-        return shouldCreateSupplier;
+        return true;
     }
 
     private int alphabetical(Map.Entry<String, FieldSetter<T, ?>> entry1, Map.Entry<String, FieldSetter<T, ?>> entry2) {

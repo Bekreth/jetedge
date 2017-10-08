@@ -17,7 +17,6 @@ import java.util.stream.Stream;
  *
  */
 public class PojoGenerator<T> implements Cloneable {
-
     private Class<T> pojo;
     private Integer randomSeed;
 
@@ -69,7 +68,6 @@ public class PojoGenerator<T> implements Cloneable {
     /**
      * This method populates the PojoAttributes with the needed fieldSetters and dataGenerators
      *      necessary to create Pojos on demand.
-     * @return
      */
     public PojoGenerator<T> analyzePojo() {
         pojoAnalyzer.parsePojo(pojo, pojoAttributes);
@@ -79,7 +77,15 @@ public class PojoGenerator<T> implements Cloneable {
 
     public Stream<T> generatePojoStream() {
         return IntStream.iterate(0, i -> i + 1)
-                .mapToObj(this::generatePojo);
+                .mapToObj(i1 -> {
+                    try {
+                        T newInstance = pojo.newInstance();
+                        pojoAttributes.apply(newInstance);
+                        return newInstance;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Error generating pojo", e);
+                    }
+                });
     }
 
     public List<T> generatePojoList(int count) {
@@ -89,7 +95,13 @@ public class PojoGenerator<T> implements Cloneable {
     }
 
     public T generatePojo() {
-        return generatePojo(0);
+        try {
+            T newInstance = pojo.newInstance();
+            pojoAttributes.apply(newInstance);
+            return newInstance;
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating pojo", e);
+        }
     }
 
     @Override
@@ -101,22 +113,12 @@ public class PojoGenerator<T> implements Cloneable {
         } catch (Exception e) {
             throw new RuntimeException("Failed to clone objects: ", e);
         }
-        generator.randomSeed = new Integer(this.randomSeed);
+        generator.randomSeed = this.randomSeed;
         generator.pojoAnalyzer = new DefaultPojoAnalyzer<>();
         generator.pojoAttributes = this.pojoAttributes.clone();
         generator.fieldDataGenerator = new FieldDataGenerator(randomSeed);
 
         return generator;
-    }
-
-    private T generatePojo(int i) {
-        try {
-            T newInstance = pojo.newInstance();
-            pojoAttributes.apply(newInstance);
-            return newInstance;
-        } catch (Exception e) {
-            throw new RuntimeException("Error generating pojo", e);
-        }
     }
 
 }
