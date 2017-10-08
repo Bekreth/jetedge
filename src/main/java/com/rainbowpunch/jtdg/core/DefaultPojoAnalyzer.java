@@ -14,7 +14,7 @@ import com.rainbowpunch.jtdg.core.reflection.MethodAttributes;
  *
  */
 public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
-    private static Logger log = LoggerFactory.getLogger(DefaultPojoAnalyzer.class);
+    private static final Logger log = LoggerFactory.getLogger(DefaultPojoAnalyzer.class);
 
     @Override
     public void parsePojo(Class<T> clazz, PojoAttributes<T> attributes) {

@@ -103,11 +103,11 @@ public class MethodAttributes {
             }
         }
 
-        public boolean isSetter() {
+        boolean isSetter() {
             return "set".equals(accessorPrefix);
         }
 
-        public String getAssociatedFieldName() {
+        String getAssociatedFieldName() {
             return associatedFieldName;
         }
     }
