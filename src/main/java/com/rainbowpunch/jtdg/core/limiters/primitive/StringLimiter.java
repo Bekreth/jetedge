@@ -1,21 +1,20 @@
 package com.rainbowpunch.jtdg.core.limiters.primitive;
 
-import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
-import com.rainbowpunch.jtdg.util.ReadableCharList;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
+import com.rainbowpunch.jtdg.util.ReadableCharList;
+
 /**
  *
  */
 public class StringLimiter extends ObjectLimiter<String> {
 
-    private Integer length;
+    private final Integer length;
 
     public StringLimiter() {
         length = 30;
@@ -48,12 +47,10 @@ public class StringLimiter extends ObjectLimiter<String> {
 
     @Override
     public Supplier<String> generateSupplier(Random random) {
-        return () -> {
-            return IntStream.range(0, length)
-                    .sequential()
-                    .mapToObj((i) -> super.generateSupplier(random))
-                    .map(Supplier::get)
-                    .collect(Collectors.joining());
-        };
+        return () -> IntStream.range(0, length)
+                .sequential()
+                .mapToObj((i) -> super.generateSupplier(random))
+                .map(Supplier::get)
+                .collect(Collectors.joining());
     }
 }
