@@ -4,7 +4,6 @@ import com.rainbowpunch.jtdg.core.limiters.Limiter;
 import com.rainbowpunch.jtdg.core.limiters.NestedLimiter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -23,7 +22,7 @@ public class PojoAttributes<T> implements Cloneable {
 
     }
 
-    public PojoAttributes(Class pojoClazz, int randomSeed) {
+    public PojoAttributes(Class<T> pojoClazz, int randomSeed) {
         this.pojoClazz = pojoClazz;
         this.randomSeed = randomSeed;
 
@@ -105,10 +104,7 @@ public class PojoAttributes<T> implements Cloneable {
     }
 
     public void apply(T pojo) {
-        fieldSetterMap.entrySet()
-                .forEach(entry -> {
-                    entry.getValue().apply(pojo);
-                });
+        fieldSetterMap.forEach((key, value) -> value.apply(pojo));
     }
 
 }
