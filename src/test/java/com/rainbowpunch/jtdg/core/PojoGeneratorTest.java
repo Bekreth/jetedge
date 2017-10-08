@@ -3,7 +3,6 @@ package com.rainbowpunch.jtdg.core;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassA;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassAchild;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassC;
-import com.rainbowpunch.jtdg.core.falseDomain.ClassD;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassE;
 import com.rainbowpunch.jtdg.core.limiters.BigDecimalLimiter;
 import com.rainbowpunch.jtdg.core.limiters.NestedLimiter;
