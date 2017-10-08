@@ -8,6 +8,9 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * A friendly wrapper for Method objects.
+ */
 public class MethodAttributes {
     private final Method method;
     private MethodName methodName = null;
@@ -25,24 +28,41 @@ public class MethodAttributes {
         return method;
     }
 
+    /**
+     * @return true if the method is a setter method; that is, its name starts with "set" and
+     *         it accepts one parameter and has a void return type.
+     */
     public boolean isSetter() {
         return getMethodName().isSetter() &&
                 getParameterCount() == 1 &&
                 getReturnType().isVoid();
     }
 
+    /**
+     * @return the expected field name associated with the method if the method appears to be a
+     *         getter or a setter.
+     */
     public Optional<String> getAssociatedFieldName() {
         return Optional.ofNullable(methodName.getAssociatedFieldName());
     }
 
+    /**
+     * @return a wrapped Class object of the return type of the method.
+     */
     public ClassAttributes getReturnType() {
         return ClassAttributes.create(method.getReturnType(), method.getGenericReturnType());
     }
 
+    /**
+     * @return the parameter count of the method.
+     */
     public int getParameterCount() {
         return method.getParameterCount();
     }
 
+    /**
+     * @return a list of wrapped Class objects which are the parameter types of the method.
+     */
     public List<ClassAttributes> getParameterTypes() {
         if (parameterTypes == null) {
             parameterTypes = new ArrayList<>();
@@ -76,6 +96,10 @@ public class MethodAttributes {
         return methodName;
     }
 
+    /**
+     * @param s string to uncapitalize (yes, it's not a word).
+     * @return the uncaptalized string: "FooBar" -> "fooBar".
+     */
     private static String uncapitalize(String s) {
         if (s == null) {
             return null;

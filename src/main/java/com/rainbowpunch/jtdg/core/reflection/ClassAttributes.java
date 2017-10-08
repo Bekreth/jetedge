@@ -14,6 +14,9 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Friendly wrapper around the Java reflection API.
+ */
 public class ClassAttributes {
     private final Class<?> clazz;
     private final Type genericTypeHint;
@@ -23,8 +26,14 @@ public class ClassAttributes {
     private List<MethodAttributes> methods = null;
     private List<FieldAttributes> fields = null;
 
+    /**
+     * @param clazz class to wrap.
+     * @param genericTypeHint an optional generic type hint.
+     */
     private ClassAttributes(Class<?> clazz, Type genericTypeHint) {
         this.clazz = requireNonNull(clazz);
+        // This is the Type that is stored on a Field or Method object. Providing this type
+        // helps us get around the type erasure of parameterized types such as List<> or Map<>.
         this.genericTypeHint = genericTypeHint;
     }
 
@@ -32,10 +41,16 @@ public class ClassAttributes {
         return clazz.getName();
     }
 
+    /**
+     * @return the wrapped Class object.
+     */
     public Class<?> getClazz() {
         return clazz;
     }
 
+    /**
+     * @return a list of all methods on the Class object and those inherited by parent classes.
+     */
     public List<MethodAttributes> getMethods() {
         if (methods == null) {
             methods = Arrays.stream(clazz.getMethods())
@@ -45,6 +60,9 @@ public class ClassAttributes {
         return methods;
     }
 
+    /**
+     * @return a list of all fields on the Class object and those inherited by parent classes.
+     */
     public List<FieldAttributes> getFields() {
         if (fields == null) {
             final List<Field> rawFields = new ArrayList<>();
@@ -60,36 +78,64 @@ public class ClassAttributes {
         return fields;
     }
 
+    /**
+     * @param others classes to compare against.
+     * @return true if the Class object is a subclass of any class in others.
+     * @throws NullPointerException if any class in others is null.
+     */
     public boolean isSubclassOf(Class<?> ...others) {
         return Arrays.stream(others)
                 .filter(Objects::nonNull)
                 .anyMatch(o -> o.isAssignableFrom(clazz));
     }
 
+    /**
+     * @param others classes to compare against.
+     * @return true if the Class object is exactly equal to any class in others.
+     * @throws NullPointerException if any class in others is null.
+     */
     public boolean is(Class<?> ...others) {
         return Arrays.stream(others)
                 .filter(Objects::nonNull)
                 .anyMatch(o -> Objects.equals(o, clazz));
     }
 
+    /**
+     * @return true if the Class object is a Java array.
+     */
     public boolean isArray() {
         return clazz.isArray();
     }
 
+    /**
+     * @return true if the Class object is a subclass of java.util.Collection.
+     */
     public boolean isCollection() {
         return isSubclassOf(Collection.class);
     }
 
+    /**
+     * @return true if the Class object is a subclass of java.util.Map
+     */
     public boolean isMap() {
         return isSubclassOf(Map.class);
     }
 
+    /**
+     * @return true if the Class object is type Void or void.
+     */
     public boolean isVoid() {
         return is(void.class) || is(Void.class);
     }
 
+    /**
+     * @return true if the Class object is an Enum type.
+     */
     public boolean isEnum() { return isSubclassOf(Enum.class); }
 
+    /**
+     * @return the array or Collection underlying element type for the Class object.
+     */
     public Optional<ClassAttributes> getElementType() {
         if (isArray()) {
             return Optional.of(create(clazz.getComponentType()));
@@ -106,6 +152,9 @@ public class ClassAttributes {
         return Optional.empty();
     }
 
+    /**
+     * @return the underlying Map key type for the Class object.
+     */
     public Optional<ClassAttributes> getKeyType() {
         if (isMap()) {
             final List<Class<?>> parameterizedTypes = getParameterizedTypes();
@@ -119,6 +168,9 @@ public class ClassAttributes {
         return Optional.empty();
     }
 
+    /**
+     * @return the underlying Map value type for the Class object.
+     */
     public Optional<ClassAttributes> getValueType() {
         if (isMap()) {
             final List<Class<?>> parameterizedTypes = getParameterizedTypes();
@@ -137,6 +189,9 @@ public class ClassAttributes {
         return String.format("Class[%s]", getName());
     }
 
+    /**
+     * @return a list of parameter types associated with the Class object.
+     */
     public List<Class<?>> getParameterizedTypes() {
         if (parameterizedTypes == null) {
             parameterizedTypes = extractParameterizedTypes(genericTypeHint);
@@ -144,10 +199,19 @@ public class ClassAttributes {
         return parameterizedTypes;
     }
 
+    /**
+     * @param clazz the Class object to wrap.
+     * @param genericTypeHint an optional generic type hint.
+     * @return a wrapped attributes object for clazz.
+     */
     public static ClassAttributes create(Class<?> clazz, Type genericTypeHint) {
         return new ClassAttributes(clazz, genericTypeHint);
     }
 
+    /**
+     * @param clazz the Class object to wrap.
+     * @return a wrapped attributes object for clazz.
+     */
     public static ClassAttributes create(Class<?> clazz) {
         return new ClassAttributes(clazz, null);
     }

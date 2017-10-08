@@ -76,16 +76,7 @@ public class PojoGenerator<T> implements Cloneable {
     }
 
     public Stream<T> generatePojoStream() {
-        return IntStream.iterate(0, i -> i + 1)
-                .mapToObj(i1 -> {
-                    try {
-                        T newInstance = pojo.newInstance();
-                        pojoAttributes.apply(newInstance);
-                        return newInstance;
-                    } catch (Exception e) {
-                        throw new RuntimeException("Error generating pojo", e);
-                    }
-                });
+        return Stream.generate(this::generatePojo);
     }
 
     public List<T> generatePojoList(int count) {

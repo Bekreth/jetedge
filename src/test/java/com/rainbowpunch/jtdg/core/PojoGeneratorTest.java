@@ -206,8 +206,7 @@ public class PojoGeneratorTest {
                             objects.stream()
                                     .forEach(PojoGeneratorTest::classFieldsNotNull);
                         } catch (Exception e) {
-                            throw new RuntimeException(e);
-                            //fail(e.getMessage());
+                            fail(e.getMessage());
                         }
                     }
                 });
