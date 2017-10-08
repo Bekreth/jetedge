@@ -12,11 +12,7 @@ import com.rainbowpunch.jtdg.core.limiters.primitive.ShortLimiter;
 import com.rainbowpunch.jtdg.core.limiters.primitive.StringLimiter;
 import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
 public class DefaultLimiters {
     private static final Limiter<Integer> INTEGER_LIMITER = new IntegerLimiter();
@@ -28,43 +24,37 @@ public class DefaultLimiters {
     private static final Limiter<Character> CHARACTER_LIMITER = new CharacterLimiter();
     private static final Limiter<String> STRING_LIMITER = new StringLimiter();
 
-    private static final Map<Class<?>, Function<Class<?>, Limiter<?>>> limiterFactoryMap =
-            Collections.unmodifiableMap(new HashMap<Class<?>, Function<Class<?>, Limiter<?>>>() {{
-                put(Integer.class, clazz -> INTEGER_LIMITER);
-                put(int.class, clazz -> INTEGER_LIMITER);
-                put(Short.class, clazz -> SHORT_LIMITER);
-                put(short.class, clazz -> SHORT_LIMITER);
-                put(Long.class, clazz -> LONG_LIMITER);
-                put(long.class, clazz -> LONG_LIMITER);
-                put(Boolean.class, clazz -> BOOLEAN_LIMITER);
-                put(boolean.class, clazz -> BOOLEAN_LIMITER);
-                put(Float.class, clazz -> FLOAT_LIMITER);
-                put(float.class, clazz -> FLOAT_LIMITER);
-                put(Double.class, clazz -> DOUBLE_LIMITER);
-                put(double.class, clazz -> DOUBLE_LIMITER);
-                put(Character.class, clazz -> CHARACTER_LIMITER);
-                put(char.class, clazz -> CHARACTER_LIMITER);
-                put(String.class, clazz -> STRING_LIMITER);
-            }});
-
     public static Limiter<?> getDefaultLimiter(
             ClassAttributes classAttributes,
             PojoAttributes pojoAttributes
     ) {
-        final Function<Class<?>, Limiter<?>> limiterFactory =
-                limiterFactoryMap.get(classAttributes.getClazz());
-        if (limiterFactory != null) {
-            return limiterFactory.apply(classAttributes.getClazz());
-        }
-        if (classAttributes.isEnum()) {
+        if (classAttributes.is(Integer.class, int.class))
+            return INTEGER_LIMITER;
+        else if (classAttributes.is(Short.class, short.class))
+            return SHORT_LIMITER;
+        else if (classAttributes.is(Long.class, long.class))
+            return LONG_LIMITER;
+        else if (classAttributes.is(Boolean.class, boolean.class))
+            return BOOLEAN_LIMITER;
+        else if (classAttributes.is(Float.class, float.class))
+            return FLOAT_LIMITER;
+        else if (classAttributes.is(Double.class, double.class))
+            return DOUBLE_LIMITER;
+        else if (classAttributes.is(Character.class, char.class))
+            return CHARACTER_LIMITER;
+        else if (classAttributes.is(String.class))
+            return STRING_LIMITER;
+
+        if (classAttributes.isEnum())
             return EnumLimiter.createEnumLimiter(classAttributes.getClazz());
-        }
+
         if (classAttributes.isSubclassOf(List.class)) {
-            return ListLimiter.createListLimiter(
-                    getDefaultLimiter(
-                            classAttributes.getElementType()
-                                    .orElseThrow(RuntimeException::new), pojoAttributes));
+            return ListLimiter.createListLimiter(getDefaultLimiter(
+                    classAttributes.getElementType().orElseThrow(RuntimeException::new),
+                    pojoAttributes
+            ));
         }
-        return new DefaultPojoLimiter(classAttributes.getClazz(), pojoAttributes);
+
+        return new DefaultPojoLimiter<>(classAttributes.getClazz(), pojoAttributes);
     }
 }
