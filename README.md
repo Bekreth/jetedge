@@ -1,4 +1,7 @@
 # Java Test Data Generator
+
+[![Build Status](https://travis-ci.org/Bekreth/java-test-data-generator.svg?branch=master)](https://travis-ci.org/Bekreth/java-test-data-generator)
+
 Welcome welcome.
 
 This is a Java library for quickly and easily creating random data
