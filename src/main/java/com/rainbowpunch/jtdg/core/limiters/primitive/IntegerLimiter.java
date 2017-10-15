@@ -10,8 +10,8 @@ import java.util.function.Supplier;
  */
 public class IntegerLimiter implements Limiter<Integer> {
 
-    private Integer range;
-    private Integer offset;
+    private final Integer range;
+    private final Integer offset;
 
     public IntegerLimiter() {
         this(null, 0);
@@ -28,19 +28,9 @@ public class IntegerLimiter implements Limiter<Integer> {
 
     @Override
     public Supplier<Integer> generateSupplier(Random random) {
-        Supplier<Integer> supplier = null;
-        if (range == null) {
-            supplier = () -> {
-                Integer returnValue = random.nextInt();
-                return returnValue;
-            };
-        } else {
-            supplier = () -> {
-                Integer returnValue = random.nextInt(range) + offset;
-                return returnValue + offset;
-            };
-        }
-        return supplier;
+        return range == null ?
+             () -> (Integer) random.nextInt() :
+             () -> (Integer) (random.nextInt(range) + offset) + offset;
     }
 
 }

@@ -1,69 +1,47 @@
 package com.rainbowpunch.jtdg.core;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Arrays;
+import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
+
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  *
  */
 public class FieldSetter<T, U> {
 
-    private Class clazz;
+    private final ClassAttributes classAttributes;
     private BiConsumer<T, U> consumer;
     private Supplier<U> supplier;
-    private List<Class<?>> genericFields;
 
-    public static <V> FieldSetter makeFieldSetter(Type type) {
-        FieldSetter fieldSetter = null;
-
-        List<Class<?>> genericFields = null;
-        Class clazz = null;
-        try {
-            ParameterizedType parameterizedType = (ParameterizedType) type;
-            clazz = Class.forName(parameterizedType.getRawType().getTypeName());
-            genericFields = Arrays.stream(parameterizedType.getActualTypeArguments())
-                    .map(FieldSetter::getGenericClass)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            clazz = (Class) type;
-        }
-
-        if (clazz == Integer.class || clazz == int.class) fieldSetter = new FieldSetter<V, Integer>();
-        else if (clazz == Boolean.class || clazz == boolean.class) fieldSetter = new FieldSetter<V, Boolean>();
-        else if (clazz == Short.class || clazz == short.class) fieldSetter = new FieldSetter<V, Short>();
-        else if (clazz == Float.class || clazz == float.class) fieldSetter = new FieldSetter<V, Float>();
-        else if (clazz == Double.class  || clazz == double.class) fieldSetter = new FieldSetter<V, Double>();
-        else if (clazz == Long.class || clazz == long.class) fieldSetter = new FieldSetter<V, Long>();
-        else if (clazz == Character.class || clazz == char.class) fieldSetter = new FieldSetter<V, Character>();
-        else if (clazz == String.class) fieldSetter = new FieldSetter<V, String>();
-        else if (clazz == Enum.class) fieldSetter = new FieldSetter<V, Enum>();
-        else if (clazz == List.class) fieldSetter = new FieldSetter<V, List>();
-        else fieldSetter = new FieldSetter<V, Object>();
-
-        if (fieldSetter == null) {
-            throw new RuntimeException("FieldSetter failed to match class : " + clazz);
-        }
-
-        fieldSetter.clazz = clazz;
-        fieldSetter.genericFields = genericFields;
-        return fieldSetter;
+    public static <V> FieldSetter create(ClassAttributes classAttributes) {
+        if (classAttributes.is(Integer.class, int.class))
+            return new FieldSetter<V, Integer>(classAttributes);
+        else if (classAttributes.is(Boolean.class, boolean.class))
+            return new FieldSetter<V, Boolean>(classAttributes);
+        else if (classAttributes.is(Short.class, short.class))
+            return new FieldSetter<V, Short>(classAttributes);
+        else if (classAttributes.is(Long.class, long.class))
+            return new FieldSetter<V, Long>(classAttributes);
+        else if (classAttributes.is(Float.class, float.class))
+            return new FieldSetter<V, Float>(classAttributes);
+        else if (classAttributes.is(Double.class, double.class))
+            return new FieldSetter<V, Double>(classAttributes);
+        else if (classAttributes.is(Character.class, char.class))
+            return new FieldSetter<V, Character>(classAttributes);
+        else if (classAttributes.is(String.class))
+            return new FieldSetter<V, String>(classAttributes);
+        else if (classAttributes.is(List.class))
+            return new FieldSetter<V, List>(classAttributes);
+        else if (classAttributes.is(Enum.class))
+            return new FieldSetter<V, Enum>(classAttributes);
+        else
+            return new FieldSetter<V, Object>(classAttributes);
     }
 
-    private FieldSetter() {
-
-    }
-
-    private static Class<?> getGenericClass(Type type) {
-        try {
-            return Class.forName(type.getTypeName());
-        } catch (Exception e) {
-            throw new RuntimeException("Error getting generic class", e);
-        }
+    private FieldSetter(ClassAttributes classAttributes) {
+        this.classAttributes = classAttributes;
     }
 
     public void setConsumer(BiConsumer<T, U> consumer) {
@@ -74,12 +52,12 @@ public class FieldSetter<T, U> {
         this.supplier = supplier;
     }
 
-    public Class getClazz() {
-        return clazz;
+    public ClassAttributes getClassAttributes() {
+        return classAttributes;
     }
 
     public List<Class<?>> getGenericFields() {
-        return genericFields;
+        return classAttributes.getParameterizedTypes();
     }
 
     public void apply(T instance) {

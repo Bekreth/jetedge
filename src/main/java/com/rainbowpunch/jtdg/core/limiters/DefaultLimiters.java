@@ -1,128 +1,59 @@
 package com.rainbowpunch.jtdg.core.limiters;
 
-import com.rainbowpunch.jtdg.core.limiters.primitive.*;
-import com.rainbowpunch.jtdg.spi.PojoGenerator;
-import com.rainbowpunch.jtdg.core.FieldSetter;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.collections.ListLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.BooleanLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.CharacterLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.DoubleLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.FloatLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.IntegerLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.LongLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.ShortLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.StringLimiter;
+import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
+import java.util.List;
 
-/**
- * Maps classes to limiters
- */
-public enum DefaultLimiters {
-    SHORT(new ShortLimiter(), short.class, Short.class),
-    INT(new IntegerLimiter(), int.class, Integer.class),
-    BOOLEAN(new BooleanLimiter(), boolean.class, Boolean.class),
-    FLOAT(new FloatLimiter(), float.class, Float.class),
-    DOUBLE(new DoubleLimiter(), double.class, Double.class),
-    LONG(new LongLimiter(), long.class, Long.class),
-    CHAR(new CharacterLimiter(), char.class, Character.class),
-    STRING(new StringLimiter(), String.class),
-    ENUM(EnumLimiter::createEnumLimiter, Enum.class, 0),
-    LIST(ListLimiter::createListLimiter, List.class);
+public class DefaultLimiters {
+    private static final Limiter<Integer> INTEGER_LIMITER = new IntegerLimiter();
+    private static final Limiter<Short> SHORT_LIMITER = new ShortLimiter();
+    private static final Limiter<Long> LONG_LIMITER = new LongLimiter();
+    private static final Limiter<Boolean> BOOLEAN_LIMITER = new BooleanLimiter();
+    private static final Limiter<Float> FLOAT_LIMITER = new FloatLimiter();
+    private static final Limiter<Double> DOUBLE_LIMITER = new DoubleLimiter();
+    private static final Limiter<Character> CHARACTER_LIMITER = new CharacterLimiter();
+    private static final Limiter<String> STRING_LIMITER = new StringLimiter();
 
-    private List<Class<?>> clazz;
-    private Limiter<?> limiter;
-    private Function<Limiter<?>, Limiter<?>> listLimiterFunction;
-    private Function<Class<?>, ObjectLimiter<?>> enumLimiterFunction;
-
-    DefaultLimiters(Limiter<?> limiter, Class<?>... clazz) {
-        this.limiter = limiter;
-        this.clazz = Arrays.asList(clazz);
-    }
-
-    //The int here is to differentiate the enum.  This needs to be replaced with a better idea
-    DefaultLimiters(Function<Class<?>, ObjectLimiter<?>> enumLimiterFunction, Class<? extends Enum> clazz, int a) {
-        this.enumLimiterFunction = enumLimiterFunction;
-        this.clazz = Arrays.asList(clazz);
-    }
-
-    DefaultLimiters(Function<Limiter<?>, Limiter<?>> listLimiterFunction, Class<?> clazz) {
-        this.clazz = Arrays.asList(clazz);
-        this.listLimiterFunction = listLimiterFunction;
-    }
-
-    private static DefaultLimiters defaultLimiters(Class clazz) {
-        DefaultLimiters defaultLimiters = null;
-        for (DefaultLimiters simpleLimiters : DefaultLimiters.values()) {
-            if (simpleLimiters.clazz.contains(clazz)) {
-                defaultLimiters = simpleLimiters;
-                break;
-            }
-        }
-        if (defaultLimiters == null && Enum.class.isAssignableFrom(clazz)) {
-            defaultLimiters = ENUM;
-        }
-        return defaultLimiters;
-    }
-
-    public static Limiter<?> getSimpleLimiter(Class clazz, FieldSetter fieldSetter, PojoAttributes attributes) {
-        DefaultLimiters defaultLimiters = defaultLimiters(clazz);
-        Limiter limiter = null;
-        if (defaultLimiters != null) {
-            if (defaultLimiters.listLimiterFunction != null) {
-                Class genClass = (Class) fieldSetter.getGenericFields().get(0);
-                DefaultLimiters genDefaultLimiter = defaultLimiters(genClass);
-                Limiter<?> intermediateLimiter = null;
-                if (genDefaultLimiter == null) {
-                    intermediateLimiter = new DefaultPojoLimiter<>(genClass, attributes);
-                } else if (genDefaultLimiter.limiter != null) {
-                    intermediateLimiter = genDefaultLimiter.limiter;
-                } else if (genDefaultLimiter.enumLimiterFunction != null) {
-                    intermediateLimiter = genDefaultLimiter.enumLimiterFunction.apply(genClass);
-                }
-                limiter = defaultLimiters.listLimiterFunction.apply(intermediateLimiter);
-            } else if (defaultLimiters.enumLimiterFunction != null) {
-                limiter = defaultLimiters.enumLimiterFunction.apply(fieldSetter.getClazz());
-            } else {
-                limiter = defaultLimiters.limiter;
-            }
-        }
-        if (limiter == null) {
-            limiter = new DefaultPojoLimiter(clazz, attributes);
-        }
-        return limiter;
-    }
-
-
-    private static class DefaultPojoLimiter<T extends Object> implements Limiter<T> {
-
-        private PojoGenerator<T> generator;
-
-        public DefaultPojoLimiter(Class<T> clazz, PojoAttributes<T> parentAttributes) {
-            this.generator = new PojoGenerator<>(clazz, parentAttributes.getRandomSeed());
-            parentAttributes.getLimiters()
-                    .entrySet()
-                    .stream()
-                    .filter(entry -> !entry.getKey().equals(parentAttributes.getPojoClazz()))
-                    .flatMap(this::flattenLimiterMap)
-                    .forEach(entry -> {
-                        generator.andLimitField(entry.getKey(), entry.getValue());
-                    });
-            parentAttributes.getAllFieldLimiterMap()
-                    .entrySet()
-                    .stream()
-                    .map(Map.Entry::getValue)
-                    .forEach(generator::andLimitAllFieldsOf);
-            generator.analyzePojo();
+    @SuppressWarnings("unchecked")
+    public static Limiter<?> getDefaultLimiter(
+            ClassAttributes classAttributes,
+            PojoAttributes pojoAttributes
+    ) {
+        if (classAttributes.is(Integer.class, int.class))
+            return INTEGER_LIMITER;
+        else if (classAttributes.is(Short.class, short.class))
+            return SHORT_LIMITER;
+        else if (classAttributes.is(Long.class, long.class))
+            return LONG_LIMITER;
+        else if (classAttributes.is(Boolean.class, boolean.class))
+            return BOOLEAN_LIMITER;
+        else if (classAttributes.is(Float.class, float.class))
+            return FLOAT_LIMITER;
+        else if (classAttributes.is(Double.class, double.class))
+            return DOUBLE_LIMITER;
+        else if (classAttributes.is(Character.class, char.class))
+            return CHARACTER_LIMITER;
+        else if (classAttributes.is(String.class))
+            return STRING_LIMITER;
+        else if (classAttributes.isEnum())
+            return EnumLimiter.createEnumLimiter(classAttributes.getClazz());
+        else if (classAttributes.isSubclassOf(List.class)) {
+            return ListLimiter.createListLimiter(getDefaultLimiter(
+                    classAttributes.getElementType().orElseThrow(RuntimeException::new),
+                    pojoAttributes
+            ));
         }
 
-        private Stream<Map.Entry<String, Limiter<?>>> flattenLimiterMap(Map.Entry<Class, Map<String, Limiter<?>>> entry) {
-            return entry.getValue()
-                    .entrySet()
-                    .stream();
-        }
-
-        @Override
-        public Supplier<T> generateSupplier(Random random) {
-            return () -> {
-                return generator.generatePojo();
-            };
-        }
+        return new DefaultPojoLimiter<>(classAttributes.getClazz(), pojoAttributes);
     }
 }

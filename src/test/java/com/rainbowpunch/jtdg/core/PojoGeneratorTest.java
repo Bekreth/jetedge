@@ -1,5 +1,16 @@
 package com.rainbowpunch.jtdg.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import com.rainbowpunch.jtdg.core.falseDomain.ClassA;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassAchild;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassC;
@@ -9,22 +20,57 @@ import com.rainbowpunch.jtdg.core.limiters.NestedLimiter;
 import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
 import com.rainbowpunch.jtdg.core.limiters.RegexLimiter;
 import com.rainbowpunch.jtdg.core.limiters.collections.ListLimiter;
+import com.rainbowpunch.jtdg.core.test.Pojos.Extra;
+import com.rainbowpunch.jtdg.core.test.Pojos.Person;
+import com.rainbowpunch.jtdg.core.test.Pojos.Storyline;
+import com.rainbowpunch.jtdg.core.test.Pojos.Superhero;
 import com.rainbowpunch.jtdg.spi.PojoGenerator;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import static org.junit.Assert.*;
 
 /**
  *
  */
 public class PojoGeneratorTest {
+    @Test
+    public void testGenerateEmptyPojo() {
+        // TODO test that all relevant fields have been set properly (use seed)
+        assertNotNull(
+                new PojoGenerator<>(Extra.class)
+                        .analyzePojo()
+                        .generatePojo()
+        );
+    }
+
+    @Test
+    public void testGeneratePojo() {
+        // TODO test that all relevant fields have been set properly (use seed)
+        assertNotNull(
+                new PojoGenerator<>(Person.class)
+                        .analyzePojo()
+                        .generatePojo()
+        );
+    }
+
+    @Test
+    public void testGenerateNestedPojo() {
+        // TODO more comprehensive testing for subfields (use seed)
+        final Storyline storyline = new PojoGenerator<>(Storyline.class)
+                .analyzePojo()
+                .generatePojo();
+
+        assertNotNull(storyline.getSuperhero());
+        assertNotNull(storyline.getArchNemesis());
+    }
+
+    @Test
+    public void testGenerateListPojo() {
+        // TODO more comprehensive testing for sublist (use seed)
+        final Superhero superhero = new PojoGenerator<>(Superhero.class)
+                .analyzePojo()
+                .generatePojo();
+        assertNotNull(superhero.getSuperPowers());
+    }
 
     @Test
     public void simpleDepthTest() {
@@ -43,6 +89,7 @@ public class PojoGeneratorTest {
                 .andLimitField("echildlist", new ListLimiter(2, 4))
                 .andLimitAllFieldsOf(new BigDecimalLimiter())
                 .analyzePojo();
+
         ClassAchild objA = generator.generatePojo();
 
         classFieldsNotNull(objA);

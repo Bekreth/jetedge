@@ -2,7 +2,10 @@ package com.rainbowpunch.jtdg.core.limiters;
 
 import com.rainbowpunch.jtdg.util.ReadableCharList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -105,14 +108,14 @@ public class RegexLimiter implements Limiter<String> {
 
 
     private class EncodedChar {
-        private Flag flag;
+        private final Flag flag;
         private List<Character> possibleCharacter;
         private Integer startInt;
         private Integer endInt;
 
         EncodedChar(char character) {
             this.flag = Flag.SINGLE_CHARACTER;
-            possibleCharacter = Arrays.asList(character);
+            possibleCharacter = Collections.singletonList(character);
         }
 
         EncodedChar(Flag flag) {
@@ -147,7 +150,7 @@ public class RegexLimiter implements Limiter<String> {
                     endInt = startInt;
                 }
             } else {
-                throw new RuntimeException("Encoded charcter failed");
+                throw new RuntimeException("Encoded character failed");
             }
         }
 
@@ -187,7 +190,7 @@ public class RegexLimiter implements Limiter<String> {
     private enum Flag {
         SINGLE_CHARACTER(),
         DOT(".", ReadableCharList.LIST_OF_ALL_CHAR),
-        WHITE_SPACE("s", Arrays.asList(' ')),
+        WHITE_SPACE("s", Collections.singletonList(' ')),
         ANTI_WHITE_SPACE("S", ReadableCharList.LIST_OF_CHAR_NO_SPACE),
         CHAR_SET(),
         ANTI_CHAR_SET(),

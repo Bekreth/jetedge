@@ -6,10 +6,10 @@ import java.util.function.Supplier;
 /**
  *
  */
-public class NestedLimiter<T extends Object> implements Limiter<T> {
+public class NestedLimiter<T> implements Limiter<T> {
 
-    private Class clazz;
-    private Limiter<T> limiter;
+    private final Class clazz;
+    private final Limiter<T> limiter;
 
     public NestedLimiter(Class clazz, Limiter<T> limiter) {
         this.clazz = clazz;
@@ -18,9 +18,7 @@ public class NestedLimiter<T extends Object> implements Limiter<T> {
 
     @Override
     public Supplier<T> generateSupplier(Random random) {
-        return () -> {
-            return limiter.generateSupplier(random).get();
-        };
+        return () -> limiter.generateSupplier(random).get();
     }
 
     public Class getClazz() {

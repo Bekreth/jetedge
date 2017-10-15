@@ -11,8 +11,6 @@ import java.util.function.Supplier;
 public class ShortLimiter implements Limiter<Short> {
     @Override
     public Supplier<Short> generateSupplier(Random random) {
-        return () ->{
-            return (short) random.nextInt();
-        };
+        return () -> (short) random.nextInt();
     }
 }
