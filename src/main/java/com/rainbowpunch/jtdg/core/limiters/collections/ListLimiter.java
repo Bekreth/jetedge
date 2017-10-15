@@ -14,8 +14,8 @@ import java.util.stream.IntStream;
  */
 public class ListLimiter implements Limiter<List<Object>>, RequiresDefaultLimiter<ListLimiter> {
 
-    private int range;
-    private int offset;
+    private final int range;
+    private final int offset;
     private Limiter limiter;
 
     public static ListLimiter createListLimiter(Limiter<?> limiter) {

@@ -9,7 +9,7 @@ import java.util.function.Supplier;
  */
 public class ConstantValueLimiter<T> extends ObjectLimiter<T> {
 
-    private T object;
+    private final T object;
 
     public ConstantValueLimiter(T object) {
         this.object = object;

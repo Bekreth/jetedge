@@ -9,9 +9,6 @@ public class BigDecimalLimiter implements Limiter<BigDecimal> {
 
     @Override
     public Supplier<BigDecimal> generateSupplier(Random random) {
-        return () -> {
-            return new BigDecimal(random.nextInt());
-
-        };
+        return () -> new BigDecimal(random.nextInt());
     }
 }

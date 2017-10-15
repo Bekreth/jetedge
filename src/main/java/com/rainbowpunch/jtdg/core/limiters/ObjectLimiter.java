@@ -31,11 +31,11 @@ public abstract class ObjectLimiter<T> implements Limiter<T> {
         };
     }
 
-    public static <U extends Object> ObjectLimiter<U> ofObjects(U... objects) {
+    public static <U> ObjectLimiter<U> ofObjects(U... objects) {
         return ofObjects(Arrays.asList(objects));
     }
 
-    public static <U extends Object> ObjectLimiter<U> ofObjects(List<U> objects) {
+    public static <U> ObjectLimiter<U> ofObjects(List<U> objects) {
         return new ObjectLimiter<U>() {
             @Override
             protected List<U> configureObjectList() {
