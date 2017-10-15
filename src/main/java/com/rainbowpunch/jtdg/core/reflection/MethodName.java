@@ -20,7 +20,7 @@ public class MethodName {
             accessorSuffix = matcher.group(2);
             associatedFieldName = uncapitalize(accessorSuffix);
         } else {
-            accessorPrefix = accessorSuffix = associatedFieldName = null;
+            accessorPrefix = associatedFieldName = null;
         }
     }
 
