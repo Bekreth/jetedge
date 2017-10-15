@@ -24,6 +24,7 @@ public class DefaultLimiters {
     private static final Limiter<Character> CHARACTER_LIMITER = new CharacterLimiter();
     private static final Limiter<String> STRING_LIMITER = new StringLimiter();
 
+    @SuppressWarnings("unchecked")
     public static Limiter<?> getDefaultLimiter(
             ClassAttributes classAttributes,
             PojoAttributes pojoAttributes
@@ -44,11 +45,9 @@ public class DefaultLimiters {
             return CHARACTER_LIMITER;
         else if (classAttributes.is(String.class))
             return STRING_LIMITER;
-
-        if (classAttributes.isEnum())
+        else if (classAttributes.isEnum())
             return EnumLimiter.createEnumLimiter(classAttributes.getClazz());
-
-        if (classAttributes.isSubclassOf(List.class)) {
+        else if (classAttributes.isSubclassOf(List.class)) {
             return ListLimiter.createListLimiter(getDefaultLimiter(
                     classAttributes.getElementType().orElseThrow(RuntimeException::new),
                     pojoAttributes

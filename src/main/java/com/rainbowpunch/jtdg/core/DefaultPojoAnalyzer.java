@@ -17,14 +17,15 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
     private static final Logger log = LoggerFactory.getLogger(DefaultPojoAnalyzer.class);
 
     @Override
+    @SuppressWarnings("unchecked")
     public void parsePojo(Class<T> clazz, PojoAttributes<T> attributes) {
         log.info("Parsing class: {}", clazz.getCanonicalName());
         final ClassAttributes classAttributes = ClassAttributes.create(clazz);
 
         // Get a list of all field names with public setters
         final Set<String> fieldsWithPublicSetters = classAttributes.getMethods().stream()
-                .filter(MethodAttributes::isSetter)
-                .map(MethodAttributes::getAssociatedFieldName)
+                .filter(DefaultPojoAnalyzer::methodIsSetter)
+                .map(m -> m.getMethodName().getAssociatedFieldName())
                 .filter(Optional::isPresent).map(Optional::get)
                 .collect(toSet());
 
@@ -37,5 +38,10 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
                     fs.setConsumer(f.getSetter());
                     attributes.putFieldSetter(f.getName(), fs);
                 });
+    }
+
+    private static boolean methodIsSetter(MethodAttributes methodAttributes) {
+        return methodAttributes.getMethodName().isPrefixedWithSet() &&
+                methodAttributes.getParameterCount() == 1;
     }
 }

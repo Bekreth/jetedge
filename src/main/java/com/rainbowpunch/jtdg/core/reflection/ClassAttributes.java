@@ -65,7 +65,7 @@ public class ClassAttributes {
      */
     public List<FieldAttributes> getFields() {
         if (fields == null) {
-            final List<Field> rawFields = new ArrayList<>();
+            List<Field> rawFields = new ArrayList<>();
             Class<?> cur = clazz;
             while (cur != null && cur != Object.class) {
                 rawFields.addAll(Arrays.asList(cur.getDeclaredFields()));
@@ -141,9 +141,9 @@ public class ClassAttributes {
             return Optional.of(create(clazz.getComponentType()));
         }
         if (isCollection()) {
-            final List<Class<?>> parameterizedTypes = getParameterizedTypes();
+            List<Class<?>> parameterizedTypes = getParameterizedTypes();
             if (!parameterizedTypes.isEmpty()) {
-                final Class<?> first = parameterizedTypes.get(0);
+                Class<?> first = parameterizedTypes.get(0);
                 if (first != null) {
                     return Optional.of(create(first));
                 }
@@ -157,9 +157,9 @@ public class ClassAttributes {
      */
     public Optional<ClassAttributes> getKeyType() {
         if (isMap()) {
-            final List<Class<?>> parameterizedTypes = getParameterizedTypes();
+            List<Class<?>> parameterizedTypes = getParameterizedTypes();
             if (parameterizedTypes.size() >= 2) {
-                final Class<?> first = parameterizedTypes.get(0);
+                Class<?> first = parameterizedTypes.get(0);
                 if (first != null) {
                     return Optional.of(create(first));
                 }
@@ -173,9 +173,9 @@ public class ClassAttributes {
      */
     public Optional<ClassAttributes> getValueType() {
         if (isMap()) {
-            final List<Class<?>> parameterizedTypes = getParameterizedTypes();
+            List<Class<?>> parameterizedTypes = getParameterizedTypes();
             if (parameterizedTypes.size() >= 2) {
-                final Class<?> second = parameterizedTypes.get(1);
+                Class<?> second = parameterizedTypes.get(1);
                 if (second != null) {
                     return Optional.of(create(second));
                 }
@@ -217,9 +217,9 @@ public class ClassAttributes {
     }
 
     private static List<Class<?>> extractParameterizedTypes(Type type) {
-        final List<Class<?>> parameters = new ArrayList<>();
+        List<Class<?>> parameters = new ArrayList<>();
         if (type instanceof ParameterizedType) {
-            final Type[] typeArguments = ((ParameterizedType) type).getActualTypeArguments();
+            Type[] typeArguments = ((ParameterizedType) type).getActualTypeArguments();
             for (Type t : typeArguments) {
                 if (t instanceof Class) {
                     parameters.add((Class<?>) t);
