@@ -1,5 +1,6 @@
 package com.rainbowpunch.jtdg.core.limiters.primitive;
 
+import com.rainbowpunch.jtdg.core.limiters.Limiter;
 import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
 import com.rainbowpunch.jtdg.util.ReadableCharList;
 
@@ -10,7 +11,7 @@ import java.util.function.Supplier;
 /**
  *
  */
-public class CharacterLimiter extends ObjectLimiter<Character> {
+public class CharacterLimiter extends ObjectLimiter<Character> implements Limiter<Character> {
 
     @Override
     protected List<Character> configureObjectList() {

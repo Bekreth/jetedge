@@ -2,6 +2,7 @@ package com.rainbowpunch.jtdg.core.reflection;
 
 import java.lang.reflect.Field;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * A friendly wrapper for Field objects.
@@ -37,6 +38,24 @@ public class FieldAttributes {
             f.setAccessible(true);
             try {
                 f.set(instance, value);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        };
+    }
+
+    /**
+     * Constructs a getter function that is capable of retrieving the value of a field on a provided instance.
+     * @param <T> the instance type of the object.
+     * @param <R> the value type of the field in the object.
+     * @return a function that accepts an instance and returns a field value.
+     */
+    public <T, R> Function<T, R> getGetter() {
+        final Field f = field;
+        return instance -> {
+            f.setAccessible(true);
+            try {
+                return (R) f.get(instance);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }

@@ -7,11 +7,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-import com.rainbowpunch.jtdg.core.test.Pojos.City;
-import com.rainbowpunch.jtdg.core.test.Pojos.Person;
-import com.rainbowpunch.jtdg.core.test.Pojos.Power;
-import com.rainbowpunch.jtdg.core.test.Pojos.Superhero;
-import com.rainbowpunch.jtdg.core.test.Pojos.SuperheroNetwork;
+import com.rainbowpunch.jtdg.test.Pojos.City;
+import com.rainbowpunch.jtdg.test.Pojos.Person;
+import com.rainbowpunch.jtdg.test.Pojos.Power;
+import com.rainbowpunch.jtdg.test.Pojos.Superhero;
+import com.rainbowpunch.jtdg.test.Pojos.SuperheroNetwork;
 import junit.framework.AssertionFailedError;
 import org.junit.Test;
 

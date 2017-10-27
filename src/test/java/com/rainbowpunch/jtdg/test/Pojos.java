@@ -1,9 +1,11 @@
-package com.rainbowpunch.jtdg.core.test;
+package com.rainbowpunch.jtdg.test;
 
 import java.util.List;
 import java.util.Map;
 
-public class Pojos {
+public final class Pojos {
+    private Pojos() {}
+
     public static class Extra { }
 
     public static class Person {
@@ -102,6 +104,36 @@ public class Pojos {
 
         public void setArchNemesis(Person archNemesis) {
             this.archNemesis = archNemesis;
+        }
+    }
+
+    public static class Vehicle {
+        private Integer maxSpeed;
+        private Integer numWheels;
+        private String name;
+
+        public Integer getMaxSpeed() {
+            return maxSpeed;
+        }
+
+        public void setMaxSpeed(Integer maxSpeed) {
+            this.maxSpeed = maxSpeed;
+        }
+
+        public Integer getNumWheels() {
+            return numWheels;
+        }
+
+        public void setNumWheels(Integer numWheels) {
+            this.numWheels = numWheels;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
     }
 }

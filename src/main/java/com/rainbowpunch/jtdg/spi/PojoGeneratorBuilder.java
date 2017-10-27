@@ -5,6 +5,7 @@ import com.rainbowpunch.jtdg.core.FieldDataGenerator;
 import com.rainbowpunch.jtdg.core.PojoAnalyzer;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
+import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Random;
@@ -13,8 +14,8 @@ import static java.util.Objects.requireNonNull;
 
 public final class PojoGeneratorBuilder<T> implements Cloneable {
     private final Class<T> clazz;
-    private final int randomSeed;
     private final PojoAttributes<T> pojoAttributes;
+    private int randomSeed;
     private PojoAnalyzer<T> pojoAnalyzer = new DefaultPojoAnalyzer<>();
 
     public PojoGeneratorBuilder(Class<T> clazz) {
@@ -32,7 +33,7 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
         this.pojoAnalyzer = pojoAnalyzer;
     }
 
-    public PojoGeneratorBuilder<T> andLimitFieldWith(String fieldName, Limiter<?> limiter) {
+    public PojoGeneratorBuilder<T> andLimitField(String fieldName, Limiter<?> limiter) {
         pojoAttributes.putFieldLimiter(fieldName, limiter);
         return this;
     }
@@ -42,7 +43,8 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
         return this;
     }
 
-    public PojoGeneratorBuilder<T> andLimitAllFieldsWith(Limiter<?> limiter) {
+    public PojoGeneratorBuilder<T> andLimitAllFieldsOf(Limiter<?> limiter) {
+        System.out.println(limiter.getClass().getGenericInterfaces().length);
         Class clazz = ((Class) ((ParameterizedType) limiter.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0]);
         pojoAttributes.putAllFieldLimiter(clazz, limiter);
         return this;
@@ -50,6 +52,11 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
 
     public PojoGeneratorBuilder<T> andUseAnalyzer(PojoAnalyzer<T> pojoAnalyzer) {
         this.pojoAnalyzer = requireNonNull(pojoAnalyzer);
+        return this;
+    }
+
+    public PojoGeneratorBuilder<T> andUseRandomSeed(int randomSeed) {
+        this.randomSeed = randomSeed;
         return this;
     }
 

@@ -1,5 +1,6 @@
 package com.rainbowpunch.jtdg.core.limiters.primitive;
 
+import com.rainbowpunch.jtdg.core.limiters.Limiter;
 import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
 import com.rainbowpunch.jtdg.util.ReadableCharList;
 
@@ -12,7 +13,7 @@ import java.util.stream.IntStream;
 /**
  *
  */
-public class StringLimiter extends ObjectLimiter<String> {
+public class StringLimiter extends ObjectLimiter<String> implements Limiter<String> {
 
     private final Integer length;
 
