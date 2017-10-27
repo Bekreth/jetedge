@@ -1,14 +1,13 @@
 package com.rainbowpunch.jtdg.core.reflection;
 
-import static org.junit.Assert.assertEquals;
+import com.rainbowpunch.jtdg.test.Pojos.Person;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-
-import com.rainbowpunch.jtdg.core.falseDomain.ClassA;
-import com.rainbowpunch.jtdg.test.Pojos.Person;
 import junit.framework.AssertionFailedError;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class FieldAttributesTest {
     @Test
