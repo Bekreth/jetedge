@@ -1,10 +1,10 @@
 package com.rainbowpunch.jtdg.core.reflection;
 
-import static com.rainbowpunch.jtdg.core.test.Pojos.Extra;
-import static com.rainbowpunch.jtdg.core.test.Pojos.Person;
-import static com.rainbowpunch.jtdg.core.test.Pojos.Power;
-import static com.rainbowpunch.jtdg.core.test.Pojos.Superhero;
-import static com.rainbowpunch.jtdg.core.test.Pojos.SuperheroNetwork;
+import static com.rainbowpunch.jtdg.test.Pojos.Extra;
+import static com.rainbowpunch.jtdg.test.Pojos.Person;
+import static com.rainbowpunch.jtdg.test.Pojos.Power;
+import static com.rainbowpunch.jtdg.test.Pojos.Superhero;
+import static com.rainbowpunch.jtdg.test.Pojos.SuperheroNetwork;
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 

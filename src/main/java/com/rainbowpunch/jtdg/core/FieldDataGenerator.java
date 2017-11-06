@@ -14,10 +14,6 @@ public class FieldDataGenerator<T> {
 
     private final Random random;
 
-    public FieldDataGenerator() {
-        random = new Random();
-    }
-
     public FieldDataGenerator(int generatorSeed) {
         random = new Random(generatorSeed);
     }
