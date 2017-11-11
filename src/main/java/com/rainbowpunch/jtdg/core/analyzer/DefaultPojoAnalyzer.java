@@ -1,5 +1,7 @@
-package com.rainbowpunch.jtdg.core;
+package com.rainbowpunch.jtdg.core.analyzer;
 
+import com.rainbowpunch.jtdg.core.FieldSetter;
+import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
 import com.rainbowpunch.jtdg.core.reflection.MethodAttributes;
 
@@ -20,7 +22,7 @@ public class DefaultPojoAnalyzer<T> implements PojoAnalyzer<T> {
     @SuppressWarnings("unchecked")
     public void parsePojo(Class<T> clazz, PojoAttributes<T> attributes) {
         log.info("Parsing class: {}", clazz.getCanonicalName());
-        final ClassAttributes classAttributes = ClassAttributes.create(clazz);
+        ClassAttributes classAttributes = ClassAttributes.create(clazz);
 
         // Get a list of all field names with public setters
         final Set<String> fieldsWithPublicSetters = classAttributes.getMethods().stream()

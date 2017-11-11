@@ -14,7 +14,8 @@ public class DefaultPojoLimiter<T> implements Limiter<T> {
     private final PojoGenerator<T> generator;
 
     public DefaultPojoLimiter(Class<T> clazz, PojoAttributes<T> parentAttributes) {
-        PojoGeneratorBuilder<T> builder = new PojoGeneratorBuilder<T>(clazz, parentAttributes.getRandomSeed());
+        PojoGeneratorBuilder<T> builder = new PojoGeneratorBuilder<T>(clazz,
+                parentAttributes.getRandomSeed(), parentAttributes.getParentPojoAnalyzer());
 
         parentAttributes.getLimiters().entrySet().stream()
                 .filter(entry -> !entry.getKey().equals(parentAttributes.getPojoClazz()))
