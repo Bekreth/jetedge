@@ -1,4 +1,6 @@
-package com.rainbowpunch.jtdg.core;
+package com.rainbowpunch.jtdg.core.analyzer;
+
+import com.rainbowpunch.jtdg.core.PojoAttributes;
 
 /**
  * This class takes a generic class along with a map of the limiters and creates a list of consumers for that

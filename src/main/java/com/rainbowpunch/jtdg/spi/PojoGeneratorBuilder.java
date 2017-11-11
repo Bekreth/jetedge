@@ -1,11 +1,10 @@
 package com.rainbowpunch.jtdg.spi;
 
-import com.rainbowpunch.jtdg.core.DefaultPojoAnalyzer;
+import com.rainbowpunch.jtdg.core.analyzer.DefaultPojoAnalyzer;
 import com.rainbowpunch.jtdg.core.FieldDataGenerator;
-import com.rainbowpunch.jtdg.core.PojoAnalyzer;
+import com.rainbowpunch.jtdg.core.analyzer.PojoAnalyzer;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
-import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Random;
@@ -16,14 +15,22 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     private final Class<T> clazz;
     private final PojoAttributes<T> pojoAttributes;
     private int randomSeed;
-    private PojoAnalyzer<T> pojoAnalyzer = new DefaultPojoAnalyzer<>();
+    private PojoAnalyzer pojoAnalyzer;
 
     public PojoGeneratorBuilder(Class<T> clazz) {
         this(clazz, new Random().nextInt());
     }
 
+    public PojoGeneratorBuilder(Class<T> clazz, PojoAnalyzer pojoAnalyzer) {
+        this(clazz, new Random().nextInt(), pojoAnalyzer);
+    }
+
     public PojoGeneratorBuilder(Class<T> clazz, int randomSeed) {
-        this(clazz, randomSeed, new PojoAttributes<>(clazz, randomSeed), new DefaultPojoAnalyzer<>());
+        this(clazz, randomSeed, new PojoAttributes<>(clazz, DefaultPojoAnalyzer.class, randomSeed), new DefaultPojoAnalyzer<>());
+    }
+
+    public PojoGeneratorBuilder(Class<T> clazz, int randomSeed, PojoAnalyzer pojoAnalyzer) {
+        this(clazz, randomSeed, new PojoAttributes<>(clazz, pojoAnalyzer.getClass(), randomSeed), pojoAnalyzer);
     }
 
     private PojoGeneratorBuilder(Class<T> clazz, int randomSeed, PojoAttributes<T> pojoAttributes, PojoAnalyzer<T> pojoAnalyzer) {
@@ -32,6 +39,7 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
         this.pojoAttributes = pojoAttributes;
         this.pojoAnalyzer = pojoAnalyzer;
     }
+
 
     public PojoGeneratorBuilder<T> andLimitField(String fieldName, Limiter<?> limiter) {
         pojoAttributes.putFieldLimiter(fieldName, limiter);

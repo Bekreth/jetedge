@@ -1,4 +1,4 @@
-# Java Test Data Generator
+# Java Test Data Generator #
 
 [![Build Status](https://travis-ci.org/Bekreth/java-test-data-generator.svg?branch=master)](https://travis-ci.org/Bekreth/java-test-data-generator)
 
@@ -39,7 +39,7 @@ Welp, I've tried my hardest to make it simple and easy to configure
 the generator (mostly because I built this to use myself). 
 
 ```
-PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class)
+PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("fieldName", new IntegerLimiter(10))
                 .analyzePojo();
 ```
@@ -50,7 +50,7 @@ primitives, String, and List. In addition to these Limiters, I've
 also provided a RegexLimiter (of which I'm quite proud of)  
 
 ```
-PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class)
+PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("phoneNumber", new RegexLimiter("(\\d{3})-\\d{3}-\\d{4}"))
                 .analyzePojo();
 ```
@@ -66,7 +66,7 @@ But now you're asking yourself, "I have a nested class, how do I
 configure a field in that nested class?"
 
 ```
-PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class)
+PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("innerFieldName", new NestedLimiter(YourNestedClass.class, new IntegerLimiter(5, -10)))
                 .analyzePojo();
 ```
@@ -78,7 +78,7 @@ to only be between -10 and -5.
 Assuming that you want to provide your own `Limiter`, just implement
 the `Limiter` class and provide it to the generator like so:
 ```
-PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class)
+PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("fieldYouWillLimit", new YourLimiter())
                 .analyzePojo();
 ```
@@ -91,7 +91,7 @@ the POJO structure.
 already made!"  Luckily for you, I've already gone through and
 given you the power to do this.
 ```
-PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class)
+PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("fieldYouWillLimit", ObjectLimiter.ofObjects(ListOfYourObjects))
                 .analyzePojo();
 ```
@@ -102,7 +102,7 @@ the same 15 random POJOs (And don't want to fill them out yourself
 as part of an ObjectLimiter), you can easily clone your generator 
 for reuse.
 ```
-PojoGenerator<YourClass> generator1 = new PojoGenerator<>(YourClass.class);
+PojoGenerator<YourClass> generator1 = new PojoGeneratorBuilder<>(YourClass.class);
 PojoGenerator<YourClass> generator2 = generator1.clone();
 
 generator1 = generator1.analyzePojo();
@@ -132,27 +132,28 @@ POJO structure, all of those test will fail because the Random seed being
 passed around will have its path altered and instead your output will be
 K->?->3.
 
+## PojoAnalyzer ##
+By default, the PojoGeneratorBuilder class uses the DefaultPojoAnalyzer
+(whozah!).  This Analyzer uses the setter methods that exist for your Pojo
+in order to find and populate them even if they are private methods.  In
+addition to this default, there is a FieldPojoAnalyzer that looks for and
+sets all of your Pojos directly on the field.
+
+```
+PojoGenerator<YourClass> generator =
+                new PojoGeneratorBuilder(YourClass.class, new FieldPojoAnalyzer())
+                .analyzePojo();
+```
+
+I would recommend not using this particular anaylzer on a matter of principle
+(private fields should be left alone).  It is not my place to disuade anyone
+from taking this particular course of action, but know that I judge you, and I
+believe my opinion to be valuable.
+
 ## How Fast is JDTG? ##
 Damn fast.  With a reasonably complex POJO (multiple layers, lists, datatypes,
 and regex expressions), JDTG can whip out 1,000,000 POJOs in about 47 seconds.
 It can handle whatever you want to through at it.
-
-## Default Limiters ##
-These are the `Limiter`s that I am/will provide for you in the near
-future. 
-
-Limiter | Currently Supported
----|---
-IntegerLimiter | True
-StringLimiter | True
-ShortLimiter | True
-BooleanLimiter | True
-FloatLimiter | True
-DoubleLimiter | True
-LongLimiter | True
-CharLimiter | True
-ListLimiter | True
-RegexLimiter | True
 
 ## How to Contribute ##
 

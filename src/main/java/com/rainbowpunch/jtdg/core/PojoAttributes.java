@@ -1,5 +1,6 @@
 package com.rainbowpunch.jtdg.core;
 
+import com.rainbowpunch.jtdg.core.analyzer.PojoAnalyzer;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
 import com.rainbowpunch.jtdg.core.limiters.NestedLimiter;
 
@@ -19,15 +20,17 @@ public class PojoAttributes<T> implements Cloneable {
     private Map<Class, Limiter<?>> allFieldLimiterMap;
     private Map<String, FieldSetter<T, ?>> fieldSetterMap;
     private Set<String> fieldsToIgnore;
+    private Class<? extends PojoAnalyzer> pojoAnalyzerClass;
     private int randomSeed;
 
     private PojoAttributes() {
 
     }
 
-    public PojoAttributes(Class<T> pojoClazz, int randomSeed) {
+    public PojoAttributes(Class<T> pojoClazz, Class<? extends PojoAnalyzer> pojoAnalyzerClass, int randomSeed) {
         this.pojoClazz = pojoClazz;
         this.randomSeed = randomSeed;
+        this.pojoAnalyzerClass = pojoAnalyzerClass;
 
         this.masterLimiterMap = new HashMap<>();
         this.masterLimiterMap.put(this.pojoClazz, new HashMap<>());
@@ -65,6 +68,7 @@ public class PojoAttributes<T> implements Cloneable {
     public void putAllFieldLimiter(Class clazz, Limiter<?> limiter) {
         allFieldLimiterMap.put(clazz, limiter);
     }
+
     public void putFieldLimiter(String fieldName, NestedLimiter limiter) {
         masterLimiterMap.get(limiter.getClazz()).put(fieldName, limiter);
     }
@@ -87,6 +91,14 @@ public class PojoAttributes<T> implements Cloneable {
 
     public int getRandomSeed() {
         return randomSeed;
+    }
+
+    public PojoAnalyzer getParentPojoAnalyzer() {
+        try {
+            return pojoAnalyzerClass.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
