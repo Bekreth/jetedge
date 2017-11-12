@@ -114,7 +114,7 @@ public class PojoAttributes<T> implements Cloneable {
         attributes.fieldSetterMap = (Map) ((HashMap) this.fieldSetterMap).clone();
         attributes.allFieldLimiterMap = (Map) ((HashMap) this.allFieldLimiterMap).clone();
         attributes.fieldsToIgnore = (Set) ((HashSet) this.fieldsToIgnore).clone();
-
+        attributes.pojoAnalyzerClass = this.pojoAnalyzerClass;
         return attributes;
     }
 

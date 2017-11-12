@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 public class FieldPojoAnalyzerTest {
 
     @Test
-    public void test() {
+    public void testFieldPojoAnalyzer() {
         PojoGenerator<Car> generator = new PojoGeneratorBuilder<>(Car.class, new FieldPojoAnalyzer())
                 .andLimitField("topSpeed", new IntegerLimiter(10))
                 .andLimitField("make", new ConstantValueLimiter<String>("Ford"))
