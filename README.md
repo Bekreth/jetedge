@@ -10,14 +10,14 @@ based off of YOUR POJOs.  How quick and easy?
 ## How to Use JTDG! ##
 
 ```
-PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class)
-                .analyzePojo();
+PojoGenerator<YourClass> generator = new PojoGeneratorBuild<>(YourClass.class)
+                .build();
 ```
 
 This one line of code give the JTDG everything it needs to create
-randomized POJOs.  When you use the `analyzePojo()` method of the
-PojoGenerator class, it recursively scans through your POJO down 
-to its primatives (int, String, boolean, etc...).  After it has 
+randomized POJOs.  When you use the `build()` method of the
+PojoGeneratorBuilder class, it recursively scans through your POJO down
+to its primitives (int, String, boolean, etc...).  After it has
 scanned your POJO, it populates it with generators for each field.
 
 After you've created your the generator, there are 3 ways to get 
@@ -41,7 +41,7 @@ the generator (mostly because I built this to use myself).
 ```
 PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("fieldName", new IntegerLimiter(10))
-                .analyzePojo();
+                .build();
 ```
 With this additional line of code, you've told JTDG that you only 
 want numbers 0-9 to be randomly picked and put into the field 
@@ -52,7 +52,7 @@ also provided a RegexLimiter (of which I'm quite proud of)
 ```
 PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("phoneNumber", new RegexLimiter("(\\d{3})-\\d{3}-\\d{4}"))
-                .analyzePojo();
+                .build();
 ```
 This is a quick example of how to use the RegexLimiter to create 
 phonenumbers (A common use for regex).  This feature is not fully
@@ -68,7 +68,7 @@ configure a field in that nested class?"
 ```
 PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("innerFieldName", new NestedLimiter(YourNestedClass.class, new IntegerLimiter(5, -10)))
-                .analyzePojo();
+                .build();
 ```
 BOOM! This line tells JTDG that in the class you're giving to the 
 generator, that along the class structure there is a class called 
@@ -80,7 +80,7 @@ the `Limiter` class and provide it to the generator like so:
 ```
 PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("fieldYouWillLimit", new YourLimiter())
-                .analyzePojo();
+                .build();
 ```
 
 Combine this with the `NestedLimiter` in order to dig down into
@@ -93,26 +93,20 @@ given you the power to do this.
 ```
 PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("fieldYouWillLimit", ObjectLimiter.ofObjects(ListOfYourObjects))
-                .analyzePojo();
+                .build();
 ```
 In addition to an easy-to-use static interface, you can also extend 
 the ObjectLimiter class if you plan on using the same list of Objects
 for several data generators. However if you need to reliably create 
 the same 15 random POJOs (And don't want to fill them out yourself
-as part of an ObjectLimiter), you can easily clone your generator 
+as part of an ObjectLimiter), you can easily build to copies of your generator
 for reuse.
 ```
-PojoGenerator<YourClass> generator1 = new PojoGeneratorBuilder<>(YourClass.class);
-PojoGenerator<YourClass> generator2 = generator1.clone();
-
-generator1 = generator1.analyzePojo();
-generator2 = generator2.analyzePojo();
+PojoGeneratorBuilder<YourClass> builder = new PojoGeneratorBuilder<>(YourClass.class);
+PojoGenerator<YourClass> generator1 = builder.build();
+PojoGenerator<YourClass> generator2 = builder.build();
 ```
 This produces 2 generators that will return the exact same objects when called.
-I'm certain on the most observant of you noticed that you call to analyze
-your pojo AFTER you clone.  This is because during the analysis phase,
-suppliers are created with the a `Random` and it is quite cumbersome to 
-replace all these values.
 
 This is great and all, but what if you want to seed a single generator that 
 will then return the same object every time you hit it (you know, the way 
@@ -120,7 +114,7 @@ will then return the same object every time you hit it (you know, the way
 generator.
 ```
 PojoGenerator<YourClass> generator = new PojoGenerator<>(YourClass.class, intSeed)
-                .analyzePojo();
+                .build();
 ```
 If you define this generator in a `@Before` in your unit tests, it will then
 always return A, then B, then C and so on.  I will warn you though, 
@@ -142,11 +136,11 @@ sets all of your Pojos directly on the field.
 ```
 PojoGenerator<YourClass> generator =
                 new PojoGeneratorBuilder(YourClass.class, new FieldPojoAnalyzer())
-                .analyzePojo();
+                .build();
 ```
 
 I would recommend not using this particular anaylzer on a matter of principle
-(private fields should be left alone).  It is not my place to disuade anyone
+(private fields should be left alone).  It is not my place to dissuade anyone
 from taking this particular course of action, but know that I judge you, and I
 believe my opinion to be valuable.
 
