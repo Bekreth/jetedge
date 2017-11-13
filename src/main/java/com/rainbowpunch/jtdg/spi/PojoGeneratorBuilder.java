@@ -1,10 +1,12 @@
 package com.rainbowpunch.jtdg.spi;
 
+import com.rainbowpunch.jtdg.core.FieldSetter;
 import com.rainbowpunch.jtdg.core.analyzer.DefaultPojoAnalyzer;
 import com.rainbowpunch.jtdg.core.FieldDataGenerator;
 import com.rainbowpunch.jtdg.core.analyzer.PojoAnalyzer;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
+import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Random;
@@ -26,14 +28,14 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     public PojoGeneratorBuilder(Class<T> clazz, int randomSeed) {
-        this(clazz, randomSeed, new PojoAttributes<>(clazz, DefaultPojoAnalyzer.class, randomSeed), new DefaultPojoAnalyzer<>());
+        this(clazz, randomSeed, new PojoAttributes<>(clazz, DefaultPojoAnalyzer.class, randomSeed), new DefaultPojoAnalyzer());
     }
 
     public PojoGeneratorBuilder(Class<T> clazz, int randomSeed, PojoAnalyzer pojoAnalyzer) {
         this(clazz, randomSeed, new PojoAttributes<>(clazz, pojoAnalyzer.getClass(), randomSeed), pojoAnalyzer);
     }
 
-    private PojoGeneratorBuilder(Class<T> clazz, int randomSeed, PojoAttributes<T> pojoAttributes, PojoAnalyzer<T> pojoAnalyzer) {
+    private PojoGeneratorBuilder(Class<T> clazz, int randomSeed, PojoAttributes<T> pojoAttributes, PojoAnalyzer pojoAnalyzer) {
         this.clazz = clazz;
         this.randomSeed = randomSeed;
         this.pojoAttributes = pojoAttributes;
@@ -58,7 +60,7 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
         return this;
     }
 
-    public PojoGeneratorBuilder<T> andUseAnalyzer(PojoAnalyzer<T> pojoAnalyzer) {
+    public PojoGeneratorBuilder<T> andUseAnalyzer(PojoAnalyzer pojoAnalyzer) {
         this.pojoAnalyzer = requireNonNull(pojoAnalyzer);
         return this;
     }
@@ -69,7 +71,13 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     public PojoGenerator<T> build() {
-        pojoAnalyzer.parsePojo(clazz, pojoAttributes);
+        ClassAttributes classAttributes = ClassAttributes.create(clazz);
+        pojoAnalyzer.extractFields(classAttributes)
+                .filter(f -> !pojoAttributes.shouldIgnore(f.getName().toLowerCase()))
+                .forEach(f -> pojoAttributes.putFieldSetter(
+                        f.getName(),
+                        FieldSetter.create(f.getType(), f.getSetter())
+                ));
         new FieldDataGenerator<T>(randomSeed).populateSuppliers(pojoAttributes);
         return () -> {
             try {
