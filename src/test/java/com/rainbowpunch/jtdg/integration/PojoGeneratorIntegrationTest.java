@@ -1,9 +1,7 @@
 package com.rainbowpunch.jtdg.integration;
 
-import com.rainbowpunch.jtdg.core.FieldSetter;
 import com.rainbowpunch.jtdg.core.limiters.primitive.IntegerLimiter;
 import com.rainbowpunch.jtdg.core.limiters.primitive.StringLimiter;
-import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
 import com.rainbowpunch.jtdg.spi.PojoGeneratorBuilder;
 import com.rainbowpunch.jtdg.test.Pojos.Extra;
 import com.rainbowpunch.jtdg.test.Pojos.Person;
@@ -128,15 +126,9 @@ public class PojoGeneratorIntegrationTest {
         generated = new PojoGeneratorBuilder<>(Person.class)
                 .andUseRandomSeed(RANDOM_SEED)
                 // use a custom analyzer that only includes string attributes
-                .andUseAnalyzer((clazz, pojoAttributes) ->
-                        ClassAttributes.create(clazz)
-                                .getFields().stream()
-                                .filter(f -> f.getType().is(String.class))
-                                .forEach(f -> {
-                                    FieldSetter<Person, String> fs = FieldSetter.create(f.getType());
-                                    fs.setConsumer(f.getSetter());
-                                    pojoAttributes.putFieldSetter(f.getName(), fs);
-                                }))
+                .andUseAnalyzer(classAttributes ->
+                        classAttributes.getFields().stream()
+                                .filter(f -> f.getType().is(String.class)))
                 .build()
                 .generatePojo();
 
