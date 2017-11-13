@@ -15,6 +15,7 @@ public class FieldSetter<T, U> {
     private BiConsumer<T, U> consumer;
     private Supplier<U> supplier;
 
+    @SuppressWarnings("unchecked")
     public static <T> FieldSetter create(ClassAttributes classAttributes, BiConsumer<T, ?> consumer) {
         if (classAttributes.is(Integer.class, int.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, Integer>) consumer);

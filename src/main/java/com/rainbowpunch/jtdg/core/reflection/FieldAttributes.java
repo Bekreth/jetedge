@@ -55,6 +55,7 @@ public class FieldAttributes {
         return instance -> {
             f.setAccessible(true);
             try {
+                //noinspection unchecked
                 return (R) f.get(instance);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
