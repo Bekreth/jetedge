@@ -1,23 +1,19 @@
 package com.rainbowpunch.jtdg.spi;
 
-import com.rainbowpunch.jtdg.core.FieldSetter;
-import com.rainbowpunch.jtdg.core.analyzer.DefaultPojoAnalyzer;
 import com.rainbowpunch.jtdg.core.FieldDataGenerator;
-import com.rainbowpunch.jtdg.core.analyzer.PojoAnalyzer;
+import com.rainbowpunch.jtdg.core.FieldSetter;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
+import com.rainbowpunch.jtdg.core.analyzer.Analyzers;
+import com.rainbowpunch.jtdg.core.analyzer.PojoAnalyzer;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
 import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Random;
 
-import static java.util.Objects.requireNonNull;
-
 public final class PojoGeneratorBuilder<T> implements Cloneable {
     private final Class<T> clazz;
     private final PojoAttributes<T> pojoAttributes;
-    private int randomSeed;
-    private PojoAnalyzer pojoAnalyzer;
 
     public PojoGeneratorBuilder(Class<T> clazz) {
         this(clazz, new Random().nextInt());
@@ -28,20 +24,17 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     public PojoGeneratorBuilder(Class<T> clazz, int randomSeed) {
-        this(clazz, randomSeed, new PojoAttributes<>(clazz, DefaultPojoAnalyzer.class, randomSeed), new DefaultPojoAnalyzer());
+        this(clazz, randomSeed, Analyzers.DEFAULT);
     }
 
     public PojoGeneratorBuilder(Class<T> clazz, int randomSeed, PojoAnalyzer pojoAnalyzer) {
-        this(clazz, randomSeed, new PojoAttributes<>(clazz, pojoAnalyzer.getClass(), randomSeed), pojoAnalyzer);
+        this(clazz, new PojoAttributes<>(clazz, pojoAnalyzer, randomSeed));
     }
 
-    private PojoGeneratorBuilder(Class<T> clazz, int randomSeed, PojoAttributes<T> pojoAttributes, PojoAnalyzer pojoAnalyzer) {
+    private PojoGeneratorBuilder(Class<T> clazz, PojoAttributes<T> pojoAttributes) {
         this.clazz = clazz;
-        this.randomSeed = randomSeed;
         this.pojoAttributes = pojoAttributes;
-        this.pojoAnalyzer = pojoAnalyzer;
     }
-
 
     public PojoGeneratorBuilder<T> andLimitField(String fieldName, Limiter<?> limiter) {
         pojoAttributes.putFieldLimiter(fieldName, limiter);
@@ -61,24 +54,24 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     public PojoGeneratorBuilder<T> andUseAnalyzer(PojoAnalyzer pojoAnalyzer) {
-        this.pojoAnalyzer = requireNonNull(pojoAnalyzer);
+        pojoAttributes.setPojoAnalyzer(pojoAnalyzer);
         return this;
     }
 
     public PojoGeneratorBuilder<T> andUseRandomSeed(int randomSeed) {
-        this.randomSeed = randomSeed;
+        pojoAttributes.setRandomSeed(randomSeed);
         return this;
     }
 
     public PojoGenerator<T> build() {
         ClassAttributes classAttributes = ClassAttributes.create(clazz);
-        pojoAnalyzer.extractFields(classAttributes)
+        pojoAttributes.getParentPojoAnalyzer().extractFields(classAttributes)
                 .filter(f -> !pojoAttributes.shouldIgnore(f.getName().toLowerCase()))
                 .forEach(f -> pojoAttributes.putFieldSetter(
                         f.getName(),
                         FieldSetter.create(f.getType(), f.getSetter())
                 ));
-        new FieldDataGenerator<T>(randomSeed).populateSuppliers(pojoAttributes);
+        new FieldDataGenerator<T>(pojoAttributes.getRandomSeed()).populateSuppliers(pojoAttributes);
         return () -> {
             try {
                 T newInstance = clazz.newInstance();
@@ -92,6 +85,6 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
 
     @Override
     public PojoGeneratorBuilder<T> clone() {
-        return new PojoGeneratorBuilder<>(clazz, randomSeed, pojoAttributes.clone(), pojoAnalyzer);
+        return new PojoGeneratorBuilder<>(clazz, pojoAttributes.clone());
     }
 }

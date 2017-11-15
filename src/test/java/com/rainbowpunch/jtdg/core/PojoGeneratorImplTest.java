@@ -1,16 +1,5 @@
 package com.rainbowpunch.jtdg.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import com.rainbowpunch.jtdg.core.falseDomain.ClassA;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassAchild;
 import com.rainbowpunch.jtdg.core.falseDomain.ClassC;
@@ -20,14 +9,21 @@ import com.rainbowpunch.jtdg.core.limiters.NestedLimiter;
 import com.rainbowpunch.jtdg.core.limiters.ObjectLimiter;
 import com.rainbowpunch.jtdg.core.limiters.RegexLimiter;
 import com.rainbowpunch.jtdg.core.limiters.collections.ListLimiter;
-import com.rainbowpunch.jtdg.test.Pojos.Extra;
-import com.rainbowpunch.jtdg.test.Pojos.Storyline;
-import com.rainbowpunch.jtdg.test.Pojos.Superhero;
 import com.rainbowpunch.jtdg.spi.PojoGenerator;
 import com.rainbowpunch.jtdg.spi.PojoGeneratorBuilder;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
