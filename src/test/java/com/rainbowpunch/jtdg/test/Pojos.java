@@ -107,10 +107,16 @@ public final class Pojos {
         }
     }
 
+    public enum Powerplant {
+        ELECTRIC, GASOLINE
+    }
+
     public static class Vehicle {
         private Integer maxSpeed;
         private Integer numWheels;
         private String name;
+        private Powerplant engineType; // Does not have public accessor
+        public boolean hasTintedWindows; // Public, but does not have accessor
 
         public Integer getMaxSpeed() {
             return maxSpeed;
@@ -135,5 +141,8 @@ public final class Pojos {
         public void setName(String name) {
             this.name = name;
         }
+
+        // Has setter, but no underlying field
+        public void setHasChrome(boolean hasChrome) { }
     }
 }

@@ -21,7 +21,7 @@ public final class Assertions {
     static {
         OBJECT_FIELDS = ClassAttributes.create(Object.class)
                 .getFields().stream()
-                .map(f -> f.getName())
+                .map(FieldAttributes::getName)
                 .collect(toSet());
     }
 

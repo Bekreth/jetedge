@@ -18,6 +18,7 @@ import static com.rainbowpunch.jtdg.test.Pojos.Power.XRAY_VISION;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class PojoGeneratorIntegrationTest {
@@ -122,8 +123,7 @@ public class PojoGeneratorIntegrationTest {
 
     @Test
     public void testUseCustomAnalyzer() {
-        Person generated;
-        generated = new PojoGeneratorBuilder<>(Person.class)
+        Person generated = new PojoGeneratorBuilder<>(Person.class)
                 .andUseRandomSeed(RANDOM_SEED)
                 // use a custom analyzer that only includes string attributes
                 .andUseAnalyzer(classAttributes ->
@@ -134,5 +134,16 @@ public class PojoGeneratorIntegrationTest {
 
         assertEquals("h1<t\"c!>ya,f,0(TDja_(!DkOIfD[$", generated.getName());
         assertEquals(0, generated.getAge());
+    }
+
+    @Test
+    public void testIgnoreField() {
+        Vehicle generated = new PojoGeneratorBuilder<>(Vehicle.class)
+                .andIgnoreField("name")
+                .build()
+                .generatePojo();
+        assertNull(generated.getName());
+        assertNotNull(generated.getNumWheels());
+        assertNotNull(generated.getMaxSpeed());
     }
 }

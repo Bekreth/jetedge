@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 public class FieldSetter<T, U> {
 
     private final ClassAttributes classAttributes;
-    private BiConsumer<T, U> consumer;
+    private final BiConsumer<T, U> consumer;
     private Supplier<U> supplier;
 
     @SuppressWarnings("unchecked")

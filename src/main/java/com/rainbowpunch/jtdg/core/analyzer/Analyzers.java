@@ -1,29 +1,28 @@
 package com.rainbowpunch.jtdg.core.analyzer;
 
-import com.rainbowpunch.jtdg.core.reflection.ClassAttributes;
-import com.rainbowpunch.jtdg.core.reflection.FieldAttributes;
 import com.rainbowpunch.jtdg.core.reflection.MethodAttributes;
 import com.rainbowpunch.jtdg.core.reflection.MethodName;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toSet;
-
-public class DefaultPojoAnalyzer implements PojoAnalyzer {
-    @Override
-    public Stream<FieldAttributes> extractFields(ClassAttributes ca) {
+public final class Analyzers {
+    public static final PojoAnalyzer DEFAULT = classAttributes -> {
         // Get a list of all field names with public setters
-        Set<String> fieldsWithPublicSetters = ca.getMethods().stream()
+        Set<String> fieldsWithPublicSetters = classAttributes.getMethods().stream()
                 .filter(ma -> ma.getParameterCount() == 1)
                 .map(MethodAttributes::getMethodName)
                 .filter(MethodName::isPrefixedWithSet)
                 .map(MethodName::getAssociatedFieldName)
                 .filter(Optional::isPresent).map(Optional::get)
-                .collect(toSet());
+                .collect(Collectors.toSet());
 
-        return ca.getFields().stream()
+        return classAttributes.getFields().stream()
                 .filter(f -> fieldsWithPublicSetters.contains(f.getName()));
-    }
+    };
+
+    public static final PojoAnalyzer ALL_FIELDS = classAttributes -> classAttributes.getFields().stream();
+
+    private Analyzers() {}
 }

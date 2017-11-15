@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * An entity of all the Pojo's attributes
  */
@@ -22,15 +24,16 @@ public class PojoAttributes<T> implements Cloneable {
     private Set<String> fieldsToIgnore;
     private Class<? extends PojoAnalyzer> pojoAnalyzerClass;
     private int randomSeed;
+    private PojoAnalyzer pojoAnalyzer;
 
     private PojoAttributes() {
 
     }
 
-    public PojoAttributes(Class<T> pojoClazz, Class<? extends PojoAnalyzer> pojoAnalyzerClass, int randomSeed) {
-        this.pojoClazz = pojoClazz;
+    public PojoAttributes(Class<T> clazz, PojoAnalyzer pojoAnalyzer, int randomSeed) {
+        this.pojoClazz = requireNonNull(clazz);
+        this.pojoAnalyzer = requireNonNull(pojoAnalyzer);
         this.randomSeed = randomSeed;
-        this.pojoAnalyzerClass = pojoAnalyzerClass;
 
         this.masterLimiterMap = new HashMap<>();
         this.masterLimiterMap.put(this.pojoClazz, new HashMap<>());
@@ -82,7 +85,7 @@ public class PojoAttributes<T> implements Cloneable {
     }
 
     public void ignoreField(String fieldName) {
-        fieldsToIgnore.add("set" + fieldName.toLowerCase());
+        fieldsToIgnore.add(fieldName.toLowerCase());
     }
 
     public boolean shouldIgnore(String fieldName) {
@@ -93,33 +96,32 @@ public class PojoAttributes<T> implements Cloneable {
         return randomSeed;
     }
 
+    public void setRandomSeed(int randomSeed) {
+        this.randomSeed = randomSeed;
+    }
+
     public PojoAnalyzer getParentPojoAnalyzer() {
-        try {
-            return pojoAnalyzerClass.newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return pojoAnalyzer;
+    }
+
+    public void setPojoAnalyzer(PojoAnalyzer pojoAnalyzer) {
+        this.pojoAnalyzer = pojoAnalyzer;
     }
 
     @Override
     public PojoAttributes<T> clone() {
         PojoAttributes<T> attributes = new PojoAttributes<>();
-
-        try {
-            attributes.pojoClazz = (Class<T>) Class.forName(this.pojoClazz.getName());
-        } catch (Exception e) {
-            throw new RuntimeException("Failed cloning object: ", e);
-        }
+        attributes.pojoClazz = this.pojoClazz;
         attributes.masterLimiterMap = (Map) ((HashMap) this.masterLimiterMap).clone();
         attributes.fieldSetterMap = (Map) ((HashMap) this.fieldSetterMap).clone();
         attributes.allFieldLimiterMap = (Map) ((HashMap) this.allFieldLimiterMap).clone();
         attributes.fieldsToIgnore = (Set) ((HashSet) this.fieldsToIgnore).clone();
         attributes.pojoAnalyzerClass = this.pojoAnalyzerClass;
+        attributes.pojoAnalyzer = this.pojoAnalyzer;
         return attributes;
     }
 
     public void apply(T pojo) {
         fieldSetterMap.forEach((key, value) -> value.apply(pojo));
     }
-
 }
