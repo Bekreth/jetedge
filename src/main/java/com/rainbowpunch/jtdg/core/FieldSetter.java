@@ -31,6 +31,8 @@ public class FieldSetter<T, U> {
             return new FieldSetter<>(classAttributes, (BiConsumer<T, Double>) consumer);
         else if (classAttributes.is(Character.class, char.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, Character>) consumer);
+        else if (classAttributes.is(Byte.class, byte.class))
+            return new FieldSetter<>(classAttributes, (BiConsumer<T, Byte>) consumer);
         else if (classAttributes.is(String.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, String>) consumer);
         else if (classAttributes.is(List.class))

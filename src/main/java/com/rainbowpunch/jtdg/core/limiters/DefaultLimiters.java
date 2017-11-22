@@ -3,6 +3,8 @@ package com.rainbowpunch.jtdg.core.limiters;
 import com.rainbowpunch.jtdg.core.PojoAttributes;
 import com.rainbowpunch.jtdg.core.limiters.collections.ListLimiter;
 import com.rainbowpunch.jtdg.core.limiters.primitive.BooleanLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.ByteArrayLimiter;
+import com.rainbowpunch.jtdg.core.limiters.primitive.ByteLimiter;
 import com.rainbowpunch.jtdg.core.limiters.primitive.CharacterLimiter;
 import com.rainbowpunch.jtdg.core.limiters.primitive.DoubleLimiter;
 import com.rainbowpunch.jtdg.core.limiters.primitive.FloatLimiter;
@@ -23,6 +25,7 @@ public class DefaultLimiters {
     private static final Limiter<Double> DOUBLE_LIMITER = new DoubleLimiter();
     private static final Limiter<Character> CHARACTER_LIMITER = new CharacterLimiter();
     private static final Limiter<String> STRING_LIMITER = new StringLimiter();
+    private static final Limiter<Byte> BYTE_LIMITER = new ByteLimiter();
 
     @SuppressWarnings("unchecked")
     public static Limiter<?> getDefaultLimiter(
@@ -45,6 +48,8 @@ public class DefaultLimiters {
             return CHARACTER_LIMITER;
         else if (classAttributes.is(String.class))
             return STRING_LIMITER;
+        else if (classAttributes.is(Byte.class, byte.class))
+            return BYTE_LIMITER;
         else if (classAttributes.isEnum())
             return EnumLimiter.createEnumLimiter(classAttributes.getClazz());
         else if (classAttributes.isSubclassOf(List.class)) {
