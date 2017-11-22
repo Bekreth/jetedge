@@ -112,7 +112,6 @@ public class PojoGeneratorIntegrationTest {
         int expectedRange = 10;
         Vehicle generated = new PojoGeneratorBuilder<>(Vehicle.class)
                 .andUseRandomSeed(RANDOM_SEED)
-                // FIXME IntegerLimiter only matches on Integer, not int
                 .andLimitAllFieldsOf(new IntegerLimiter(expectedRange))
                 .build()
                 .generatePojo();

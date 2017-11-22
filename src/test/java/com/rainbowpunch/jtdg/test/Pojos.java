@@ -112,8 +112,8 @@ public final class Pojos {
     }
 
     public static class Vehicle {
-        private Integer maxSpeed;
-        private Integer numWheels;
+        private int maxSpeed;
+        private int numWheels;
         private String name;
         private Powerplant engineType; // Does not have public accessor
         public boolean hasTintedWindows; // Public, but does not have accessor
