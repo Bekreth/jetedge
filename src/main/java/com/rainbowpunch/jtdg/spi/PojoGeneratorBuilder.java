@@ -47,7 +47,6 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     public PojoGeneratorBuilder<T> andLimitAllFieldsOf(Limiter<?> limiter) {
-        System.out.println(limiter.getClass().getGenericInterfaces().length);
         Class clazz = ((Class) ((ParameterizedType) limiter.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0]);
         pojoAttributes.putAllFieldLimiter(clazz, limiter);
         return this;
