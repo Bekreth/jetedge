@@ -17,21 +17,21 @@ public class FieldSetter<T, U> {
 
     @SuppressWarnings("unchecked")
     public static <T> FieldSetter create(ClassAttributes classAttributes, BiConsumer<T, ?> consumer) {
-        if (classAttributes.is(Integer.class, int.class))
+        if (classAttributes.is(Integer.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, Integer>) consumer);
-        else if (classAttributes.is(Boolean.class, boolean.class))
+        else if (classAttributes.is(Boolean.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, Boolean>) consumer);
-        else if (classAttributes.is(Short.class, short.class))
+        else if (classAttributes.is(Short.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, Short>) consumer);
-        else if (classAttributes.is(Long.class, long.class))
+        else if (classAttributes.is(Long.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, Long>) consumer);
-        else if (classAttributes.is(Float.class, float.class))
+        else if (classAttributes.is(Float.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, Float>) consumer);
-        else if (classAttributes.is(Double.class, double.class))
+        else if (classAttributes.is(Double.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, Double>) consumer);
-        else if (classAttributes.is(Character.class, char.class))
+        else if (classAttributes.is(Character.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, Character>) consumer);
-        else if (classAttributes.is(Byte.class, byte.class))
+        else if (classAttributes.is(Byte.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, Byte>) consumer);
         else if (classAttributes.is(String.class))
             return new FieldSetter<>(classAttributes, (BiConsumer<T, String>) consumer);

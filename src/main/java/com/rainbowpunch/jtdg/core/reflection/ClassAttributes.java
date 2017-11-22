@@ -205,7 +205,7 @@ public class ClassAttributes {
      * @return a wrapped attributes object for clazz.
      */
     public static ClassAttributes create(Class<?> clazz, Type genericTypeHint) {
-        return new ClassAttributes(clazz, genericTypeHint);
+        return new ClassAttributes(mapPrimitiveToObject(clazz), genericTypeHint);
     }
 
     /**
@@ -213,7 +213,27 @@ public class ClassAttributes {
      * @return a wrapped attributes object for clazz.
      */
     public static ClassAttributes create(Class<?> clazz) {
-        return new ClassAttributes(clazz, null);
+        return new ClassAttributes(mapPrimitiveToObject(clazz), null);
+    }
+
+    /**
+     * If an incomming class is of a primitive type, this maps it to its corresponding Object type, else, it returns the object
+     * @param clazz
+     * @return
+     */
+    public static Class<?> mapPrimitiveToObject(Class<?> clazz) {
+        Class outputClass = clazz;
+
+        if (clazz.equals(int.class)) outputClass = Integer.class;
+        else if (clazz.equals(boolean.class)) outputClass = Boolean.class;
+        else if (clazz.equals(short.class)) outputClass = Short.class;
+        else if (clazz.equals(long.class)) outputClass = Long.class;
+        else if (clazz.equals(float.class)) outputClass = Float.class;
+        else if (clazz.equals(double.class)) outputClass = Double.class;
+        else if (clazz.equals(char.class)) outputClass = Character.class;
+        else if (clazz.equals(byte.class)) outputClass = Byte.class;
+
+        return outputClass;
     }
 
     private static List<Class<?>> extractParameterizedTypes(Type type) {
