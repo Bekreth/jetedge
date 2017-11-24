@@ -1,4 +1,4 @@
-package com.rainbowpunch.jetedge.core.limiters;
+package com.rainbowpunch.jetedge.core.limiters.common;
 
 import java.util.List;
 import java.util.Random;

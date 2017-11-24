@@ -1,6 +1,7 @@
-package com.rainbowpunch.jetedge.core.limiters;
+package com.rainbowpunch.jetedge.core.limiters.common;
 
 import com.rainbowpunch.jetedge.core.PojoAttributes;
+import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.spi.PojoGenerator;
 import com.rainbowpunch.jetedge.spi.PojoGeneratorBuilder;
 

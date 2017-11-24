@@ -1,5 +1,6 @@
-package com.rainbowpunch.jetedge.core.limiters;
+package com.rainbowpunch.jetedge.core.limiters.common;
 
+import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.util.ReadableCharList;
 
 import java.util.ArrayList;
