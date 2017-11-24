@@ -3,6 +3,7 @@ package com.rainbowpunch.jtdg.integration;
 import com.rainbowpunch.jtdg.core.limiters.primitive.IntegerLimiter;
 import com.rainbowpunch.jtdg.core.limiters.primitive.StringLimiter;
 import com.rainbowpunch.jtdg.spi.PojoGeneratorBuilder;
+import com.rainbowpunch.jtdg.test.Pojos;
 import com.rainbowpunch.jtdg.test.Pojos.Extra;
 import com.rainbowpunch.jtdg.test.Pojos.Person;
 import com.rainbowpunch.jtdg.test.Pojos.Superhero;
@@ -11,10 +12,10 @@ import com.rainbowpunch.jtdg.test.Pojos.Vehicle;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.List;
+
 import static com.rainbowpunch.jtdg.test.Assertions.assertPojosShallowEqual;
-import static com.rainbowpunch.jtdg.test.Pojos.Power.FLIGHT;
-import static com.rainbowpunch.jtdg.test.Pojos.Power.SPIDER_SENSE;
-import static com.rainbowpunch.jtdg.test.Pojos.Power.XRAY_VISION;
+import static com.rainbowpunch.jtdg.test.Pojos.Power.*;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -40,8 +41,8 @@ public class PojoGeneratorIntegrationTest {
                 .build()
                 .generatePojo();
 
-        assertEquals(-1742253836, generated.getAge());
-        assertEquals("h1<t\"c!>ya,f,0(TDja_(!DkOIfD[$", generated.getName());
+        assertEquals(-1771985870, generated.getAge());
+        assertEquals("ya,f,0(TDja_(!DkOIfD[$(ntus7.1", generated.getName());
     }
 
     @Test
@@ -51,8 +52,8 @@ public class PojoGeneratorIntegrationTest {
                 .build()
                 .generatePojo();
 
-        assertEquals(681416186, generated.getAge());
-        assertEquals("h1<t\"c!>ya,f,0(TDja_(!DkOIfD[$", generated.getName());
+        assertEquals(389401069, generated.getAge());
+        assertEquals("ya,f,0(TDja_(!DkOIfD[$(ntus7.1", generated.getName());
 
         // also verify that direct fields are picked up
         assertNotNull(generated.getSuperPowers());
@@ -66,10 +67,8 @@ public class PojoGeneratorIntegrationTest {
                 .build()
                 .generatePojo();
 
-        assertEquals(
-                asList(XRAY_VISION, FLIGHT, FLIGHT, SPIDER_SENSE, SPIDER_SENSE, SPIDER_SENSE),
-                generated.getSuperPowers()
-        );
+        List<Pojos.Power> powers = asList(SPEED, SPEED, FLIGHT, MONEY, SPIDER_SENSE, FLIGHT);
+        assertEquals(powers, generated.getSuperPowers());
     }
 
     @Ignore("nested POJO does not currently inherit random seed")

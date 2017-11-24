@@ -6,6 +6,7 @@ import static com.rainbowpunch.jtdg.test.Pojos.Power;
 import static com.rainbowpunch.jtdg.test.Pojos.Superhero;
 import static com.rainbowpunch.jtdg.test.Pojos.SuperheroNetwork;
 import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -68,7 +69,9 @@ public class ClassAttributesTest {
     public void testIsArray() {
         assertFalse(unitUnderTest.isArray());
         final int[] array = new int[] { };
-        assertTrue(ClassAttributes.create(array.getClass()).isArray());
+        ClassAttributes attributes = ClassAttributes.create(array.getClass());
+        assertTrue(attributes.isArray());
+        assertEquals(Integer.class, attributes.getClazz()); // check primitive erasure
     }
 
     @Test

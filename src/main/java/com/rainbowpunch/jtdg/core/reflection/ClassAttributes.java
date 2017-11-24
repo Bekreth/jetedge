@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class ClassAttributes {
     private final Class<?> clazz;
+    private boolean isArray = false;
     private final Type genericTypeHint;
     private List<Class<?>> parameterizedTypes = null;
 
@@ -30,11 +31,37 @@ public class ClassAttributes {
      * @param clazz class to wrap.
      * @param genericTypeHint an optional generic type hint.
      */
-    private ClassAttributes(Class<?> clazz, Type genericTypeHint) {
+    private ClassAttributes(Class<?> clazz, Type genericTypeHint, boolean isArray) {
+        this.isArray = isArray;
         this.clazz = requireNonNull(clazz);
         // This is the Type that is stored on a Field or Method object. Providing this type
         // helps us get around the type erasure of parameterized types such as List<> or Map<>.
         this.genericTypeHint = genericTypeHint;
+    }
+
+    private ClassAttributes(Class<?> clazz, Type genericTypeHint) {
+        this(clazz, genericTypeHint, false);
+    }
+
+    /**
+     * @param clazz the Class object to wrap.
+     * @param genericTypeHint an optional generic type hint.
+     * @return a wrapped attributes object for clazz.
+     */
+    public static ClassAttributes create(Class<?> clazz, Type genericTypeHint) {
+        if (clazz.isArray()) {
+            return new ClassAttributes(mapPrimitiveToObject(clazz.getComponentType()), genericTypeHint, true);
+        } else {
+            return new ClassAttributes(mapPrimitiveToObject(clazz), genericTypeHint);
+        }
+    }
+
+    /**
+     * @param clazz the Class object to wrap.
+     * @return a wrapped attributes object for clazz.
+     */
+    public static ClassAttributes create(Class<?> clazz) {
+        return create(mapPrimitiveToObject(clazz), null);
     }
 
     public String getName() {
@@ -97,14 +124,18 @@ public class ClassAttributes {
     public boolean is(Class<?> ...others) {
         return Arrays.stream(others)
                 .filter(Objects::nonNull)
-                .anyMatch(o -> Objects.equals(o, clazz));
+                .anyMatch(o -> {
+                    boolean isArray = o.isArray();
+                    Class innerClazz = isArray ? o.getComponentType() : o;
+                    return  (Objects.equals(innerClazz, clazz) && this.isArray == isArray);
+                });
     }
 
     /**
      * @return true if the Class object is a Java array.
      */
     public boolean isArray() {
-        return clazz.isArray();
+        return isArray;
     }
 
     /**
@@ -138,7 +169,7 @@ public class ClassAttributes {
      */
     public Optional<ClassAttributes> getElementType() {
         if (isArray()) {
-            return Optional.of(create(clazz.getComponentType()));
+            return Optional.of(create(clazz));
         }
         if (isCollection()) {
             List<Class<?>> parameterizedTypes = getParameterizedTypes();
@@ -197,23 +228,6 @@ public class ClassAttributes {
             parameterizedTypes = extractParameterizedTypes(genericTypeHint);
         }
         return parameterizedTypes;
-    }
-
-    /**
-     * @param clazz the Class object to wrap.
-     * @param genericTypeHint an optional generic type hint.
-     * @return a wrapped attributes object for clazz.
-     */
-    public static ClassAttributes create(Class<?> clazz, Type genericTypeHint) {
-        return new ClassAttributes(mapPrimitiveToObject(clazz), genericTypeHint);
-    }
-
-    /**
-     * @param clazz the Class object to wrap.
-     * @return a wrapped attributes object for clazz.
-     */
-    public static ClassAttributes create(Class<?> clazz) {
-        return new ClassAttributes(mapPrimitiveToObject(clazz), null);
     }
 
     /**
