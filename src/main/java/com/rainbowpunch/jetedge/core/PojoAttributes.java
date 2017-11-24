@@ -2,7 +2,7 @@ package com.rainbowpunch.jetedge.core;
 
 import com.rainbowpunch.jetedge.core.analyzer.PojoAnalyzer;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
-import com.rainbowpunch.jetedge.core.limiters.NestedLimiter;
+import com.rainbowpunch.jetedge.core.limiters.common.NestedLimiter;
 
 import java.util.HashMap;
 import java.util.HashSet;

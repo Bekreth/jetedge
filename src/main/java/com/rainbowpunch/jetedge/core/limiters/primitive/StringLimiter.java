@@ -1,7 +1,7 @@
 package com.rainbowpunch.jetedge.core.limiters.primitive;
 
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
-import com.rainbowpunch.jetedge.core.limiters.ObjectLimiter;
+import com.rainbowpunch.jetedge.core.limiters.common.ObjectLimiter;
 import com.rainbowpunch.jetedge.util.ReadableCharList;
 
 import java.util.List;

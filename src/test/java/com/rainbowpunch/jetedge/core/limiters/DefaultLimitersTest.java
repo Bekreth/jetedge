@@ -1,6 +1,7 @@
 package com.rainbowpunch.jetedge.core.limiters;
 
 import com.rainbowpunch.jetedge.core.PojoAttributes;
+import com.rainbowpunch.jetedge.core.limiters.common.EnumLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.BooleanLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.ByteLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.CharacterLimiter;
