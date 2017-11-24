@@ -66,11 +66,12 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
         ClassAttributes classAttributes = ClassAttributes.create(clazz);
         pojoAttributes.getParentPojoAnalyzer().extractFields(classAttributes)
                 .filter(f -> !pojoAttributes.shouldIgnore(f.getName().toLowerCase()))
-                .forEach(f -> pojoAttributes.putFieldSetter(
-                        f.getName(),
-                        FieldSetter.create(f.getType(), f.getSetter())
-                ));
-        new FieldDataGenerator<T>(pojoAttributes.getRandomSeed()).populateSuppliers(pojoAttributes);
+                .forEach(f -> {
+                    pojoAttributes.putFieldSetter(f.getName(), FieldSetter.create(f.getType(), f.getSetter()));
+                });
+
+        new FieldDataGenerator<T>(pojoAttributes.getRandomSeed()).populateSuppliers(pojoAttributes); // TODO: 11/24/17 Look at making this static
+
         return () -> {
             try {
                 T newInstance = clazz.newInstance();

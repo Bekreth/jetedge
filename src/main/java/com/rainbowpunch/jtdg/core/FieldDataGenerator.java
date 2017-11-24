@@ -33,17 +33,14 @@ public class FieldDataGenerator<T> {
                     limiter = limiterOfCurrentObjects.getOrDefault(entryName, limiter);
 
                     if (limiter == null || requiresPopulation(limiter)) {
-                        Limiter defaultLimiter = DefaultLimiters.getDefaultLimiter(
-                                entry.getValue().getClassAttributes(),
-                                attributes
-                        );
+                        Limiter defaultLimiter = DefaultLimiters.getDefaultLimiter(entry.getValue().getClassAttributes(), attributes);
+
                         if (limiter == null) {
                             limiter = defaultLimiter;
                         } else {
                             limiter = ((RequiresDefaultLimiter) limiter).reconcile(defaultLimiter);
                         }
                     }
-
                     updateFieldSetterWithSupplier(entry.getValue(), limiter); // TODO: 7/29/17 get or default
                 });
     }
