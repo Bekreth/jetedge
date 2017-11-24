@@ -5,6 +5,7 @@ import com.rainbowpunch.jtdg.core.exception.PojoConstructionException;
 import com.rainbowpunch.jtdg.core.limiters.Limiter;
 import com.rainbowpunch.jtdg.core.limiters.RequiresDefaultLimiter;
 
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
@@ -14,25 +15,25 @@ import java.util.stream.IntStream;
 /**
  *
  */
-public class ListLimiter implements Limiter<List<Object>>, RequiresDefaultLimiter<ListLimiter> {
+public class ArrayLimiter implements Limiter<Object[]>, RequiresDefaultLimiter<ArrayLimiter> {
 
     private final int range;
     private final int offset;
     private Limiter limiter;
 
-    public static ListLimiter createListLimiter(Limiter<?> limiter) {
-        return new ListLimiter(limiter);
+    public static ArrayLimiter createArrayLimiter(Limiter<?> limiter) {
+        return new ArrayLimiter(limiter);
     }
 
-    public ListLimiter(Limiter limiter) {
+    public ArrayLimiter(Limiter limiter) {
         this(limiter, 2, 5);
     }
 
-    public ListLimiter(int range, int offset) {
+    public ArrayLimiter(int range, int offset) {
         this(null, range, offset);
     }
 
-    public ListLimiter(Limiter limiter, int range, int offset) {
+    public ArrayLimiter(Limiter limiter, int range, int offset) {
         this.range = range;
         this.offset = offset;
         this.limiter = limiter;
@@ -45,7 +46,7 @@ public class ListLimiter implements Limiter<List<Object>>, RequiresDefaultLimite
 
     private void validate() {
         if (range < 0 || offset < 0) {
-            throw new LimiterConstructionException("Error creating ListLimiter : Offset and Range cannot be less than 0");
+            throw new LimiterConstructionException("Error creating ArrayLimiter : Offset and Range cannot be less than 0");
         }
     }
 
@@ -55,23 +56,25 @@ public class ListLimiter implements Limiter<List<Object>>, RequiresDefaultLimite
     }
 
     @Override
-    public ListLimiter reconcile(ListLimiter baseLimiter) {
-        return new ListLimiter(baseLimiter.getLimiter(), this.range, this.offset);
+    public ArrayLimiter reconcile(ArrayLimiter baseLimiter) {
+        return new ArrayLimiter(baseLimiter.getLimiter(), this.range, this.offset);
     }
 
     @Override
-    public Supplier<List<Object>> generateSupplier(Random random) {
+    public Supplier<Object[]> generateSupplier(Random random) {
         if (this.limiter == null) {
-            throw new LimiterConstructionException("Error creating ListLimiter : Missing internal Limiter");
+            throw new LimiterConstructionException("Error creating ArrayLimiter : Missing internal Limiter");
         }
         return () -> {
             try {
                 int count = range == 0 ? offset : random.nextInt(range) + offset;
-                return IntStream.range(0, count)
-                        .mapToObj(i -> limiter.generateSupplier(random).get())
-                        .collect(Collectors.toList());
+                Object[] objectArray = (Object[]) Array.newInstance(limiter.generateSupplier(random).get().getClass(), count);
+                for (int i = 0; i < count; i++) {
+                    objectArray[i] = limiter.generateSupplier(random).get();
+                }
+                return objectArray;
             } catch (Exception e) {
-                throw new PojoConstructionException("Failed to create object for ListLimiter: ", e);
+                throw new PojoConstructionException("Failed to create object for ArrayLimiter: ", e);
             }
         };
     }
