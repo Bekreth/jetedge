@@ -67,12 +67,12 @@ configure a field in that nested class?"
 
 ```
 PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
-                .andLimitField("innerFieldName.subFieldName.subSubField", new new IntegerLimiter(5, -10))
+                .andLimitField("innerFieldName.subFieldName.subSubField", new IntegerLimiter(5, -10))
                 .build();
 ```
 BOOM! This line tells Jetedge that in the class you're giving to the 
-generator, that you want the field along the path innerFieldName, 
-subFieldName, subSubField, you want the last in that list to be 
+generator, that you want the field along the path innerFieldName,
+subFieldName, subSubField, you want the last in that list to be
 Integer Limited to only be between -10 and -5.
 
 Assuming that you want to provide your own `Limiter`, just implement
