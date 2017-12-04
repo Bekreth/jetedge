@@ -2,12 +2,13 @@ package com.rainbowpunch.jetedge.core;
 
 import com.rainbowpunch.jetedge.core.analyzer.PojoAnalyzer;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
-import com.rainbowpunch.jetedge.core.limiters.common.NestedLimiter;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -24,6 +25,7 @@ public class PojoAttributes<T> implements Cloneable {
     private Set<String> fieldsToIgnore;
     private Class<? extends PojoAnalyzer> pojoAnalyzerClass;
     private int randomSeed;
+    private int nestedClassCounter = 0;
     private PojoAnalyzer pojoAnalyzer;
 
     private PojoAttributes() {
@@ -37,6 +39,7 @@ public class PojoAttributes<T> implements Cloneable {
 
         this.masterLimiterMap = new HashMap<>();
         this.masterLimiterMap.put(this.pojoClazz, new HashMap<>());
+        this.masterLimiterMap.put(UnknownClass.class, new HashMap<>());
         this.fieldSetterMap = new HashMap<>();
         this.allFieldLimiterMap = new HashMap<>();
         this.fieldsToIgnore = new HashSet<>();
@@ -59,10 +62,12 @@ public class PojoAttributes<T> implements Cloneable {
     }
 
     public void putFieldLimiter(String fieldName, Limiter limiter) {
-        if (limiter instanceof NestedLimiter) {
-            Class clazz = ((NestedLimiter) limiter).getClazz();
-            if (!masterLimiterMap.containsKey(clazz)) masterLimiterMap.put(clazz, new HashMap<>());
-            masterLimiterMap.get(clazz).put(fieldName.toLowerCase(), limiter);
+        if (fieldName.contains(".")) {
+            String[] roots = fieldName.split("\\.", 2);
+            Limiter newInnerLimiter = new NestedLimiter(roots[1], limiter);
+            // Increments and appends a unique ID in order to keep Hashmap from colliding in the field name.
+            nestedClassCounter++;
+            masterLimiterMap.get(UnknownClass.class).put(roots[0].toLowerCase() + "?" + nestedClassCounter, newInnerLimiter);
         } else {
             masterLimiterMap.get(pojoClazz).put(fieldName.toLowerCase(), limiter);
         }
@@ -70,10 +75,6 @@ public class PojoAttributes<T> implements Cloneable {
 
     public void putAllFieldLimiter(Class clazz, Limiter<?> limiter) {
         allFieldLimiterMap.put(clazz, limiter);
-    }
-
-    public void putFieldLimiter(String fieldName, NestedLimiter limiter) {
-        masterLimiterMap.get(limiter.getClazz()).put(fieldName, limiter);
     }
 
     public Stream<Map.Entry<String, FieldSetter<T, ?>>> fieldSetterStream() {
@@ -123,5 +124,41 @@ public class PojoAttributes<T> implements Cloneable {
 
     public void apply(T pojo) {
         fieldSetterMap.forEach((key, value) -> value.apply(pojo));
+    }
+
+    /**
+     * This class is provided to marked nested limiter calls and is stripped away as a dot-delimited field is broken down.
+     */
+    public static class NestedLimiter implements Limiter {
+
+        private String fieldNameOfLimiter;
+        private Limiter<?> limiter;
+
+        private NestedLimiter(String fieldNameOfLimiter, Limiter<?> limiter) {
+            this.fieldNameOfLimiter = fieldNameOfLimiter;
+            this.limiter = limiter;
+        }
+
+        public String getFieldNameOfLimiter() {
+            return fieldNameOfLimiter;
+        }
+
+        public Limiter<?> getLimiter() {
+            return limiter;
+        }
+
+        @Override
+        public Supplier generateSupplier(Random random) {
+            return () -> null;
+        }
+    }
+
+    /**
+     * This is used as a place holder while the NestedLimiter unwinds.
+     */
+    public static class UnknownClass {
+        private UnknownClass() {
+
+        }
     }
 }

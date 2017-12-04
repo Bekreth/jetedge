@@ -19,15 +19,29 @@ public class DefaultPojoLimiter<T> implements Limiter<T> {
                 parentAttributes.getRandomSeed(), parentAttributes.getParentPojoAnalyzer());
 
         parentAttributes.getLimiters().entrySet().stream()
-                .filter(entry -> !entry.getKey().equals(parentAttributes.getPojoClazz()))
+                .filter(entry -> this.shouldProcess(entry, parentAttributes))
                 .flatMap(this::flattenLimiterMap)
-                .forEach(entry -> builder.andLimitField(entry.getKey(), entry.getValue()));
+                .forEach(entry -> addToBuilder(entry, builder));
 
         parentAttributes.getAllFieldLimiterMap().entrySet().stream()
                 .map(Map.Entry::getValue)
                 .forEach(builder::andLimitAllFieldsOf);
 
         generator = builder.build();
+    }
+
+    private boolean shouldProcess(Map.Entry<Class, Map<String, Limiter<?>>> entry, PojoAttributes parentAttributes) {
+        Class clazz = entry.getKey();
+        return (!clazz.equals(parentAttributes.getPojoClazz()) || clazz.equals(PojoAttributes.UnknownClass.class));
+    }
+
+    private void addToBuilder(Map.Entry<String, Limiter<?>> entry, PojoGeneratorBuilder builder) {
+        if (entry.getValue() instanceof PojoAttributes.NestedLimiter) {
+            PojoAttributes.NestedLimiter limiter = (PojoAttributes.NestedLimiter) entry.getValue();
+            builder.andLimitField(limiter.getFieldNameOfLimiter(), limiter.getLimiter());
+        } else {
+            builder.andLimitField(entry.getKey(), entry.getValue());
+        }
     }
 
     private Stream<Map.Entry<String, Limiter<?>>> flattenLimiterMap(Map.Entry<Class, Map<String, Limiter<?>>> entry) {

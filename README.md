@@ -7,14 +7,14 @@ Welcome welcome.
 This is a Java library for quickly and easily creating random data
 based off of YOUR POJOs.  How quick and easy?
 
-## How to Use JTDG! ##
+## How to Use Jetedge! ##
 
 ```
 PojoGenerator<YourClass> generator = new PojoGeneratorBuild<>(YourClass.class)
                 .build();
 ```
 
-This one line of code give the JTDG everything it needs to create
+This one line of code give the Jetedge everything it needs to create
 randomized POJOs.  When you use the `build()` method of the
 PojoGeneratorBuilder class, it recursively scans through your POJO down
 to its primitives (int, String, boolean, etc...).  After it has
@@ -43,7 +43,7 @@ PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("fieldName", new IntegerLimiter(10))
                 .build();
 ```
-With this additional line of code, you've told JTDG that you only 
+With this additional line of code, you've told Jetedge that you only 
 want numbers 0-9 to be randomly picked and put into the field 
 "fieldName" in `YourClass` POJO. A simple limiter exists for all
 primitives, String, and List. In addition to these Limiters, I've
@@ -67,13 +67,13 @@ configure a field in that nested class?"
 
 ```
 PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
-                .andLimitField("innerFieldName", new NestedLimiter(YourNestedClass.class, new IntegerLimiter(5, -10)))
+                .andLimitField("innerFieldName.subFieldName.subSubField", new IntegerLimiter(5, -10))
                 .build();
 ```
-BOOM! This line tells JTDG that in the class you're giving to the 
-generator, that along the class structure there is a class called 
-`YourNestedClass` and you want to set its field `innerFieldName` 
-to only be between -10 and -5.
+BOOM! This line tells Jetedge that in the class you're giving to the 
+generator, that you want the field along the path innerFieldName,
+subFieldName, subSubField, you want the last in that list to be
+Integer Limited to only be between -10 and -5.
 
 Assuming that you want to provide your own `Limiter`, just implement
 the `Limiter` class and provide it to the generator like so:
@@ -82,9 +82,6 @@ PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
                 .andLimitField("fieldYouWillLimit", new YourLimiter())
                 .build();
 ```
-
-Combine this with the `NestedLimiter` in order to dig down into
-the POJO structure.
 
 "But what if I don't want to make a Limiter?" I hear you asking,
 "I just want you to fill my POJOs with a set of classes I've 

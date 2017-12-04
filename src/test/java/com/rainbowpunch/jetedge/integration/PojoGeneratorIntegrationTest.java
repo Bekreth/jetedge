@@ -1,7 +1,10 @@
 package com.rainbowpunch.jetedge.integration;
 
+import com.rainbowpunch.jetedge.core.limiters.collections.ListLimiter;
+import com.rainbowpunch.jetedge.core.limiters.common.ConstantValueLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.IntegerLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.StringLimiter;
+import com.rainbowpunch.jetedge.spi.PojoGenerator;
 import com.rainbowpunch.jetedge.spi.PojoGeneratorBuilder;
 import com.rainbowpunch.jetedge.test.Pojos;
 import com.rainbowpunch.jetedge.test.Pojos.Extra;
@@ -15,6 +18,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.rainbowpunch.jetedge.test.Assertions.assertPojosShallowEqual;
+import static com.rainbowpunch.jetedge.test.Pojos.*;
 import static com.rainbowpunch.jetedge.test.Pojos.Power.*;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -143,5 +147,20 @@ public class PojoGeneratorIntegrationTest {
         assertNull(generated.getName());
         assertNotNull(generated.getNumWheels());
         assertNotNull(generated.getMaxSpeed());
+    }
+
+    @Test
+    public void testNestedLimiter() {
+        PojoGenerator<Storyline> generator = new PojoGeneratorBuilder<>(Storyline.class)
+                .andLimitField("archNemesis.name", new ConstantValueLimiter<String>("Johnny"))
+                .andLimitField("superhero.superPowers", new ListLimiter(3, 12))
+                .andLimitField("superhero.archNemesis.age", new IntegerLimiter(100))
+                .build();
+
+        Storyline generated = generator.generatePojo();
+
+        assertEquals("Johnny", generated.getArchNemesis().getName());
+        assertTrue(generated.getSuperhero().getSuperPowers().size() >= 12);
+        assertTrue(generated.getSuperhero().getArchNemesis().getAge() <= 100);
     }
 }
