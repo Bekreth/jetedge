@@ -92,7 +92,7 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     private boolean filterFields (ClassAttributes classAttributes, FieldAttributes fieldAttributes) {
         String classPrepender = classAttributes.getFieldNameOfClass();
         String fieldName = fieldAttributes.getName().toLowerCase();
-        String qualifiedFieldName = !classPrepender.isEmpty() ? classPrepender.toLowerCase() + "." + fieldName : fieldName;
+        String qualifiedFieldName = !classPrepender.isEmpty() ? classPrepender + "." + fieldName : fieldName;
         return !pojoAttributes.shouldIgnore(qualifiedFieldName);
     }
 

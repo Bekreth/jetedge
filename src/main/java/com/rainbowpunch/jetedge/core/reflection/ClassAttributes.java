@@ -86,7 +86,7 @@ public class ClassAttributes {
             if (parentClassAttribute != null) prependValue = parentClassAttribute.getFieldNameOfClass();
             if (!prependValue.isEmpty()) returnValue = prependValue + "." + fieldNameOfClass;
             else returnValue = fieldNameOfClass;
-            return returnValue;
+            return returnValue.toLowerCase();
         }
     }
 
