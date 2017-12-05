@@ -30,70 +30,70 @@ public class DefaultLimitersTest {
     @Test
     public void testIntegerLimiter() {
         ClassAttributes attributes = ClassAttributes.create(Integer.class);
-        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes);
+        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes, "");
         assertTrue(limiter instanceof IntegerLimiter);
     }
 
     @Test
     public void testShortLimiter() {
         ClassAttributes attributes = ClassAttributes.create(Short.class);
-        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes);
+        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes, "");
         assertTrue(limiter instanceof ShortLimiter);
     }
 
     @Test
     public void testLongLimiter() {
         ClassAttributes attributes = ClassAttributes.create(Long.class);
-        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes);
+        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes, "");
         assertTrue(limiter instanceof LongLimiter);
     }
 
     @Test
     public void testBooleanLimiter() {
         ClassAttributes attributes = ClassAttributes.create(Boolean.class);
-        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes);
+        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes, "");
         assertTrue(limiter instanceof BooleanLimiter);
     }
 
     @Test
     public void testFloatLimiter() {
         ClassAttributes attributes = ClassAttributes.create(Float.class);
-        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes);
+        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes, "");
         assertTrue(limiter instanceof FloatLimiter);
     }
 
     @Test
     public void testDoubleLimiter() {
         ClassAttributes attributes = ClassAttributes.create(Double.class);
-        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes);
+        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes, "");
         assertTrue(limiter instanceof DoubleLimiter);
     }
 
     @Test
     public void testCharacterLimiter() {
         ClassAttributes attributes = ClassAttributes.create(Character.class);
-        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes);
+        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes, "");
         assertTrue(limiter instanceof CharacterLimiter);
     }
 
     @Test
     public void testStringLimiter() {
         ClassAttributes attributes = ClassAttributes.create(String.class);
-        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes);
+        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes, "");
         assertTrue(limiter instanceof StringLimiter);
     }
 
     @Test
     public void testByteLimiter() {
         ClassAttributes attributes = ClassAttributes.create(Byte.class);
-        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes);
+        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes, "");
         assertTrue(limiter instanceof ByteLimiter);
     }
 
     @Test
     public void testEnumLimiter() {
         ClassAttributes attributes = ClassAttributes.create(InnerTestEnum.class);
-        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes);
+        Limiter limiter = DefaultLimiters.getDefaultLimiter(attributes, pojoAttributes, "");
         assertTrue(limiter instanceof EnumLimiter);
     }
 

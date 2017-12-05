@@ -2,6 +2,7 @@ package com.rainbowpunch.jetedge.core;
 
 import com.rainbowpunch.jetedge.core.analyzer.PojoAnalyzer;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,10 +54,6 @@ public class PojoAttributes<T> implements Cloneable {
         return masterLimiterMap;
     }
 
-    public FieldSetter<T, ?> getFieldSetter(String fieldName) {
-        return fieldSetterMap.get(fieldName);
-    }
-
     public void putFieldSetter(String fieldName, FieldSetter<T, ?> fieldSetter) {
         fieldSetterMap.put(fieldName, fieldSetter);
     }
@@ -91,6 +88,10 @@ public class PojoAttributes<T> implements Cloneable {
 
     public boolean shouldIgnore(String fieldName) {
         return fieldsToIgnore.contains(fieldName);
+    }
+
+    public Set<String> getFieldsToIgnore() {
+        return fieldsToIgnore;
     }
 
     public int getRandomSeed() {

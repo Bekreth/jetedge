@@ -3,6 +3,7 @@ package com.rainbowpunch.jetedge.core;
 import com.rainbowpunch.jetedge.core.limiters.DefaultLimiters;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.RequiresDefaultLimiter;
+import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
 
 import java.util.Map;
 import java.util.Random;
@@ -33,7 +34,8 @@ public class FieldDataGenerator<T> {
                     limiter = limiterOfCurrentObjects.getOrDefault(entryName, limiter);
 
                     if (limiter == null || requiresPopulation(limiter)) {
-                        Limiter defaultLimiter = DefaultLimiters.getDefaultLimiter(entry.getValue().getClassAttributes(), attributes);
+                        ClassAttributes classAttributes = entry.getValue().getClassAttributes();
+                        Limiter defaultLimiter = DefaultLimiters.getDefaultLimiter(classAttributes, attributes, entryName);
 
                         if (limiter == null) {
                             limiter = defaultLimiter;

@@ -28,9 +28,10 @@ import java.util.function.Predicate;
 public class DefaultLimiters {
 
     @SuppressWarnings("unchecked")
-    public static Limiter<?> getDefaultLimiter(ClassAttributes classAttributes, PojoAttributes pojoAttributes) {
+    public static Limiter<?> getDefaultLimiter(ClassAttributes classAttributes, PojoAttributes pojoAttributes, String entryName) {
         if (classAttributes.isSubclassOf(List.class) || classAttributes.isArray()) {
-            Limiter limiter = getDefaultLimiter(classAttributes.getElementType().orElseThrow(RuntimeException::new), pojoAttributes);
+            // TODO: 12/5/17 Add more useful Exception
+            Limiter limiter = getDefaultLimiter(classAttributes.getElementType().orElseThrow(RuntimeException::new), pojoAttributes, entryName);
 
             if (classAttributes.isSubclassOf(List.class)) return ListLimiter.createListLimiter(limiter);
             else if (classAttributes.isArray()) return ArrayLimiter.createArrayLimiter(limiter);
@@ -40,7 +41,7 @@ public class DefaultLimiters {
         Limiter limiter = LimiterMapper.getDefaultMapping(classAttributes::is);
         if (limiter != null) return limiter;
 
-        return new DefaultPojoLimiter<>(classAttributes.getClazz(), pojoAttributes);
+        return new DefaultPojoLimiter<>(classAttributes, classAttributes.getClazz(), pojoAttributes, entryName);
     }
 
     private enum LimiterMapper {

@@ -11,9 +11,11 @@ import java.util.function.Function;
  */
 public class FieldAttributes {
     private final Field field;
+    private final ClassAttributes parentClassAttributes;
 
-    public FieldAttributes(Field field) {
+    public FieldAttributes(ClassAttributes parentClassAttributes, Field field) {
         this.field = field;
+        this.parentClassAttributes = parentClassAttributes;
     }
 
     public String getName() {
@@ -25,7 +27,9 @@ public class FieldAttributes {
     }
 
     public ClassAttributes getType() {
-        return ClassAttributes.create(field.getType(), field.getGenericType());
+        ClassAttributes attributes = ClassAttributes.create(parentClassAttributes, field.getType(), field.getGenericType());
+        attributes.setFieldNameOfClass(field.getName());
+        return attributes;
     }
 
     /**

@@ -7,6 +7,7 @@ import com.rainbowpunch.jetedge.core.analyzer.Analyzers;
 import com.rainbowpunch.jetedge.core.analyzer.PojoAnalyzer;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
+import com.rainbowpunch.jetedge.core.reflection.FieldAttributes;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Random;
@@ -62,13 +63,10 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
         return this;
     }
 
-    public PojoGenerator<T> build() {
-        ClassAttributes classAttributes = ClassAttributes.create(clazz);
+    public PojoGenerator<T> build(ClassAttributes classAttributes) {
         pojoAttributes.getParentPojoAnalyzer().extractFields(classAttributes)
-                .filter(f -> !pojoAttributes.shouldIgnore(f.getName().toLowerCase()))
-                .forEach(f -> {
-                    pojoAttributes.putFieldSetter(f.getName(), FieldSetter.create(f.getType(), f.getSetter()));
-                });
+                .filter(f -> filterFields(classAttributes, f))
+                .forEach(this::createFieldSetters);
 
         new FieldDataGenerator<T>(pojoAttributes.getRandomSeed()).populateSuppliers(pojoAttributes); // TODO: 11/24/17 Look at making this static
 
@@ -81,6 +79,21 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
                 throw new RuntimeException(e);
             }
         };
+    }
+
+    public PojoGenerator<T> build() {
+        return this.build(ClassAttributes.create(clazz));
+    }
+
+    private void createFieldSetters(FieldAttributes f) {
+        pojoAttributes.putFieldSetter(f.getName(), FieldSetter.create(f.getType(), f.getSetter()));
+    }
+
+    private boolean filterFields (ClassAttributes classAttributes, FieldAttributes fieldAttributes) {
+        String classPrepender = classAttributes.getFieldNameOfClass();
+        String fieldName = fieldAttributes.getName().toLowerCase();
+        String qualifiedFieldName = !classPrepender.isEmpty() ? classPrepender.toLowerCase() + "." + fieldName : fieldName;
+        return !pojoAttributes.shouldIgnore(qualifiedFieldName);
     }
 
     @Override
