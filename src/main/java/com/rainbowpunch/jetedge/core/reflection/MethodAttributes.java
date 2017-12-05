@@ -10,10 +10,13 @@ import java.util.List;
  */
 public class MethodAttributes {
     private final Method method;
+    private final ClassAttributes parentClassAttributes;
+
     private MethodName methodName = null;
     private List<ClassAttributes> parameterTypes = null;
 
-    public MethodAttributes(Method method) {
+    public MethodAttributes(ClassAttributes parentClassAttributes, Method method) {
+        this.parentClassAttributes = parentClassAttributes;
         this.method = method;
     }
 
@@ -29,7 +32,7 @@ public class MethodAttributes {
      * @return a wrapped Class object of the return type of the method.
      */
     public ClassAttributes getReturnType() {
-        return ClassAttributes.create(method.getReturnType(), method.getGenericReturnType());
+        return ClassAttributes.create(parentClassAttributes, method.getReturnType(), method.getGenericReturnType());
     }
 
     /**
@@ -53,10 +56,9 @@ public class MethodAttributes {
                     // FIXME we should probably bail instead of continuing with null values
                     parameterTypes.add(null);
                 } else {
-                    parameterTypes.add(ClassAttributes.create(
-                            parameterType,
-                            i < parameterGenericTypes.length ? parameterGenericTypes[i] : null
-                    ));
+                    Type types = i < parameterGenericTypes.length ? parameterGenericTypes[i] : null;
+                    ClassAttributes classAttributes = ClassAttributes.create(parentClassAttributes, parameterType, types);
+                    parameterTypes.add(classAttributes);
                 }
             }
         }

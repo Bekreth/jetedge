@@ -18,10 +18,12 @@ import static java.util.stream.Collectors.toList;
  * Friendly wrapper around the Java reflection API.
  */
 public class ClassAttributes {
+    private ClassAttributes parentClassAttribute;
     private final Class<?> clazz;
     private boolean isArray = false;
     private final Type genericTypeHint;
     private List<Class<?>> parameterizedTypes = null;
+    private String fieldNameOfClass = null;
 
     // Cache these as they are unlikely to go out of date
     private List<MethodAttributes> methods = null;
@@ -31,7 +33,8 @@ public class ClassAttributes {
      * @param clazz class to wrap.
      * @param genericTypeHint an optional generic type hint.
      */
-    private ClassAttributes(Class<?> clazz, Type genericTypeHint, boolean isArray) {
+    private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint, boolean isArray) {
+        this.parentClassAttribute = classAttributes;
         this.isArray = isArray;
         this.clazz = requireNonNull(clazz);
         // This is the Type that is stored on a Field or Method object. Providing this type
@@ -39,8 +42,8 @@ public class ClassAttributes {
         this.genericTypeHint = genericTypeHint;
     }
 
-    private ClassAttributes(Class<?> clazz, Type genericTypeHint) {
-        this(clazz, genericTypeHint, false);
+    private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint) {
+        this(classAttributes, clazz, genericTypeHint, false);
     }
 
     /**
@@ -48,11 +51,11 @@ public class ClassAttributes {
      * @param genericTypeHint an optional generic type hint.
      * @return a wrapped attributes object for clazz.
      */
-    public static ClassAttributes create(Class<?> clazz, Type genericTypeHint) {
+    public static ClassAttributes create(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint) {
         if (clazz.isArray()) {
-            return new ClassAttributes(mapPrimitiveToObject(clazz.getComponentType()), genericTypeHint, true);
+            return new ClassAttributes(classAttributes, mapPrimitiveToObject(clazz.getComponentType()), genericTypeHint, true);
         } else {
-            return new ClassAttributes(mapPrimitiveToObject(clazz), genericTypeHint);
+            return new ClassAttributes(classAttributes, mapPrimitiveToObject(clazz), genericTypeHint);
         }
     }
 
@@ -61,11 +64,35 @@ public class ClassAttributes {
      * @return a wrapped attributes object for clazz.
      */
     public static ClassAttributes create(Class<?> clazz) {
-        return create(mapPrimitiveToObject(clazz), null);
+        return create(null, mapPrimitiveToObject(clazz), null);
     }
 
+    /**
+     * @return the name of the Class
+     */
     public String getName() {
         return clazz.getName();
+    }
+
+    /**
+     * @return the name of the field associated with this class from inside the parent object.
+     */
+    public String getFieldNameOfClass() {
+        if (fieldNameOfClass == null) {
+            return "";
+        } else {
+            String returnValue = "";
+            String prependValue = "";
+            if (parentClassAttribute != null) prependValue = parentClassAttribute.getFieldNameOfClass();
+            if (!prependValue.isEmpty()) returnValue = prependValue + "." + fieldNameOfClass;
+            else returnValue = fieldNameOfClass;
+            return returnValue;
+        }
+    }
+
+    public void setFieldNameOfClass(String fieldNameOfClass) {
+        if (this.fieldNameOfClass == null) this.fieldNameOfClass = fieldNameOfClass;
+        else throw new RuntimeException("Cannot overwrite fieldNameOfClass from : " + this.fieldNameOfClass);
     }
 
     /**
@@ -81,7 +108,7 @@ public class ClassAttributes {
     public List<MethodAttributes> getMethods() {
         if (methods == null) {
             methods = Arrays.stream(clazz.getMethods())
-                    .map(MethodAttributes::new)
+                    .map(m -> new MethodAttributes(this, m))
                     .collect(toList());
         }
         return methods;
@@ -99,7 +126,7 @@ public class ClassAttributes {
                 cur = cur.getSuperclass();
             }
             fields = rawFields.stream()
-                    .map(FieldAttributes::new)
+                    .map(f -> new FieldAttributes(this, f))
                     .collect(toList());
         }
         return fields;

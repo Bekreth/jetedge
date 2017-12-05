@@ -142,11 +142,27 @@ public class PojoGeneratorIntegrationTest {
     public void testIgnoreField() {
         Vehicle generated = new PojoGeneratorBuilder<>(Vehicle.class)
                 .andIgnoreField("name")
+                .andIgnoreField("maxSpeed")
                 .build()
                 .generatePojo();
         assertNull(generated.getName());
+        assertEquals(0, generated.getMaxSpeed());
         assertNotNull(generated.getNumWheels());
-        assertNotNull(generated.getMaxSpeed());
+    }
+
+    @Test
+    public void testNestedIgnoreField() {
+        PojoGenerator<Storyline> generator = new PojoGeneratorBuilder<>(Storyline.class)
+                .andIgnoreField("archNemesis.name")
+                .andIgnoreField("superhero.superPowers")
+                .andIgnoreField("superhero.archNemesis.age")
+                .build();
+
+        Storyline generated = generator.generatePojo();
+
+        assertNull(generated.getArchNemesis().getName());
+        assertNull(generated.getSuperhero().getSuperPowers());
+        assertEquals(0, generated.getSuperhero().getArchNemesis().getAge());
     }
 
     @Test
