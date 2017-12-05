@@ -20,22 +20,21 @@ public class FieldDataGenerator<T> {
     }
 
     public void populateSuppliers(PojoAttributes<T> attributes) {
-        Map<Class, Map<String, Limiter<?>>> limiters = attributes.getLimiters();
-        Map<String, Limiter<?>> limiterOfCurrentObjects = limiters.get(attributes.getPojoClazz());
+        Map<String, Limiter<?>> limiters = attributes.getLimiters();
 
         attributes.fieldSetterStream()
-                .filter(entry -> shouldCreateSupplier(limiterOfCurrentObjects.get(entry.getKey())))
+                .filter(entry -> shouldCreateSupplier(limiters.get(entry.getKey())))
                 .sorted(this::alphabetical)
                 .forEach(entry -> {
-                    String entryName = entry.getKey().toLowerCase();
+                    ClassAttributes classAttributes = entry.getValue().getClassAttributes();
+                    String entryName = classAttributes.getFieldNameOfClass();
                     Class clazz = entry.getValue().getClassAttributes().getClazz();
 
                     Limiter limiter = attributes.getAllFieldLimiterMap().get(clazz);
-                    limiter = limiterOfCurrentObjects.getOrDefault(entryName, limiter);
+                    limiter = limiters.getOrDefault(entryName, limiter);
 
                     if (limiter == null || requiresPopulation(limiter)) {
-                        ClassAttributes classAttributes = entry.getValue().getClassAttributes();
-                        Limiter defaultLimiter = DefaultLimiters.getDefaultLimiter(classAttributes, attributes, entryName);
+                        Limiter defaultLimiter = DefaultLimiters.getDefaultLimiter(classAttributes, attributes);
 
                         if (limiter == null) {
                             limiter = defaultLimiter;

@@ -61,6 +61,22 @@ character ranges `[somechars]`, anti-character ranges `[^notthis]`,
 and quantity `{3,4}`, `{2}`, `{5,}`.  I figured this would be good
 enough to get you started on using Regex strings.
 
+"Gee, thats all good, but what if I have a LOT of fields that all need to
+be set with the same limiter type?"  Fantastic question.  I know how lazy us
+programmers are, and if you're eyeing up your 15 tierd POJO with a total of 1000+
+fields, you may be going white thinking of how much boiler plate you have to write.
+Never fear!
+
+```
+PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
+                .andLimitAllFieldsOf(new IntegerLimiter(12))
+                .build();
+```
+With the `andLimitAllFieldsOf` method, you establish a new default setting on a
+given class.  In this example, we have now limited every single int in your POJO
+to having a range of 12.  This, of course, can still be overwritten with your own
+desired limiter class if you have a special desire for certain fields to have
+different logic than others.
 
 But now you're asking yourself, "I have a nested class, how do I
 configure a field in that nested class?"
@@ -74,6 +90,17 @@ BOOM! This line tells Jetedge that in the class you're giving to the
 generator, that you want the field along the path innerFieldName,
 subFieldName, subSubField, you want the last in that list to be
 Integer Limited to only be between -10 and -5.
+
+In a similar vein, you can set a series of fields to be ignored using the same
+dot delimited syntax.
+
+```
+PojoGenerator<YourClass> generator = new PojoGeneratorBuilder<>(YourClass.class)
+                .andIgnoreField("innerFieldName.subFieldName.subSubField")
+                .build();
+```
+This builder will leave the field you specify set to its standard value, whether that be `null`
+or `"hello world"`
 
 Assuming that you want to provide your own `Limiter`, just implement
 the `Limiter` class and provide it to the generator like so:
