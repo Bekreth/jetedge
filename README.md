@@ -185,15 +185,4 @@ it doesn't, you done goofed.
 I work a full time job and play with this project on the side, so
 please be patient with me and my response time.
 
-At this stage, if you look at my code, you'll notice I have not
-abided by a lot of my rules.  I'm not happy about this, but my #1
-goal was to get the initial SNAPSHOT because a lot of people in 
-my office are quite excited by this idea (seems its a good one)
-and want to contribute starting a month ago when I first came
-up with this idea.
-
-## Release Plan ##
-
-It is my plan to have a truly complete version 1 release of this
-product up in Maven Central repo around the start of November.
 
