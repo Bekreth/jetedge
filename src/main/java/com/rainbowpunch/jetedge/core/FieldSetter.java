@@ -7,7 +7,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 /**
- *
+ * This class aligns data generators with the consumers that apply the data to the appropriate field within the POJO.
  */
 public class FieldSetter<T, U> {
 

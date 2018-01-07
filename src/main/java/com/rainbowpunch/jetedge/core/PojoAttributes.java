@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 /**
- * An entity of all the Pojo's attributes
+ * An entity of all the information necessary to populate a POJO.
  */
 public class PojoAttributes<T> implements Cloneable {
 

@@ -25,6 +25,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ * A class containing the default behaviour for data generation.
+ */
 public class DefaultLimiters {
 
     @SuppressWarnings("unchecked")

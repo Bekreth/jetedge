@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 /**
- *
+ * A limiter for Short data fields.
  */
 public class ShortLimiter implements Limiter<Short> {
     @Override

@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * This Limiter takes a Regex expression, and reverse engineers a string that matches it.
+ * This Limiter takes simplified Regex expression, and reverse engineers a string that matches it.
  */
 public class RegexLimiter implements Limiter<String> {
 
@@ -24,6 +24,11 @@ public class RegexLimiter implements Limiter<String> {
 
     private List<Character> listeningCharList = new ArrayList<>();
 
+    /**
+     * Creates a String that matches the provided Regex pattern.
+     * @param pattern
+     *          The regex pattern to use as a template.
+     */
     public RegexLimiter(String pattern) {
         try {
             encodedChars = new ArrayList<>();

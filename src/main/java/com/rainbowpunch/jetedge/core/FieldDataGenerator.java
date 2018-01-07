@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- *
+ * Looks through all the consumers that have been configured for a POJO and creates appropriate data to fill them.  The data generated is what has
+ *      been specified by the PojoGeneratorBuilder.
  */
 public class FieldDataGenerator<T> {
 
@@ -19,6 +20,11 @@ public class FieldDataGenerator<T> {
         random = new Random(generatorSeed);
     }
 
+    /**
+     * Populates a PojoAttribute with appropriate date.
+     * @param attributes
+     *          The PojoAttribute to be populated.
+     */
     public void populateSuppliers(PojoAttributes<T> attributes) {
         Map<String, Limiter<?>> limiters = attributes.getLimiters();
 

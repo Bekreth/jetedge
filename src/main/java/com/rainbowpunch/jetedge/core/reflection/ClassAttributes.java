@@ -30,7 +30,8 @@ public class ClassAttributes {
     private List<FieldAttributes> fields = null;
 
     /**
-     * @param clazz class to wrap.
+     * @param clazz
+     *          class to wrap.
      * @param genericTypeHint an optional generic type hint.
      */
     private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint, boolean isArray) {
@@ -47,8 +48,12 @@ public class ClassAttributes {
     }
 
     /**
-     * @param clazz the Class object to wrap.
-     * @param genericTypeHint an optional generic type hint.
+     * @param classAttributes
+     *          The ClassAttribute of the parent class
+     * @param clazz
+     *          the Class object to wrap.
+     * @param genericTypeHint
+     *          an optional generic type hint.
      * @return a wrapped attributes object for clazz.
      */
     public static ClassAttributes create(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint) {
@@ -60,7 +65,8 @@ public class ClassAttributes {
     }
 
     /**
-     * @param clazz the Class object to wrap.
+     * @param
+     *          clazz the Class object to wrap.
      * @return a wrapped attributes object for clazz.
      */
     public static ClassAttributes create(Class<?> clazz) {
@@ -258,9 +264,10 @@ public class ClassAttributes {
     }
 
     /**
-     * If an incomming class is of a primitive type, this maps it to its corresponding Object type, else, it returns the object
+     * If an incoming class is of a primitive type, this maps it to its corresponding Object type, else, it returns the object
      * @param clazz
-     * @return
+     *          The class that will have a primitive type check run against it.
+     * @return An object class type
      */
     public static Class<?> mapPrimitiveToObject(Class<?> clazz) {
         Class outputClass = clazz;

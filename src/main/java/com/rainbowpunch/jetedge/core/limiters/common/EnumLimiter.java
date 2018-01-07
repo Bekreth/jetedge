@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+/**
+ * A limiter for Enum data fields.
+ */
 public class EnumLimiter<T extends Enum<T>> extends ObjectLimiter<T> {
 
     public static EnumLimiter<?> createEnumLimiter(Class<?> tEnum) {

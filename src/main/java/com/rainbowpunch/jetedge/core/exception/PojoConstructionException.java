@@ -1,5 +1,8 @@
 package com.rainbowpunch.jetedge.core.exception;
 
+/**
+ * This exception is thrown when there are unexpected errors during the creation of a POJO.
+ */
 public class PojoConstructionException extends RuntimeException {
     public PojoConstructionException() {
         super();

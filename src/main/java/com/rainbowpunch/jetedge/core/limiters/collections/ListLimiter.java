@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- *
+ * A Limiter for creating lists.
  */
 public class ListLimiter implements Limiter<List<Object>>, RequiresDefaultLimiter<ListLimiter> {
 

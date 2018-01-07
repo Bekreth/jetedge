@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ReadableCharList {
+/**
+ * This class provides named subsets for how to divide up readable characters.
+ */
+public final class ReadableCharList {
 
     public static final List<Character> LIST_OF_ALL_CHAR = IntStream.range(32, 126)
             .mapToObj(i -> (char) i)
