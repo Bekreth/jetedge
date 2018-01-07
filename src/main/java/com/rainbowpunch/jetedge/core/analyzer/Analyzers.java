@@ -7,6 +7,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * A list of provided PojoAnalyzers
+ */
 public final class Analyzers {
     public static final PojoAnalyzer DEFAULT = classAttributes -> {
         // Get a list of all field names with public setters

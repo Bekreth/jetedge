@@ -8,6 +8,32 @@
   <artifactId>jetedge</artifactId>
   <version>0.8.0-SNAPSHOT</version>
 
+  <name>Jetedge</name>
+  <description>An application that is used to automatically populate POJOs with bounded random data</description>
+  <url>https://github.com/Bekreth/jetedge</url>
+
+  <developers>
+    <developer>
+      <name>Christopher Hughes</name>
+      <email>christopher.hughes@rainbowpunch.com</email>
+      <organization>Rainbow Punch Studio</organization>
+      <organizationUrl>http://www.rainbowpunch.com</organizationUrl>
+    </developer>
+  </developers>
+
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git://github.com/Bekreth/jetedge.git</connection>
+    <developerConnection>scm:git:ssh://github.com:Bekreth/jetedge.git</developerConnection>
+    <url>https://github.com/Bekreth/jetedge</url>
+  </scm>
+
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -64,6 +90,7 @@
 
   <build>
     <plugins>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -73,7 +100,47 @@
         </configuration>
         <version>${maven.compiler.plugin.version}</version>
       </plugin>
+
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>docBuild</id>
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>2.2.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.9.1</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

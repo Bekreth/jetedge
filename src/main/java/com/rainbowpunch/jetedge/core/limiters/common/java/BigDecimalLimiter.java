@@ -6,8 +6,10 @@ import java.math.BigDecimal;
 import java.util.Random;
 import java.util.function.Supplier;
 
+/**
+ * A limiter for BigDecimal data fields.
+ */
 public class BigDecimalLimiter implements Limiter<BigDecimal> {
-
 
     @Override
     public Supplier<BigDecimal> generateSupplier(Random random) {

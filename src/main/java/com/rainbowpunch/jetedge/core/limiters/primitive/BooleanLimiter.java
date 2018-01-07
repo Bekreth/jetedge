@@ -5,6 +5,9 @@ import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import java.util.Random;
 import java.util.function.Supplier;
 
+/**
+ * A limiter for Boolean data fields.
+ */
 public class BooleanLimiter implements Limiter<Boolean> {
 
     private Boolean expectedBoolean;

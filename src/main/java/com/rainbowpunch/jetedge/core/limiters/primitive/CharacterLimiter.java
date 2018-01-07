@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 /**
- *
+ * A limiter for Character data fields.
  */
 public class CharacterLimiter extends ObjectLimiter<Character> implements Limiter<Character> {
 

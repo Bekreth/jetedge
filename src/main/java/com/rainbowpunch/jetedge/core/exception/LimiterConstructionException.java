@@ -1,5 +1,8 @@
 package com.rainbowpunch.jetedge.core.exception;
 
+/**
+ * This exception is thrown when a Limiter is improperly constructed.
+ */
 public class LimiterConstructionException extends RuntimeException {
     public LimiterConstructionException() {
         super();

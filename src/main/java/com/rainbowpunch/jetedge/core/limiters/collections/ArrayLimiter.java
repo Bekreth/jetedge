@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 /**
- *
+ * A limiter for arrays
  */
 public class ArrayLimiter implements Limiter<Object[]>, RequiresDefaultLimiter<ArrayLimiter> {
 

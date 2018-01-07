@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- *
+ * A limiter for String data fields.
  */
 public class StringLimiter extends ObjectLimiter<String> implements Limiter<String> {
 
@@ -21,14 +21,31 @@ public class StringLimiter extends ObjectLimiter<String> implements Limiter<Stri
         length = 30;
     }
 
+    /**
+     * Provides a StringLimiter for Strings of a given length
+     * @param length
+     *          Desired String length
+     */
     public StringLimiter(int length) {
         this(ReadableCharList.LIST_OF_ALL_CHAR, length);
     }
 
+    /**
+     * Provides a StringLimiter for Strings created with a given set of characters
+     * @param charList
+     *          List of characters that the String should be made of.
+     */
     public StringLimiter(List<Character> charList) {
         this(charList, 30);
     }
 
+    /**
+     * Provides a StringLimiter for String created with a given set of characters and a given length.
+     * @param charList
+     *          List of characters that the String should be made of.
+     * @param length
+     *          Desired String length
+     */
     public StringLimiter(List<Character> charList, int length) {
         this.length = length;
         List<String> stringList = charListToStringList(charList);
