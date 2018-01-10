@@ -1,6 +1,7 @@
-# Java Test Data Generator #
+# Jetedge #
 
-[![Build Status](https://travis-ci.org/Bekreth/java-test-data-generator.svg?branch=master)](https://travis-ci.org/Bekreth/java-test-data-generator)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.rainbowpunch/jetedge/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.rainbowpunch/jetedge)
+[![Build Status](https://travis-ci.org/Bekreth/jetedge.svg?branch=master&style=plastic)](https://travis-ci.org/Bekreth/jetedge)
 
 Welcome welcome.
 
