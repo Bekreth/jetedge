@@ -51,6 +51,15 @@ public final class Pojos {
     public static class Storyline {
         private Superhero superhero;
         private Person archNemesis;
+    }
+
+    @Data
+    public static class A<J> {
+        J j;
+    }
+
+    @Data
+    public static class B extends A<String> {
 
     }
 

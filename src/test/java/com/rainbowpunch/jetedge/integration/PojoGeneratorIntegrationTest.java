@@ -89,6 +89,7 @@ public class PojoGeneratorIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void testPojoGeneratorBuilderClone() {
         PojoGeneratorBuilder<Person> baseGen = new PojoGeneratorBuilder<>(Person.class);
 
@@ -178,5 +179,14 @@ public class PojoGeneratorIntegrationTest {
         assertEquals("Johnny", generated.getArchNemesis().getName());
         assertTrue(generated.getSuperhero().getSuperPowers().size() >= 12);
         assertTrue(generated.getSuperhero().getArchNemesis().getAge() <= 100);
+    }
+
+    @Test
+    public void testTEstTEst() {
+        PojoGenerator<B> generator = new PojoGeneratorBuilder<>(B.class)
+                .build();
+        B generated = generator.generatePojo();
+        assertNotNull(generated);
+        assertNotNull(generated.getJ());
     }
 }

@@ -1,11 +1,15 @@
 package com.rainbowpunch.jetedge.core.reflection;
 
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -18,6 +22,7 @@ import static java.util.stream.Collectors.toList;
  * Friendly wrapper around the Java reflection API.
  */
 public class ClassAttributes {
+
     private ClassAttributes parentClassAttribute;
     private final Class<?> clazz;
     private boolean isArray = false;
@@ -37,10 +42,16 @@ public class ClassAttributes {
     private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint, boolean isArray) {
         this.parentClassAttribute = classAttributes;
         this.isArray = isArray;
-        this.clazz = requireNonNull(clazz);
         // This is the Type that is stored on a Field or Method object. Providing this type
         // helps us get around the type erasure of parameterized types such as List<> or Map<>.
-        this.genericTypeHint = genericTypeHint;
+        // Makes assumption that if clazz equals Object, then class is generic
+        if (clazz.equals(Object.class)) {
+            this.genericTypeHint = classAttributes.genericTypeHint;
+            this.clazz = ((Class) ((ParameterizedTypeImpl) classAttributes.genericTypeHint).getActualTypeArguments()[0]);
+        } else {
+            this.genericTypeHint = genericTypeHint;
+            this.clazz = requireNonNull(clazz);
+        }
     }
 
     private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint) {
@@ -70,7 +81,7 @@ public class ClassAttributes {
      * @return a wrapped attributes object for clazz.
      */
     public static ClassAttributes create(Class<?> clazz) {
-        return create(null, mapPrimitiveToObject(clazz), null);
+        return create(null, mapPrimitiveToObject(clazz), clazz.getGenericSuperclass());
     }
 
     /**
