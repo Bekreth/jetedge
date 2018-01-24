@@ -203,7 +203,8 @@ public class PojoGeneratorIntegrationTest {
         for (int i = 0; i < 10000; i++) {
             Person person = generator.generatePojo();
             int pAge = person.getAge();
-            assertTrue((pAge >= 0 && pAge < 10) || (pAge >= 20 && pAge < 30) || (pAge >= 40 && pAge < 50));
+            assertTrue("Bad Value: " + String.valueOf(person.getAge()),
+                    (pAge >= 0 && pAge < 10) || (pAge >= 20 && pAge < 30) || (pAge >= 40 && pAge < 50));
         }
 
     }
