@@ -4,6 +4,7 @@ import com.rainbowpunch.jetedge.core.limiters.collections.ListLimiter;
 import com.rainbowpunch.jetedge.core.limiters.common.ConstantValueLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.IntegerLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.StringLimiter;
+import com.rainbowpunch.jetedge.core.limiters.special.MultiplexLimiter;
 import com.rainbowpunch.jetedge.spi.PojoGenerator;
 import com.rainbowpunch.jetedge.spi.PojoGeneratorBuilder;
 import com.rainbowpunch.jetedge.test.Pojos;
@@ -15,6 +16,7 @@ import com.rainbowpunch.jetedge.test.Pojos.Vehicle;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.rainbowpunch.jetedge.test.Assertions.assertPojosShallowEqual;
@@ -75,8 +77,8 @@ public class PojoGeneratorIntegrationTest {
         assertEquals(powers, generated.getSuperPowers());
     }
 
-    @Ignore("nested POJO does not currently inherit random seed")
     @Test
+    @Ignore("nested POJO does not currently inherit random seed")
     public void testGeneratePojoWithNestedPojo() {
         Person generated = new PojoGeneratorBuilder<>(Superhero.class)
                 .andUseRandomSeed(RANDOM_SEED)
@@ -182,11 +184,28 @@ public class PojoGeneratorIntegrationTest {
     }
 
     @Test
-    public void testTEstTEst() {
+    public void testGenericInterfaceBeingPopulated() {
         PojoGenerator<B> generator = new PojoGeneratorBuilder<>(B.class)
                 .build();
         B generated = generator.generatePojo();
         assertNotNull(generated);
         assertNotNull(generated.getJ());
+    }
+
+    @Test
+    public void testMultiplexLimiter() {
+        List<IntegerLimiter> limiters = Arrays.asList(new IntegerLimiter(10), new IntegerLimiter(10, 20), new IntegerLimiter(10, 40));
+
+        PojoGenerator<Person> generator = new PojoGeneratorBuilder<>(Person.class)
+                .andLimitField("age", MultiplexLimiter.generateFlatDistribution(limiters))
+                .build();
+
+        for (int i = 0; i < 10000; i++) {
+            Person person = generator.generatePojo();
+            int pAge = person.getAge();
+            assertTrue("Bad Value: " + String.valueOf(person.getAge()),
+                    (pAge >= 0 && pAge < 10) || (pAge >= 20 && pAge < 30) || (pAge >= 40 && pAge < 50));
+        }
+
     }
 }

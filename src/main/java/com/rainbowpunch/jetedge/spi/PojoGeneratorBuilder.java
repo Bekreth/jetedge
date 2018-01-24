@@ -46,6 +46,11 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     private final Class<T> clazz;
     private final PojoAttributes<T> pojoAttributes;
 
+    private PojoGeneratorBuilder(Class<T> clazz, PojoAttributes<T> pojoAttributes) {
+        this.clazz = clazz;
+        this.pojoAttributes = pojoAttributes;
+    }
+
     /**
      * Creates a builder object for the PojoGenerator with the defined class
      * @param clazz
@@ -90,11 +95,6 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
      */
     public PojoGeneratorBuilder(Class<T> clazz, int randomSeed, PojoAnalyzer pojoAnalyzer) {
         this(clazz, new PojoAttributes<>(clazz, pojoAnalyzer, randomSeed));
-    }
-
-    private PojoGeneratorBuilder(Class<T> clazz, PojoAttributes<T> pojoAttributes) {
-        this.clazz = clazz;
-        this.pojoAttributes = pojoAttributes;
     }
 
     /**
