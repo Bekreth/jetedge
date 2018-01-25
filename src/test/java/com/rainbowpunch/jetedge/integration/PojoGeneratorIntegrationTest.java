@@ -206,6 +206,36 @@ public class PojoGeneratorIntegrationTest {
             assertTrue("Bad Value: " + String.valueOf(person.getAge()),
                     (pAge >= 0 && pAge < 10) || (pAge >= 20 && pAge < 30) || (pAge >= 40 && pAge < 50));
         }
+    }
 
+    @Test
+    public void testLazyEvaluation_noPopulation() {
+        PojoGenerator<Vehicle> generator = new PojoGeneratorBuilder<>(Vehicle.class)
+                .lazilyEvaluate()
+                .build();
+
+        Vehicle vehicle = generator.generatePojo();
+
+        assertNotNull(vehicle);
+        assertEquals(0, vehicle.getMaxSpeed());
+        assertEquals(0, vehicle.getNumWheels());
+        assertNull(vehicle.getName());
+        assertNull(vehicle.getEngineType());
+    }
+
+    @Test
+    public void testLazyEvaluation_partialPopulation() {
+        PojoGenerator<Vehicle> generator = new PojoGeneratorBuilder<>(Vehicle.class)
+                .lazilyEvaluate()
+                .andLimitField("name", new ConstantValueLimiter<>("Hello World"))
+                .build();
+
+        Vehicle vehicle = generator.generatePojo();
+
+        assertNotNull(vehicle);
+        assertEquals(0, vehicle.getMaxSpeed());
+        assertEquals(0, vehicle.getNumWheels());
+        assertEquals("Hello World", vehicle.getName());
+        assertNull(vehicle.getEngineType());
     }
 }

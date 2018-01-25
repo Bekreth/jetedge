@@ -17,13 +17,15 @@ import static java.util.Objects.requireNonNull;
 public class PojoAttributes<T> implements Cloneable {
 
     private Class<T> pojoClazz;
+    private PojoAnalyzer pojoAnalyzer;
+    private int randomSeed;
+    private boolean activeEvaluation;
+
     private Map<String, Limiter<?>> masterLimiterMap;
     private Map<Class, Limiter<?>> allFieldLimiterMap;
     private Map<String, FieldSetter<T, ?>> fieldSetterMap;
     private Set<String> fieldsToIgnore;
     private Class<? extends PojoAnalyzer> pojoAnalyzerClass;
-    private int randomSeed;
-    private PojoAnalyzer pojoAnalyzer;
 
     private PojoAttributes() {
 
@@ -33,6 +35,7 @@ public class PojoAttributes<T> implements Cloneable {
         this.pojoClazz = requireNonNull(clazz);
         this.pojoAnalyzer = requireNonNull(pojoAnalyzer);
         this.randomSeed = randomSeed;
+        this.activeEvaluation = true;
 
         this.masterLimiterMap = new HashMap<>();
         this.fieldSetterMap = new HashMap<>();
@@ -73,7 +76,7 @@ public class PojoAttributes<T> implements Cloneable {
     }
 
     public boolean shouldIgnore(String fieldName) {
-        return fieldsToIgnore.contains(fieldName);
+        return activeEvaluation ? fieldsToIgnore.contains(fieldName) : !masterLimiterMap.containsKey(fieldName);
     }
 
     public Set<String> getFieldsToIgnore() {
@@ -94,6 +97,10 @@ public class PojoAttributes<T> implements Cloneable {
 
     public void setPojoAnalyzer(PojoAnalyzer pojoAnalyzer) {
         this.pojoAnalyzer = pojoAnalyzer;
+    }
+
+    public void setEvaluationState(boolean isActivelyEvaluating) {
+        this.activeEvaluation = isActivelyEvaluating;;
     }
 
     @Override

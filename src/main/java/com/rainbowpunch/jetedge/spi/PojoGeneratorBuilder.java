@@ -160,6 +160,11 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
         return this;
     }
 
+    public PojoGeneratorBuilder<T> lazilyEvaluate() {
+        pojoAttributes.setEvaluationState(false);
+        return this;
+    }
+
     /**
      * Creates the PojoGenerator specified by the fluent API used in the Builder
      * @param classAttributes
