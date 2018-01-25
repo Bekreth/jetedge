@@ -20,24 +20,24 @@ public final class ReadableCharList {
 
     public static final List<Character> LIST_OF_CHAR_NO_DIGITS = new ArrayList<>();
 
-    public static final List<Character> LIST_OF_ALL_UPPER_CASE_CHAR = new ArrayList<>();
+    public static final List<Character> LIST_OF_UPPER_CASE_CHAR = new ArrayList<>();
 
-    public static final List<Character> LIST_OF_ALL_LOWER_CASE_CHAR = new ArrayList<>();
+    public static final List<Character> LIST_OF_LOWER_CASE_CHAR = new ArrayList<>();
 
-    public static final List<Character> LIST_OF_ALL_ALPHA_CHAR = new ArrayList<>();
+    public static final List<Character> LIST_OF_ALPHA_CHAR = new ArrayList<>();
 
     public static final List<Character> LIST_OF_ALPHA_NUMERIC_CHAR = new ArrayList<>();
 
     static {
         LIST_OF_CHAR_NO_DIGITS.addAll(LIST_OF_ALL_CHAR.subList(0, 15));
         LIST_OF_CHAR_NO_DIGITS.addAll(LIST_OF_ALL_CHAR.subList(27, LIST_OF_ALL_CHAR.size()));
-        LIST_OF_ALL_UPPER_CASE_CHAR.addAll(LIST_OF_ALL_CHAR.subList(33, 59));
-        LIST_OF_ALL_LOWER_CASE_CHAR.addAll(LIST_OF_ALL_CHAR.subList(65, 91));
+        LIST_OF_UPPER_CASE_CHAR.addAll(LIST_OF_ALL_CHAR.subList(33, 59));
+        LIST_OF_LOWER_CASE_CHAR.addAll(LIST_OF_ALL_CHAR.subList(65, 91));
 
-        LIST_OF_ALL_ALPHA_CHAR.addAll(LIST_OF_ALL_UPPER_CASE_CHAR);
-        LIST_OF_ALL_ALPHA_CHAR.addAll(LIST_OF_ALL_LOWER_CASE_CHAR);
+        LIST_OF_ALPHA_CHAR.addAll(LIST_OF_UPPER_CASE_CHAR);
+        LIST_OF_ALPHA_CHAR.addAll(LIST_OF_LOWER_CASE_CHAR);
 
-        LIST_OF_ALPHA_NUMERIC_CHAR.addAll(LIST_OF_ALL_ALPHA_CHAR);
+        LIST_OF_ALPHA_NUMERIC_CHAR.addAll(LIST_OF_ALPHA_CHAR);
         LIST_OF_ALPHA_NUMERIC_CHAR.addAll(LIST_OF_CHAR_DIGITS);
     }
 
