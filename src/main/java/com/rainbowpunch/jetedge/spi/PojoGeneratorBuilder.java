@@ -43,12 +43,18 @@ import java.util.Random;
  *          The class that will should be generated.
  */
 public final class PojoGeneratorBuilder<T> implements Cloneable {
+
+    private static DefaultDataLimiter baseDataLimiters;
+
     private final Class<T> clazz;
     private final PojoAttributes<T> pojoAttributes;
 
     private PojoGeneratorBuilder(Class<T> clazz, PojoAttributes<T> pojoAttributes) {
         this.clazz = clazz;
         this.pojoAttributes = pojoAttributes;
+        if (baseDataLimiters != null) {
+            this.setDefaultDataGenerators(baseDataLimiters);
+        }
     }
 
     /**
@@ -98,6 +104,22 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     /**
+     * This method should only be used to define system wide defaults.  This property can only be set once, and ALL generators EVERYWHERE
+     *      will use the defaults provided here.  The properties can be individually overwritten, as always, but this allows users to
+     *      set very basic limiters for the entire system.
+     * @throws RuntimeException
+     *      If this field is called more than once, a RuntimeException will be thrown
+     * @param defaultDataLimiter
+     */
+    public static void setAllGeneratorsDefaultDataGenerators(DefaultDataLimiter defaultDataLimiter) {
+        if (baseDataLimiters != null) {
+            // TODO: 1/25/18 Replace this with a specific error and update javadoc.
+            throw new RuntimeException("The PojoGeneratorBuilder has already been seeded with system wide base limiters");
+        }
+        baseDataLimiters = defaultDataLimiter;
+    }
+
+    /**
      * Declares what values are acceptable for a specific field.
      * @param fieldName
      *          The name of the field that the following limitations should be enforced on.
@@ -133,6 +155,19 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     public PojoGeneratorBuilder<T> andLimitAllFieldsOf(Limiter<?> limiter) {
         Class clazz = ((Class) ((ParameterizedType) limiter.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0]);
         pojoAttributes.putAllFieldLimiter(clazz, limiter);
+        return this;
+    }
+
+    /**
+     * This method allows the user to define a collection of Limiters to be used in place of the standard Limiters.  In effect, it
+     *      repetitively calls the <code>andLimitAllFieldsOf()</code> method with the provided collection of limiters.  This allows for
+     *      reuse of the same default limiters in multiple generators without having to reapply all of the defaults.
+     * @param defaultDataLimiter
+     *          A collection of limiters to be used in place of the standard default data generators
+     * @return a reference of this object
+     */
+    public PojoGeneratorBuilder<T> setDefaultDataGenerators(DefaultDataLimiter defaultDataLimiter) {
+        defaultDataLimiter.getDefaultLimiters().forEach(this::andLimitAllFieldsOf);
         return this;
     }
 
