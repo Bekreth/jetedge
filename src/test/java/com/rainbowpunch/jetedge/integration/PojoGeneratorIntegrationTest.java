@@ -5,6 +5,7 @@ import com.rainbowpunch.jetedge.core.limiters.common.ConstantValueLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.IntegerLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.StringLimiter;
 import com.rainbowpunch.jetedge.core.limiters.special.MultiplexLimiter;
+import com.rainbowpunch.jetedge.spi.DefaultDataLimiter;
 import com.rainbowpunch.jetedge.spi.PojoGenerator;
 import com.rainbowpunch.jetedge.spi.PojoGeneratorBuilder;
 import com.rainbowpunch.jetedge.test.Pojos;
@@ -13,6 +14,7 @@ import com.rainbowpunch.jetedge.test.Pojos.Person;
 import com.rainbowpunch.jetedge.test.Pojos.Superhero;
 import com.rainbowpunch.jetedge.test.Pojos.Vehicle;
 
+import com.rainbowpunch.jetedge.util.ReadableCharList;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -237,5 +239,42 @@ public class PojoGeneratorIntegrationTest {
         assertEquals(0, vehicle.getNumWheels());
         assertEquals("Hello World", vehicle.getName());
         assertNull(vehicle.getEngineType());
+    }
+
+    @Test
+    public void testSetDefaultDataGenerators() {
+        DefaultDataLimiter limiters = new DefaultDataLimiter();
+        limiters.addDefaultLimiter(new IntegerLimiter(10, 10));
+        limiters.addDefaultLimiter(new StringLimiter(ReadableCharList.LIST_OF_ALPHA_CHAR));
+
+        PojoGenerator<Vehicle> generator = new PojoGeneratorBuilder<>(Vehicle.class)
+                .setDefaultDataGenerators(limiters)
+                .build();
+
+        Vehicle vehicle = generator.generatePojo();
+
+        assertTrue(vehicle.getMaxSpeed() > 9 && vehicle.getMaxSpeed() < 20);
+        assertTrue(vehicle.getNumWheels() > 9 && vehicle.getNumWheels() < 20);
+        Arrays.asList(vehicle.getName().toCharArray()).forEach(ReadableCharList.LIST_OF_ALL_CHAR::contains);
+        assertNotNull(vehicle.getEngineType());
+    }
+
+    @Test
+    public void testSetDefaultDataGenerators_overWritten() {
+        DefaultDataLimiter limiters = new DefaultDataLimiter();
+        limiters.addDefaultLimiter(new IntegerLimiter(10, 10));
+        limiters.addDefaultLimiter(new StringLimiter(ReadableCharList.LIST_OF_ALPHA_CHAR));
+
+        PojoGenerator<Vehicle> generator = new PojoGeneratorBuilder<>(Vehicle.class)
+                .setDefaultDataGenerators(limiters)
+                .andLimitAllFieldsOf(new StringLimiter(ReadableCharList.LIST_OF_CHAR_DIGITS))
+                .build();
+
+        Vehicle vehicle = generator.generatePojo();
+
+        assertTrue(vehicle.getMaxSpeed() > 9 && vehicle.getMaxSpeed() < 20);
+        assertTrue(vehicle.getNumWheels() > 9 && vehicle.getNumWheels() < 20);
+        Arrays.asList(vehicle.getName().toCharArray()).forEach(ReadableCharList.LIST_OF_CHAR_DIGITS::contains);
+        assertNotNull(vehicle.getEngineType());
     }
 }
