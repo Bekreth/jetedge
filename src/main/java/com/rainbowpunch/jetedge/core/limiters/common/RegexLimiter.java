@@ -1,5 +1,6 @@
 package com.rainbowpunch.jetedge.core.limiters.common;
 
+import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.util.ReadableCharList;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * This Limiter takes simplified Regex expression, and reverse engineers a string that matches it.
@@ -18,6 +20,7 @@ public class RegexLimiter implements Limiter<String> {
     private List<EncodedChar> encodedChars;
 
     private boolean openSquareBracket = false;
+    private boolean openRange = false;
     private boolean openCurlyBracket = false;
     private boolean openEscape = false;
     private boolean antiQualifier = false;
@@ -44,7 +47,7 @@ public class RegexLimiter implements Limiter<String> {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("Could not parse Regex", e);
+            throw new LimiterConstructionException("Could not parse Regex", e);
         }
     }
 
@@ -84,6 +87,22 @@ public class RegexLimiter implements Limiter<String> {
             antiQualifier = false;
         } else if (c == '^') {
             antiQualifier = true;
+        } else  if (c == '-') {
+            openRange = true;
+        } else if (openRange) {
+            int finalIndex = listeningCharList.size() - 1;
+
+            char startChar = listeningCharList.get(finalIndex);
+            char endChar = c;
+
+            listeningCharList.remove(finalIndex);
+
+            validateRangeWithinSingleCharSet(startChar, endChar);
+
+            IntStream.range((int) startChar, ((int) endChar) + 1)
+                    .mapToObj(i -> (char) i)
+                    .forEach(listeningCharList::add);
+            openRange = false;
         } else {
             listeningCharList.add(c);
         }
@@ -91,7 +110,7 @@ public class RegexLimiter implements Limiter<String> {
 
     private void escapeEncoding(char c) {
         openEscape = false;
-        Flag flag = Flag.getFlag(c);
+        Flag flag = Flag.getFlag(c) == Flag.DOT ? null : Flag.getFlag(c); //Because dot has special meaning when escaped, it's treated specially
         EncodedChar encodedChar = flag == null
                 ? new EncodedChar(c)
                 : new EncodedChar(flag);
@@ -112,7 +131,30 @@ public class RegexLimiter implements Limiter<String> {
         }
     }
 
+    private void validateRangeWithinSingleCharSet(char c1, char c2) {
+        if ((int) c1 >= (int) c2) {
+            throw new LimiterConstructionException("The provide char range is inverted.");
+        }
+        LimiterConstructionException exception = new LimiterConstructionException("Cannot construct Regex Limiter.  Char range is invalid");
+        if (ReadableCharList.LIST_OF_CHAR_DIGITS.contains(c1)) {
+            if (!ReadableCharList.LIST_OF_CHAR_DIGITS.contains(c2)) {
+                throw exception;
+            }
+        } else if (ReadableCharList.LIST_OF_UPPER_CASE_CHAR.contains(c1)) {
+            if (!ReadableCharList.LIST_OF_UPPER_CASE_CHAR.contains(c2)) {
+                throw exception;
+            }
+        } else if (ReadableCharList.LIST_OF_LOWER_CASE_CHAR.contains(c1)) {
+            if (!ReadableCharList.LIST_OF_LOWER_CASE_CHAR.contains(c2)) {
+                throw exception;
+            }
+        } else {
+            throw exception;
+        }
+    }
 
+
+    // ------------ Support Inner Classes ----------
     private class EncodedChar {
         private final Flag flag;
         private List<Character> possibleCharacter;
