@@ -2,18 +2,18 @@ package com.rainbowpunch.jetedge.core.reflection;
 
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
@@ -26,8 +26,10 @@ public class ClassAttributes {
     private ClassAttributes parentClassAttribute;
     private final Class<?> clazz;
     private boolean isArray = false;
+    private boolean isPrimitive = false;
     private final Type genericTypeHint;
     private List<Class<?>> parameterizedTypes = null;
+    private List<Constructor> possibleConstructors;
     private String fieldNameOfClass = null;
 
     // Cache these as they are unlikely to go out of date
@@ -52,6 +54,7 @@ public class ClassAttributes {
             this.genericTypeHint = genericTypeHint;
             this.clazz = requireNonNull(clazz);
         }
+        possibleConstructors = Arrays.asList(clazz.getConstructors());
     }
 
     private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint) {
@@ -68,11 +71,17 @@ public class ClassAttributes {
      * @return a wrapped attributes object for clazz.
      */
     public static ClassAttributes create(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint) {
+        ClassAttributes output = null;
+        Class mappedClass = null;
         if (clazz.isArray()) {
-            return new ClassAttributes(classAttributes, mapPrimitiveToObject(clazz.getComponentType()), genericTypeHint, true);
+            mappedClass = mapPrimitiveToObject(clazz.getComponentType());
+            output = new ClassAttributes(classAttributes, mappedClass, genericTypeHint, true);
         } else {
-            return new ClassAttributes(classAttributes, mapPrimitiveToObject(clazz), genericTypeHint);
+            mappedClass = mapPrimitiveToObject(clazz);
+            output = new ClassAttributes(classAttributes, mapPrimitiveToObject(clazz), genericTypeHint);
         }
+        output.isPrimitive = !clazz.equals(mappedClass);
+        return output;
     }
 
     /**
@@ -110,6 +119,10 @@ public class ClassAttributes {
     public void setFieldNameOfClass(String fieldNameOfClass) {
         if (this.fieldNameOfClass == null) this.fieldNameOfClass = fieldNameOfClass;
         else throw new RuntimeException("Cannot overwrite fieldNameOfClass from : " + this.fieldNameOfClass);
+    }
+
+    public boolean isPrimitive() {
+        return isPrimitive;
     }
 
     /**
@@ -272,6 +285,45 @@ public class ClassAttributes {
             parameterizedTypes = extractParameterizedTypes(genericTypeHint);
         }
         return parameterizedTypes;
+    }
+
+    public <T> T newInstance(List<ConstructorParameter> constructorObjectList) throws InstantiationException {
+        try {
+            T output = null;
+            if (constructorObjectList == null || constructorObjectList.size() == 0) {
+                output = (T) clazz.newInstance();
+            } else {
+                Constructor constructor = possibleConstructors.stream()
+                        .filter(con -> con.getParameterCount() == constructorObjectList.size())
+                        .filter(innerConstructor -> {
+                            List<Type> classes = Arrays.stream(innerConstructor.getParameters())
+                                    .map(parameter -> mapPrimitiveToObject(parameter.getType()))
+                                    .collect(Collectors.toList());
+                            boolean returnValue = true;
+
+                            for (int i = 0; i < constructorObjectList.size(); i++) {
+                                if (!constructorObjectList.get(i).getObjectType().equals(classes.get(i))) {
+                                    returnValue = false;
+                                    break;
+                                }
+                            }
+
+                            return returnValue;
+                        })
+                        .findFirst()
+                        .orElseThrow(InstantiationException::new);
+
+                Object[] constructorObjects = constructorObjectList.stream()
+                        .map(constructorParameter -> constructorParameter.getObjectSupplier().get())
+                        .toArray();
+
+                output = (T) constructor.newInstance(constructorObjects);
+            }
+
+            return output;
+        } catch (Exception e) {
+            throw new InstantiationException(e.getMessage());
+        }
     }
 
     /**
