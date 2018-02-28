@@ -26,7 +26,6 @@ public class ClassAttributes {
     private ClassAttributes parentClassAttribute;
     private final Class<?> clazz;
     private boolean isArray = false;
-    private boolean isPrimitive = false;
     private final Type genericTypeHint;
     private List<Class<?>> parameterizedTypes = null;
     private List<Constructor> possibleConstructors;
@@ -78,9 +77,8 @@ public class ClassAttributes {
             output = new ClassAttributes(classAttributes, mappedClass, genericTypeHint, true);
         } else {
             mappedClass = mapPrimitiveToObject(clazz);
-            output = new ClassAttributes(classAttributes, mapPrimitiveToObject(clazz), genericTypeHint);
+            output = new ClassAttributes(classAttributes, mappedClass, genericTypeHint);
         }
-        output.isPrimitive = !clazz.equals(mappedClass);
         return output;
     }
 
@@ -119,10 +117,6 @@ public class ClassAttributes {
     public void setFieldNameOfClass(String fieldNameOfClass) {
         if (this.fieldNameOfClass == null) this.fieldNameOfClass = fieldNameOfClass;
         else throw new RuntimeException("Cannot overwrite fieldNameOfClass from : " + this.fieldNameOfClass);
-    }
-
-    public boolean isPrimitive() {
-        return isPrimitive;
     }
 
     /**
