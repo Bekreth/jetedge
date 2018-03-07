@@ -2,9 +2,11 @@ package com.rainbowpunch.jetedge.core;
 
 import com.rainbowpunch.jetedge.core.analyzer.PojoAnalyzer;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.reflection.ConstructorParameter;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -17,6 +19,7 @@ import static java.util.Objects.requireNonNull;
 public class PojoAttributes<T> implements Cloneable {
 
     private Class<T> pojoClazz;
+    private List<ConstructorParameter> constructorObjectList;
     private PojoAnalyzer pojoAnalyzer;
     private int randomSeed;
     private boolean activeEvaluation;
@@ -45,6 +48,14 @@ public class PojoAttributes<T> implements Cloneable {
 
     public Class<T> getPojoClazz() {
         return pojoClazz;
+    }
+
+    public List<ConstructorParameter> getConstructorObjectList() {
+        return constructorObjectList;
+    }
+
+    public void setConstructorObjectList(List<ConstructorParameter> constructorObjectList) {
+        this.constructorObjectList = constructorObjectList;
     }
 
     public Map<String, Limiter<?>> getLimiters() {

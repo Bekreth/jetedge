@@ -78,4 +78,31 @@ public final class Pojos {
         // Has setter, but no underlying field
         public void setHasChrome(boolean hasChrome) { }
     }
+
+    @Data
+    public static class ParameterConstructor {
+
+        private int someNumber;
+        private int someRandomNumber;
+        private String someString;
+        private String someRandomString;
+
+        public ParameterConstructor() {
+
+        }
+
+        public ParameterConstructor(String someString) {
+            this.someString = someString;
+        }
+
+        public ParameterConstructor(int someNumber) {
+            this.someNumber = someNumber;
+        }
+
+        public ParameterConstructor(int someNumber, String someString) {
+            this.someNumber = someNumber;
+            this.someString = someString;
+        }
+    }
+
 }
