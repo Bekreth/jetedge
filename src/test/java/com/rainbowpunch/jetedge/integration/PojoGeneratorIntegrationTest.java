@@ -2,6 +2,7 @@ package com.rainbowpunch.jetedge.integration;
 
 import com.rainbowpunch.jetedge.core.analyzer.Analyzers;
 import com.rainbowpunch.jetedge.core.exception.ConfusedGenericException;
+import com.rainbowpunch.jetedge.core.limiters.PojoGeneratorLimiter;
 import com.rainbowpunch.jetedge.core.limiters.collections.ListLimiter;
 import com.rainbowpunch.jetedge.core.limiters.common.ConstantValueLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.IntegerLimiter;
@@ -171,6 +172,31 @@ public class PojoGeneratorIntegrationTest {
         assertNull(generated.getArchNemesis().getName());
         assertNull(generated.getSuperhero().getSuperPowers());
         assertEquals(0, generated.getSuperhero().getArchNemesis().getAge());
+    }
+
+    @Test
+    public void testPojoGenertorLimiter() {
+        PojoGenerator<Person> personGenerator = new PojoGeneratorBuilder<>(Person.class)
+                .andLimitField("name", new ConstantValueLimiter<>("Bobby"))
+                .andLimitField("age", new ConstantValueLimiter<>(24))
+                .lazilyEvaluate()
+                .build();
+
+        PojoGenerator<Storyline> storylineGenerator = new PojoGeneratorBuilder<>(Storyline.class)
+                .andLimitField("archNemesis", new PojoGeneratorLimiter<>(personGenerator))
+                .andLimitField("superhero.archNemesis", new PojoGeneratorLimiter<>(personGenerator))
+                .build();
+
+        Storyline storyline = storylineGenerator.generatePojo();
+
+        assertEquals("Bobby", storyline.getArchNemesis().getName());
+        assertEquals(24, storyline.getArchNemesis().getAge());
+        assertNull(storyline.getArchNemesis().getSecretName());
+
+        assertEquals("Bobby", storyline.getSuperhero().getArchNemesis().getName());
+        assertEquals(24, storyline.getSuperhero().getArchNemesis().getAge());
+        assertNull(storyline.getSuperhero().getArchNemesis().getSecretName());
+
     }
 
     @Test
