@@ -43,7 +43,9 @@ public class DefaultLimiters {
             if (genericList.size() != 1) {
                 throw new ConfusedGenericException(classAttributes.getClazz().getName());
             }
-            Limiter limiter = getDefaultLimiter(ClassAttributes.create(genericList.get(0)), pojoAttributes);
+            ClassAttributes attributes = ClassAttributes.create(genericList.get(0));
+            attributes.setFieldNameOfClass(classAttributes.getFieldNameOfClass());
+            Limiter limiter = getDefaultLimiter(attributes, pojoAttributes);
             outputLimiter = ListLimiter.createListLimiter(limiter);
 
         } else if (classAttributes.isEnum()) {
