@@ -84,6 +84,21 @@ public class PojoGeneratorIntegrationTest {
     }
 
     @Test
+    public void testGeneratePojoWithNestedLimiterInLists() {
+        PojoGenerator<Vehicle> vehicleGenerator = new PojoGeneratorBuilder<>(Vehicle.class)
+                .andLimitField("owners.age", new IntegerLimiter(10, 10))
+                .andLimitField("salesPerson.age", new IntegerLimiter(10, 10))
+                .build();
+
+        Vehicle vehicle = vehicleGenerator.generatePojo();
+
+        for (Person person : vehicle.getOwners()) {
+            assertTrue(person.getAge() >= 10 && person.getAge() < 20);
+        }
+        assertTrue(vehicle.getSalesPerson().getAge() >= 10 && vehicle.getSalesPerson().getAge() < 20);
+    }
+
+    @Test
     @Ignore("nested POJO does not currently inherit random seed")
     public void testGeneratePojoWithNestedPojo() {
         Person generated = new PojoGeneratorBuilder<>(Superhero.class)
