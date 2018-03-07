@@ -7,12 +7,9 @@ import com.rainbowpunch.jetedge.core.analyzer.Analyzers;
 import com.rainbowpunch.jetedge.core.analyzer.PojoAnalyzer;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
-import com.rainbowpunch.jetedge.core.reflection.ConstructorParameter;
 import com.rainbowpunch.jetedge.core.reflection.FieldAttributes;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -198,28 +195,8 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
         return this;
     }
 
-    /**
-     * This method will make Jetedge only evaluate fields that have been specified by limiters.  All other will be left uninstantiated.
-     * @return a reference of this object
-     */
     public PojoGeneratorBuilder<T> lazilyEvaluate() {
         pojoAttributes.setEvaluationState(false);
-        return this;
-    }
-
-    /**
-     * This method allows the user to pass in objects to be used in the construction of their object.  It is highly recommended for the
-     *      user to use this in conjunction with <code>lazilyEvaluate()</code> or appropriate <code>andIgnoreField()</code> in order to
-     *      prevent their values from being overwritten by Jetedge
-     * @param objects
-     * @return a reference of this object
-     */
-    public PojoGeneratorBuilder<T> withConstructors(Object... objects) {
-        List<ConstructorParameter> parameters = new ArrayList<>();
-        for (Object o : objects) {
-            parameters.add(new ConstructorParameter(o));
-        }
-        pojoAttributes.setConstructorObjectList(parameters);
         return this;
     }
 
@@ -238,10 +215,10 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
 
         return () -> {
             try {
-                T newInstance = classAttributes.<T>newInstance(pojoAttributes.getConstructorObjectList());
+                T newInstance = clazz.newInstance();
                 pojoAttributes.apply(newInstance);
                 return newInstance;
-            } catch (InstantiationException e) {
+            } catch (InstantiationException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         };
