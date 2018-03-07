@@ -3,18 +3,42 @@ package com.rainbowpunch.jetedge.core.reflection;
 import com.rainbowpunch.jetedge.core.exception.PojoConstructionException;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * A friendly wrapper for Field objects.
  */
 public class FieldAttributes {
     private final Field field;
+    private final Class clazz;
+    private final List<Class> genericsOnClass;
     private final ClassAttributes parentClassAttributes;
 
     public FieldAttributes(ClassAttributes parentClassAttributes, Field field) {
         this.field = field;
+
+        List<Class> intermediateGenerics = new ArrayList<>();
+
+        Type genericType = field.getGenericType();
+        if (genericType instanceof Class) {
+            clazz = (Class) genericType;
+        } else if (genericType instanceof TypeVariable) {
+            clazz = parentClassAttributes.getClassForGenericName(genericType.getTypeName());
+        } else {
+            clazz = (Class) ((ParameterizedType) genericType).getRawType();
+            intermediateGenerics = Arrays.asList(((ParameterizedType) genericType).getActualTypeArguments()).stream()
+                    .map(type -> (Class) type)
+                    .collect(Collectors.toList());
+        }
+        genericsOnClass = intermediateGenerics;
         this.parentClassAttributes = parentClassAttributes;
     }
 
@@ -27,7 +51,7 @@ public class FieldAttributes {
     }
 
     public ClassAttributes getType() {
-        ClassAttributes attributes = ClassAttributes.create(parentClassAttributes, field.getType(), field.getGenericType());
+        ClassAttributes attributes = ClassAttributes.create(parentClassAttributes, clazz, genericsOnClass);
         attributes.setFieldNameOfClass(field.getName());
         return attributes;
     }

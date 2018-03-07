@@ -18,7 +18,8 @@ public final class Analyzers {
                 .map(MethodAttributes::getMethodName)
                 .filter(MethodName::isPrefixedWithSet)
                 .map(MethodName::getAssociatedFieldName)
-                .filter(Optional::isPresent).map(Optional::get)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toSet());
 
         return classAttributes.getFields().stream()

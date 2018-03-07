@@ -1,5 +1,7 @@
 package com.rainbowpunch.jetedge.integration;
 
+import com.rainbowpunch.jetedge.core.analyzer.Analyzers;
+import com.rainbowpunch.jetedge.core.exception.ConfusedGenericException;
 import com.rainbowpunch.jetedge.core.limiters.collections.ListLimiter;
 import com.rainbowpunch.jetedge.core.limiters.common.ConstantValueLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.IntegerLimiter;
@@ -29,6 +31,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class PojoGeneratorIntegrationTest {
     private static final int RANDOM_SEED = 42;
@@ -186,15 +189,6 @@ public class PojoGeneratorIntegrationTest {
     }
 
     @Test
-    public void testGenericInterfaceBeingPopulated() {
-        PojoGenerator<B> generator = new PojoGeneratorBuilder<>(B.class)
-                .build();
-        B generated = generator.generatePojo();
-        assertNotNull(generated);
-        assertNotNull(generated.getJ());
-    }
-
-    @Test
     public void testMultiplexLimiter() {
         List<IntegerLimiter> limiters = Arrays.asList(new IntegerLimiter(10), new IntegerLimiter(10, 20), new IntegerLimiter(10, 40));
 
@@ -310,6 +304,7 @@ public class PojoGeneratorIntegrationTest {
         assertTrue(!constructor.getSomeRandomString().isEmpty());
 
     }
+
     @Test
     public void testGenerateObjectWithoutDefaultConstructor_string() {
         PojoGenerator<ParameterConstructor> generator = new PojoGeneratorBuilder<>(ParameterConstructor.class)
@@ -325,4 +320,129 @@ public class PojoGeneratorIntegrationTest {
         assertTrue(!constructor.getSomeRandomString().isEmpty());
 
     }
+
+    // Generic testing on Methods
+    @Test
+    public void testGenericInterfaceBeingPopulated() {
+        PojoGenerator<ClassExtendsWithSpecificGeneric> generator = new PojoGeneratorBuilder<>(ClassExtendsWithSpecificGeneric.class)
+                .andLimitField("j", new ConstantValueLimiter<>("Hello World"))
+                .andLimitField("k", new ConstantValueLimiter<>(9876))
+                .build();
+        ClassExtendsWithSpecificGeneric generated = generator.generatePojo();
+        assertNotNull(generated);
+        assertEquals("Hello World", generated.getJ());
+        assertEquals((Integer) 9876, (Integer) generated.getK());
+    }
+
+    @Test
+    public void testGenericPartiallyPopulatedWithHint() {
+        PojoGenerator<ClassExtendsSomeGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsSomeGenerics.class)
+                .andLimitField("j", new ConstantValueLimiter<>("Hello World"))
+                .andLimitField("k", new ConstantValueLimiter<>(9876))
+                .withGenericTypes(String.class)
+                .build();
+        ClassExtendsSomeGenerics generated = generator.generatePojo();
+        assertNotNull(generated);
+        assertEquals("Hello World", generated.getJ());
+        assertEquals((Integer) 9876, (Integer) generated.getK());
+    }
+
+    @Test(expected = ConfusedGenericException.class)
+    public void testGenericPartiallyPopulatedWithHint_throwsException() {
+        PojoGenerator<ClassExtendsSomeGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsSomeGenerics.class)
+                .andLimitField("j", new ConstantValueLimiter<>(1))
+                .andLimitField("k", new ConstantValueLimiter<>(9876))
+                .build();
+        ClassExtendsSomeGenerics generated = generator.generatePojo();
+        fail("Should have thrown a class cast exception");
+    }
+
+    @Test
+    public void testGenericWithPopulatedWithHint() {
+        PojoGenerator<ClassExtendsWithNoGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
+                .andLimitField("j", new ConstantValueLimiter<>("Hello World"))
+                .andLimitField("k", new ConstantValueLimiter<>(9876))
+                .withGenericTypes(String.class, Integer.class)
+                .build();
+        ClassExtendsWithNoGenerics generated = generator.generatePojo();
+        assertNotNull(generated);
+        assertEquals("Hello World", generated.getJ());
+        assertEquals((Integer) 9876, (Integer) generated.getK());
+    }
+
+    @Test(expected = ConfusedGenericException.class)
+    public void testGenericPopulatedWithHint_throwsException() {
+        PojoGenerator<ClassExtendsWithNoGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
+                .andLimitField("j", new ConstantValueLimiter<>(1))
+                .withGenericTypes(String.class)
+                .build();
+        ClassExtendsWithNoGenerics generated = generator.generatePojo();
+        fail("Should have thrown a class cast exception");
+    }
+
+    // Generic testing on Fields
+    @Test
+    public void testGenericInterfaceBeingPopulated_fieldAnalyzer() {
+        PojoGenerator<ClassExtendsWithSpecificGeneric> generator = new PojoGeneratorBuilder<>(ClassExtendsWithSpecificGeneric.class)
+                .andUseAnalyzer(Analyzers.ALL_FIELDS)
+                .andLimitField("j", new ConstantValueLimiter<>("Hello World"))
+                .andLimitField("k", new ConstantValueLimiter<>(9876))
+                .build();
+        ClassExtendsWithSpecificGeneric generated = generator.generatePojo();
+        assertNotNull(generated);
+        assertEquals("Hello World", generated.getJ());
+        assertEquals((Integer) 9876, (Integer) generated.getK());
+    }
+
+    @Test
+    public void testGenericPartiallyPopulatedWithHint_fieldAnalyzer() {
+        PojoGenerator<ClassExtendsSomeGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsSomeGenerics.class)
+                .andUseAnalyzer(Analyzers.ALL_FIELDS)
+                .andLimitField("j", new ConstantValueLimiter<>("Hello World"))
+                .andLimitField("k", new ConstantValueLimiter<>(9876))
+                .withGenericTypes(String.class)
+                .build();
+        ClassExtendsSomeGenerics generated = generator.generatePojo();
+        assertNotNull(generated);
+        assertEquals("Hello World", generated.getJ());
+        assertEquals((Integer) 9876, (Integer) generated.getK());
+    }
+
+    @Test(expected = ConfusedGenericException.class)
+    public void testGenericPartiallyPopulatedWithHint_throwsException_fieldAnalyzer() {
+        PojoGenerator<ClassExtendsSomeGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsSomeGenerics.class)
+                .andUseAnalyzer(Analyzers.ALL_FIELDS)
+                .andLimitField("j", new ConstantValueLimiter<>(1))
+                .andLimitField("k", new ConstantValueLimiter<>(9876))
+                .build();
+        ClassExtendsSomeGenerics generated = generator.generatePojo();
+        fail("Should have thrown a class cast exception");
+    }
+
+    @Test
+    public void testGenericWithPopulatedWithHint_fieldAnalyzer() {
+        PojoGenerator<ClassExtendsWithNoGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
+                .andUseAnalyzer(Analyzers.ALL_FIELDS)
+                .andLimitField("j", new ConstantValueLimiter<>("Hello World"))
+                .andLimitField("k", new ConstantValueLimiter<>(9876))
+                .withGenericTypes(String.class, Integer.class)
+                .build();
+        ClassExtendsWithNoGenerics generated = generator.generatePojo();
+        assertNotNull(generated);
+        assertEquals("Hello World", generated.getJ());
+        assertEquals((Integer) 9876, (Integer) generated.getK());
+    }
+
+    @Test(expected = ConfusedGenericException.class)
+    public void testGenericPopulatedWithHint_throwsException_fieldAnalyzer() {
+        PojoGenerator<ClassExtendsWithNoGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
+                .andUseAnalyzer(Analyzers.ALL_FIELDS)
+                .andLimitField("j", new ConstantValueLimiter<>(1))
+                .withGenericTypes(String.class)
+                .build();
+        ClassExtendsWithNoGenerics generated = generator.generatePojo();
+        fail("Should have thrown a class cast exception");
+    }
+
+
 }

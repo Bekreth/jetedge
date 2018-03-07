@@ -1,20 +1,16 @@
 package com.rainbowpunch.jetedge.core.reflection;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.List;
-
-import com.rainbowpunch.jetedge.test.Pojos.City;
 import com.rainbowpunch.jetedge.test.Pojos.Person;
-import com.rainbowpunch.jetedge.test.Pojos.Power;
-import com.rainbowpunch.jetedge.test.Pojos.Superhero;
-import com.rainbowpunch.jetedge.test.Pojos.SuperheroNetwork;
 import junit.framework.AssertionFailedError;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.List;
+
+import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+@Ignore
 public class MemberAttributesTest {
     @Test
     public void testClassAttributes_isVoid() {
@@ -38,96 +34,4 @@ public class MemberAttributesTest {
         );
     }
 
-    @Test
-    public void testClassAttributes_getElementType() {
-        final List<FieldAttributes> fields =
-                ClassAttributes.create(Superhero.class).getFields();
-
-        assertFalse(
-                fields.stream()
-                        .filter(f -> "archNemesis".equals(f.getName()))
-                        .findFirst().orElseThrow(AssertionFailedError::new)
-                        .getType()
-                        .getElementType()
-                        .isPresent()
-        );
-
-        assertEquals(
-                Power.class,
-                fields.stream()
-                        .filter(f -> "superPowers".equals(f.getName()))
-                        .findFirst().orElseThrow(AssertionFailedError::new)
-                        .getType()
-                        .getElementType().orElseThrow(AssertionFailedError::new)
-                        .getClazz()
-        );
-    }
-
-    @Test
-    public void testClassAttributes_getKeyType() {
-        final List<FieldAttributes> fields =
-                ClassAttributes.create(SuperheroNetwork.class).getFields();
-
-        assertFalse(
-                fields.stream()
-                        .filter(f -> "planetName".equals(f.getName()))
-                        .findFirst().orElseThrow(AssertionFailedError::new)
-                        .getType()
-                        .getKeyType()
-                        .isPresent()
-        );
-
-        assertEquals(
-                City.class,
-                fields.stream()
-                        .filter(f -> "protectorMap".equals(f.getName()))
-                        .findFirst().orElseThrow(AssertionFailedError::new)
-                        .getType()
-                        .getKeyType().orElseThrow(AssertionFailedError::new)
-                        .getClazz()
-        );
-    }
-
-    @Test
-    public void testClassAttributes_getValueType() {
-        final List<FieldAttributes> fields =
-                ClassAttributes.create(SuperheroNetwork.class).getFields();
-
-        assertFalse(
-                fields.stream()
-                        .filter(f -> "planetName".equals(f.getName()))
-                        .findFirst().orElseThrow(AssertionFailedError::new)
-                        .getType()
-                        .getValueType()
-                        .isPresent()
-        );
-
-        assertEquals(
-                Superhero.class,
-                fields.stream()
-                        .filter(f -> "protectorMap".equals(f.getName()))
-                        .findFirst().orElseThrow(AssertionFailedError::new)
-                        .getType()
-                        .getValueType().orElseThrow(AssertionFailedError::new)
-                        .getClazz()
-        );
-    }
-
-    @Test
-    public void testClassAttributes_getParameterizedTypes() {
-        final ClassAttributes classAttributes =
-                ClassAttributes.create(SuperheroNetwork.class)
-                        .getFields().stream()
-                        .filter(f -> "protectorMap".equals(f.getName()))
-                        .findFirst().orElseThrow(AssertionFailedError::new)
-                        .getType();
-
-        assertEquals(
-                Arrays.asList(
-                        City.class,
-                        Superhero.class
-                ),
-                classAttributes.getParameterizedTypes()
-        );
-    }
 }
