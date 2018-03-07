@@ -1,5 +1,14 @@
 package com.rainbowpunch.jetedge.core.reflection;
 
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.rainbowpunch.jetedge.test.Pojos.Extra;
 import static com.rainbowpunch.jetedge.test.Pojos.Person;
 import static com.rainbowpunch.jetedge.test.Pojos.Power;
@@ -8,14 +17,6 @@ import static com.rainbowpunch.jetedge.test.Pojos.SuperheroNetwork;
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class ClassAttributesTest {
     private ClassAttributes unitUnderTest = null;
@@ -78,14 +79,7 @@ public class ClassAttributesTest {
     public void testIsCollection() {
         assertFalse(unitUnderTest.isCollection());
         final Collection<Integer> coll = new ArrayList<>();
-        assertTrue(ClassAttributes.create(coll.getClass()).isCollection());
-    }
-
-    @Test
-    public void testIsMap() {
-        assertFalse(unitUnderTest.isMap());
-        final Map<String, Integer> map = new HashMap<>();
-        assertTrue(ClassAttributes.create(map.getClass()).isMap());
+        assertTrue(ClassAttributes.create(null, coll.getClass(), Arrays.asList(Integer.class)).isCollection());
     }
 
     @Test
@@ -97,26 +91,6 @@ public class ClassAttributesTest {
     @Test
     public void testIsVoid() {
         assertFalse(unitUnderTest.isVoid());
-    }
-
-    @Test
-    public void testGetElementType() {
-        assertFalse(unitUnderTest.getElementType().isPresent());
-    }
-
-    @Test
-    public void testGetKeyType() {
-        assertFalse(unitUnderTest.getKeyType().isPresent());
-    }
-
-    @Test
-    public void testGetValueType() {
-        assertFalse(unitUnderTest.getValueType().isPresent());
-    }
-
-    @Test
-    public void testGetParameterizedTypes() {
-        assertTrue(unitUnderTest.getParameterizedTypes().isEmpty());
     }
 
     @Test(expected = NullPointerException.class)
