@@ -15,18 +15,21 @@ public class LongLimiterTest {
     @Test
     public void testDefaultLongLimiter() {
         LongLimiter longSupplier = new LongLimiter();
-        Long comparison = 1000L;
+        Long minComparison = 0L;
+        Long maxComparison = Long.MAX_VALUE;
 
         for (int i = 0; i < 100; i++) {
             Long generatedValue = longSupplier.generateSupplier(random).get();
-            assertEquals(-1, comparison.compareTo(generatedValue));
+            assertEquals(-1, minComparison.compareTo(generatedValue));
+            assertEquals(1, maxComparison.compareTo(generatedValue));
         }
     }
 
     @Test
     public void testBoundedLongLimiter() {
-        LongLimiter longSupplier = new LongLimiter(10000000000L);
-        Long comparison = 10000000000L;
+        Long bound = 10000000000L;
+        LongLimiter longSupplier = new LongLimiter(bound);
+        Long comparison = bound;
         for (int i = 0; i < 100; i++) {
             Long generatedValue = longSupplier.generateSupplier(random).get();
             assertEquals(1, comparison.compareTo(generatedValue));
@@ -35,9 +38,9 @@ public class LongLimiterTest {
 
     @Test
     public void testRangedLongLimiter() {
-        LongLimiter longSupplier = new LongLimiter(100000L, 10000000000L);
         Long inclusiveMin = 100000L;
         Long exclusiveMax = 10000000000L;
+        LongLimiter longSupplier = new LongLimiter(inclusiveMin, exclusiveMax);
 
         for (int i = 0; i < 100; i++) {
             Long generatedValue = longSupplier.generateSupplier(random).get();
@@ -47,7 +50,7 @@ public class LongLimiterTest {
     }
 
     @Test
-    public void testLongLimiterSeedablility(){
+    public void testLongLimiterSeedablility() {
         Random seededRandom = new Random(100);
         LongLimiter longSupplier = new LongLimiter();
         Long comparison = 6659363606675156442L;
