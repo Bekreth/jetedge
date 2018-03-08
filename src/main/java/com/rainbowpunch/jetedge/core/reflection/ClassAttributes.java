@@ -1,21 +1,23 @@
 package com.rainbowpunch.jetedge.core.reflection;
 
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
+import com.rainbowpunch.jetedge.core.exception.ConfusedGenericException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -23,11 +25,18 @@ import static java.util.stream.Collectors.toList;
  */
 public class ClassAttributes {
 
+    // This extracts out all of the standard Object.class methods that Jetedge shouldn't attempt to resolve.
+    private static final Set<String> methodNamesToIgnore = Arrays.asList(Object.class.getMethods())
+            .stream()
+            .map(inMethod -> inMethod.getName())
+            .collect(Collectors.toSet());
+
+
     private ClassAttributes parentClassAttribute;
     private final Class<?> clazz;
     private boolean isArray = false;
-    private final Type genericTypeHint;
-    private List<Class<?>> parameterizedTypes = null;
+    private final Map<String, Class> genericTypeMap = new HashMap<>();
+    private final List<Class> genericHints;
     private List<Constructor> possibleConstructors;
     private String fieldNameOfClass = null;
 
@@ -40,23 +49,60 @@ public class ClassAttributes {
      *          class to wrap.
      * @param genericTypeHint an optional generic type hint.
      */
-    private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint, boolean isArray) {
+    private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, List<Class> genericTypeHint, boolean isArray) {
         this.parentClassAttribute = classAttributes;
         this.isArray = isArray;
-        // This is the Type that is stored on a Field or Method object. Providing this type
-        // helps us get around the type erasure of parameterized types such as List<> or Map<>.
-        // Makes assumption that if clazz equals Object, then class is generic
-        if (clazz.equals(Object.class)) {
-            this.genericTypeHint = classAttributes.genericTypeHint;
-            this.clazz = ((Class) ((ParameterizedTypeImpl) classAttributes.genericTypeHint).getActualTypeArguments()[0]);
+        this.clazz = clazz;
+
+        List<TypeVariable> genericsOnClass = Arrays.asList(clazz.getTypeParameters());
+        if (genericTypeHint.size() != genericsOnClass.size()) {
+            throw new ConfusedGenericException(clazz.getName());
+        }
+
+        genericHints = genericTypeHint;
+
+        // TODO: 3/7/18 Add the ability to handle Interfaces with generics
+        Type superClass = clazz.getGenericSuperclass();
+        if (genericsOnClass.size() == 0) {
+            if (superClass instanceof ParameterizedType) {
+                List<TypeVariable> superGenerics = Arrays.asList(((Class) ((ParameterizedType) superClass).getRawType()).getTypeParameters());
+                List<Class> subGenericImpl = Arrays.asList(((ParameterizedType) superClass).getActualTypeArguments())
+                        .stream()
+                        .sequential()
+                        .map(inType -> (Class) inType)
+                        .collect(toList());
+                for (int i = 0; i < superGenerics.size(); i++) {
+                    genericTypeMap.put(superGenerics.get(i).getName(), subGenericImpl.get(i));
+                }
+            }
         } else {
-            this.genericTypeHint = genericTypeHint;
-            this.clazz = requireNonNull(clazz);
+            if (superClass instanceof ParameterizedType) {
+                Iterator<Class> iterator = genericTypeHint.iterator();
+                List<TypeVariable> superGenerics = Arrays.asList(((Class) ((ParameterizedType) superClass).getRawType()).getTypeParameters());
+                List<Class> subGenericImpl = Arrays.asList(((ParameterizedType) superClass).getActualTypeArguments())
+                        .stream()
+                        .sequential()
+                        .map(inType -> {
+                            Class returnObject = null;
+                            if (inType instanceof TypeVariable) {
+                                returnObject = iterator.next();
+                            } else if (inType instanceof Class) {
+                                returnObject = (Class) inType;
+                            } else {
+                                throw new RuntimeException("BAD BAD BAD");
+                            }
+                            return returnObject;
+                        })
+                        .collect(toList());
+                for (int i = 0; i < superGenerics.size(); i++) {
+                    genericTypeMap.put(superGenerics.get(i).getName(), subGenericImpl.get(i));
+                }
+            }
         }
         possibleConstructors = Arrays.asList(clazz.getConstructors());
     }
 
-    private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint) {
+    private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, List<Class> genericTypeHint) {
         this(classAttributes, clazz, genericTypeHint, false);
     }
 
@@ -69,15 +115,16 @@ public class ClassAttributes {
      *          an optional generic type hint.
      * @return a wrapped attributes object for clazz.
      */
-    public static ClassAttributes create(ClassAttributes classAttributes, Class<?> clazz, Type genericTypeHint) {
+    public static ClassAttributes create(ClassAttributes classAttributes, Class<?> clazz, List<Class> genericTypeHint) {
         ClassAttributes output = null;
         Class mappedClass = null;
+        List<Class> genericHints = genericTypeHint == null ? new ArrayList<>() : genericTypeHint;
         if (clazz.isArray()) {
             mappedClass = mapPrimitiveToObject(clazz.getComponentType());
-            output = new ClassAttributes(classAttributes, mappedClass, genericTypeHint, true);
+            output = new ClassAttributes(classAttributes, mappedClass, genericHints, true);
         } else {
             mappedClass = mapPrimitiveToObject(clazz);
-            output = new ClassAttributes(classAttributes, mappedClass, genericTypeHint);
+            output = new ClassAttributes(classAttributes, mappedClass, genericHints);
         }
         return output;
     }
@@ -88,7 +135,7 @@ public class ClassAttributes {
      * @return a wrapped attributes object for clazz.
      */
     public static ClassAttributes create(Class<?> clazz) {
-        return create(null, mapPrimitiveToObject(clazz), clazz.getGenericSuperclass());
+        return create(null, mapPrimitiveToObject(clazz), null);
     }
 
     /**
@@ -132,6 +179,7 @@ public class ClassAttributes {
     public List<MethodAttributes> getMethods() {
         if (methods == null) {
             methods = Arrays.stream(clazz.getMethods())
+                    .filter(inMethod -> !methodNamesToIgnore.contains(inMethod.getName()))
                     .map(m -> new MethodAttributes(this, m))
                     .collect(toList());
         }
@@ -215,70 +263,9 @@ public class ClassAttributes {
      */
     public boolean isEnum() { return isSubclassOf(Enum.class); }
 
-    /**
-     * @return the array or Collection underlying element type for the Class object.
-     */
-    public Optional<ClassAttributes> getElementType() {
-        if (isArray()) {
-            return Optional.of(create(clazz));
-        }
-        if (isCollection()) {
-            List<Class<?>> parameterizedTypes = getParameterizedTypes();
-            if (!parameterizedTypes.isEmpty()) {
-                Class<?> first = parameterizedTypes.get(0);
-                if (first != null) {
-                    return Optional.of(create(first));
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * @return the underlying Map key type for the Class object.
-     */
-    public Optional<ClassAttributes> getKeyType() {
-        if (isMap()) {
-            List<Class<?>> parameterizedTypes = getParameterizedTypes();
-            if (parameterizedTypes.size() >= 2) {
-                Class<?> first = parameterizedTypes.get(0);
-                if (first != null) {
-                    return Optional.of(create(first));
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * @return the underlying Map value type for the Class object.
-     */
-    public Optional<ClassAttributes> getValueType() {
-        if (isMap()) {
-            List<Class<?>> parameterizedTypes = getParameterizedTypes();
-            if (parameterizedTypes.size() >= 2) {
-                Class<?> second = parameterizedTypes.get(1);
-                if (second != null) {
-                    return Optional.of(create(second));
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
     @Override
     public String toString() {
         return String.format("Class[%s]", getName());
-    }
-
-    /**
-     * @return a list of parameter types associated with the Class object.
-     */
-    public List<Class<?>> getParameterizedTypes() {
-        if (parameterizedTypes == null) {
-            parameterizedTypes = extractParameterizedTypes(genericTypeHint);
-        }
-        return parameterizedTypes;
     }
 
     public <T> T newInstance(List<ConstructorParameter> constructorObjectList) throws InstantiationException {
@@ -320,6 +307,22 @@ public class ClassAttributes {
         }
     }
 
+    public Class getClassForGenericName(String genericName) {
+        Class returnObject = genericTypeMap.get(genericName);
+        if (returnObject == null) {
+            throw new RuntimeException("FIX ME NOW PLEASE!");
+        }
+        return returnObject;
+    }
+
+    public Map<String, Class> getGenericTypeMap() {
+        return genericTypeMap;
+    }
+
+    public List<Class> getGenericHints() {
+        return genericHints;
+    }
+
     /**
      * If an incoming class is of a primitive type, this maps it to its corresponding Object type, else, it returns the object
      * @param clazz
@@ -341,18 +344,4 @@ public class ClassAttributes {
         return outputClass;
     }
 
-    private static List<Class<?>> extractParameterizedTypes(Type type) {
-        List<Class<?>> parameters = new ArrayList<>();
-        if (type instanceof ParameterizedType) {
-            Type[] typeArguments = ((ParameterizedType) type).getActualTypeArguments();
-            for (Type t : typeArguments) {
-                if (t instanceof Class) {
-                    parameters.add((Class<?>) t);
-                } else {
-                    parameters.add(null);
-                }
-            }
-        }
-        return parameters;
-    }
 }

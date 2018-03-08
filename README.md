@@ -172,7 +172,7 @@ believe my opinion to be valuable.
 ## How Fast is JDTG? ##
 Damn fast.  With a reasonably complex POJO (multiple layers, lists, datatypes,
 and regex expressions), JDTG can whip out 1,000,000 POJOs in about 47 seconds.
-It can handle whatever you want to through at it.
+It can handle whatever you want to throw at it.
 
 ## How to Contribute ##
 

@@ -12,6 +12,7 @@ import com.rainbowpunch.jetedge.core.reflection.FieldAttributes;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -50,6 +51,7 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     private static DefaultDataLimiter baseDataLimiters;
 
     private final Class<T> clazz;
+    private List<Class> genericHints;
     private final PojoAttributes<T> pojoAttributes;
 
     private PojoGeneratorBuilder(Class<T> clazz, PojoAttributes<T> pojoAttributes) {
@@ -224,6 +226,17 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     /**
+     * Users that are attempting to create Pojos with generics in their class declarations should use this method to specify what all of
+     *      the appropriate classes should be.  Order matters
+     * @param classes
+     * @return a reference of this object.
+     */
+    public PojoGeneratorBuilder<T> withGenericTypes(Class... classes) {
+        genericHints = Arrays.asList(classes);
+        return this;
+    }
+
+    /**
      * Creates the PojoGenerator specified by the fluent API used in the Builder
      * @param classAttributes
      *          A <code>ClassAttributes</code> object to be used for analysis.
@@ -252,7 +265,7 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
      * @return PojoGenerator object for generating objects of type <code>T</code>
      */
     public PojoGenerator<T> build() {
-        return this.build(ClassAttributes.create(clazz));
+        return this.build(ClassAttributes.create(null, clazz, genericHints));
     }
 
     private void createFieldSetters(FieldAttributes f) {

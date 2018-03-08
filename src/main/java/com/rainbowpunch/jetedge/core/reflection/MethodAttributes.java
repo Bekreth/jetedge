@@ -1,8 +1,11 @@
 package com.rainbowpunch.jetedge.core.reflection;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,6 +14,8 @@ import java.util.List;
 public class MethodAttributes {
     private final Method method;
     private final ClassAttributes parentClassAttributes;
+    private final Class genericReturnTypes;
+    private final List<Class> genericParameterTypes;
 
     private MethodName methodName = null;
     private List<ClassAttributes> parameterTypes = null;
@@ -18,6 +23,30 @@ public class MethodAttributes {
     public MethodAttributes(ClassAttributes parentClassAttributes, Method method) {
         this.parentClassAttributes = parentClassAttributes;
         this.method = method;
+
+        this.genericParameterTypes = new ArrayList<>();
+
+        List<Type> parameterTypes = Arrays.asList(method.getGenericParameterTypes());
+        for (Type parameterType : parameterTypes) {
+            if (parameterType instanceof Class) {
+                genericParameterTypes.add((Class) parameterType);
+            } else if (parameterType instanceof TypeVariable) {
+                Class genericClass = parentClassAttributes.getClassForGenericName(parameterType.getTypeName());
+                genericParameterTypes.add(genericClass);
+            } else {
+                Class specificClass = (Class) ((ParameterizedType) parameterType).getRawType();
+                genericParameterTypes.add(specificClass);
+            }
+        }
+
+        Type returnType = method.getGenericReturnType();
+        if (returnType instanceof Class) {
+            genericReturnTypes = (Class) returnType;
+        } else if (returnType instanceof TypeVariable) {
+            genericReturnTypes = parentClassAttributes.getClassForGenericName(returnType.getTypeName());
+        } else {
+            genericReturnTypes = (Class) ((ParameterizedType) returnType).getRawType();
+        }
     }
 
     public String getName() {
@@ -32,7 +61,7 @@ public class MethodAttributes {
      * @return a wrapped Class object of the return type of the method.
      */
     public ClassAttributes getReturnType() {
-        return ClassAttributes.create(parentClassAttributes, method.getReturnType(), method.getGenericReturnType());
+        return ClassAttributes.create(parentClassAttributes, genericReturnTypes, null);
     }
 
     /**
@@ -40,29 +69,6 @@ public class MethodAttributes {
      */
     public int getParameterCount() {
         return method.getParameterCount();
-    }
-
-    /**
-     * @return a list of wrapped Class objects which are the parameter types of the method.
-     */
-    public List<ClassAttributes> getParameterTypes() {
-        if (parameterTypes == null) {
-            parameterTypes = new ArrayList<>();
-            Class<?>[] parameterClasses = method.getParameterTypes();
-            Type[] parameterGenericTypes = method.getGenericParameterTypes();
-            for (int i = 0; i < parameterClasses.length; i++) {
-                Class<?> parameterType = parameterClasses[i];
-                if (parameterType == null) {
-                    // FIXME we should probably bail instead of continuing with null values
-                    parameterTypes.add(null);
-                } else {
-                    Type types = i < parameterGenericTypes.length ? parameterGenericTypes[i] : null;
-                    ClassAttributes classAttributes = ClassAttributes.create(parentClassAttributes, parameterType, types);
-                    parameterTypes.add(classAttributes);
-                }
-            }
-        }
-        return parameterTypes;
     }
 
     public MethodName getMethodName() {

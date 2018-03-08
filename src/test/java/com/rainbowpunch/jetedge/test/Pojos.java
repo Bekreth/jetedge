@@ -53,16 +53,6 @@ public final class Pojos {
         private Person archNemesis;
     }
 
-    @Data
-    public static class A<J> {
-        J j;
-    }
-
-    @Data
-    public static class B extends A<String> {
-
-    }
-
     public enum Powerplant {
         ELECTRIC, GASOLINE
     }
@@ -71,6 +61,8 @@ public final class Pojos {
     public static class Vehicle {
         private int maxSpeed;
         private int numWheels;
+        private List<Person> owners;
+        private Person salesPerson;
         private String name;
         private Powerplant engineType; // Does not have public accessor
         public boolean hasTintedWindows; // Public, but does not have accessor
@@ -103,6 +95,29 @@ public final class Pojos {
             this.someNumber = someNumber;
             this.someString = someString;
         }
+    }
+
+    // Generics
+
+    @Data
+    public static class ClassWithGeneric<J, K> {
+        J j;
+        K k;
+    }
+
+    @Data
+    public static class ClassExtendsWithSpecificGeneric extends ClassWithGeneric<String, Integer> {
+
+    }
+
+    @Data
+    public static class ClassExtendsSomeGenerics<T> extends ClassWithGeneric<T, Integer> {
+
+    }
+
+    @Data
+    public static class ClassExtendsWithNoGenerics<T, U> extends ClassWithGeneric<T, U> {
+
     }
 
 }
