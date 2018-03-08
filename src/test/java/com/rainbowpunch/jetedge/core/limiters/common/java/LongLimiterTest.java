@@ -1,5 +1,6 @@
 package com.rainbowpunch.jetedge.core.limiters.common.java;
 
+import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.primitive.LongLimiter;
 import org.junit.Test;
 
@@ -56,5 +57,10 @@ public class LongLimiterTest {
         Long comparison = 6659363606675156442L;
         Long generatedValue = longSupplier.generateSupplier(seededRandom).get();
         assertEquals(0, comparison.compareTo(generatedValue));
+    }
+
+    @Test(expected = LimiterConstructionException.class)
+    public void testBoundSmallerThanOrigin(){
+        new LongLimiter(Long.MAX_VALUE, Long.MIN_VALUE);
     }
 }

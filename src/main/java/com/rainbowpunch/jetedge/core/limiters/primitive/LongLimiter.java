@@ -1,5 +1,6 @@
 package com.rainbowpunch.jetedge.core.limiters.primitive;
 
+import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 
 import java.util.Random;
@@ -16,28 +17,36 @@ public class LongLimiter implements Limiter<Long> {
     private final Long origin;
     private final Long bound;
 
+    /**
+     * Default constructor will generate random long between 0L(inclusive) and Long.MAX_VALUE(exclusive)
+     */
     public LongLimiter() {
-        this.origin = 0L;
-        this.bound = Long.MAX_VALUE;
+        this(0L, Long.MAX_VALUE);
     }
 
+    /**
+     * Constructor with Long as argument will generate random long between 0L(inclusive) and bound(exclusive)
+     *
+     * @param bound exclusive right bound
+     */
     public LongLimiter(Long bound) {
-        this.origin = 0L;
-        this.bound = bound;
+        this(0L, bound);
     }
 
+    /**
+     * Constructor with two Long as arguments will generate random long between origin(inclusive) and bound(exclusive)
+     *
+     * @param origin inclusive left bound
+     * @param bound exclusive right bound
+     */
     public LongLimiter(Long origin, Long bound) {
+        if (bound < origin) {
+            throw new LimiterConstructionException("Origin can't be greater than the bound!");
+        }
         this.origin = origin;
         this.bound = bound;
     }
 
-    /**
-     * This code comes from javadoc for Random.longs()
-     * Refer to Random.longs() javadoc
-     *
-     * @param random
-     * @return Randomly generated long value between origin & bound
-     */
     @Override
     public Supplier<Long> generateSupplier(Random random) {
         return () -> random.longs(origin, bound).findFirst().getAsLong();
