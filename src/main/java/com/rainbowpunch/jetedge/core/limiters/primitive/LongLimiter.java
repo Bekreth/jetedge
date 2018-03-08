@@ -8,7 +8,6 @@ import java.util.stream.LongStream;
 
 /**
  * A limiter for Long data fields.
- * <p>
  * origin is inclusive left bound which is 0L by default
  * bound is exclusive right bound which is Long.MAX_VALUE by default
  */
