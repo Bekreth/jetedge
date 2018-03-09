@@ -247,7 +247,7 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
                 .filter(f -> filterFields(classAttributes, f))
                 .forEach(this::createFieldSetters);
 
-        new FieldDataGenerator<T>(pojoAttributes.getRandomSeed()).populateSuppliers(pojoAttributes); // TODO: 11/24/17 Look at making this static
+        FieldDataGenerator.populateSuppliers(pojoAttributes);
 
         return () -> {
             try {

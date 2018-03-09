@@ -22,10 +22,11 @@ import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * A class containing the default behaviour for data generation.
@@ -35,18 +36,20 @@ public class DefaultLimiters {
     @SuppressWarnings("unchecked")
     public static Limiter<?> getDefaultLimiter(ClassAttributes classAttributes, PojoAttributes pojoAttributes) {
         Limiter<?> outputLimiter = null;
+
         if (classAttributes.isArray()) {
-            Limiter limiter = getDefaultLimiter(ClassAttributes.create(classAttributes.getClazz()), pojoAttributes);
-            outputLimiter = ArrayLimiter.createArrayLimiter(limiter);
-        } else if (classAttributes.isSubclassOf(Collection.class)) {
-            List<Class> genericList = classAttributes.getGenericHints();
-            if (genericList.size() != 1) {
-                throw new ConfusedGenericException(classAttributes.getClazz().getName());
-            }
-            ClassAttributes attributes = ClassAttributes.create(genericList.get(0));
-            attributes.setFieldNameOfClass(classAttributes.getFieldNameOfClass());
-            Limiter limiter = getDefaultLimiter(attributes, pojoAttributes);
-            outputLimiter = ListLimiter.createListLimiter(limiter);
+            outputLimiter = multiplePojoLimiter(classAttributes, pojoAttributes,
+                    () -> classAttributes.getClazz(), ArrayLimiter::createArrayLimiter);
+        } else if (classAttributes.isCollection()) {
+            Supplier<Class> classSupplier = () -> {
+                List<Class> genericList = classAttributes.getGenericHints();
+                if (genericList.size() != 1) {
+                    throw new ConfusedGenericException(classAttributes.getClazz().getName());
+                }
+                return genericList.get(0);
+            };
+            outputLimiter = multiplePojoLimiter(classAttributes, pojoAttributes,
+                    classSupplier, ListLimiter::createListLimiter);
 
         } else if (classAttributes.isEnum()) {
             outputLimiter = EnumLimiter.createEnumLimiter(classAttributes.getClazz());
@@ -59,6 +62,14 @@ public class DefaultLimiters {
             }
         }
         return outputLimiter;
+    }
+
+    private static Limiter<?> multiplePojoLimiter(ClassAttributes containingClassAttribute, PojoAttributes pojoAttributes,
+                                                  Supplier<Class> classToAccess, Function<Limiter, Limiter> limiterFunction) {
+        ClassAttributes attributes = ClassAttributes.create(containingClassAttribute.getParentClassAttribute(), classToAccess.get(), null);
+        attributes.setFieldNameOfClass(containingClassAttribute.getFieldNameOfClass());
+        Limiter limiter = getDefaultLimiter(attributes, pojoAttributes);
+        return limiterFunction.apply(limiter);
     }
 
     private enum LimiterMapper {

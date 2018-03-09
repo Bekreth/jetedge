@@ -1,5 +1,6 @@
 package com.rainbowpunch.jetedge.core.reflection;
 
+import com.rainbowpunch.jetedge.core.DependencyTree;
 import com.rainbowpunch.jetedge.core.exception.ConfusedGenericException;
 
 import java.lang.reflect.Constructor;
@@ -31,12 +32,13 @@ public class ClassAttributes {
             .map(inMethod -> inMethod.getName())
             .collect(Collectors.toSet());
 
-
-    private ClassAttributes parentClassAttribute;
     private final Class<?> clazz;
-    private boolean isArray = false;
     private final Map<String, Class> genericTypeMap = new HashMap<>();
     private final List<Class> genericHints;
+
+    private DependencyTree dependencyTree;
+    private ClassAttributes parentClassAttribute;
+    private boolean isArray = false;
     private List<Constructor> possibleConstructors;
     private String fieldNameOfClass = null;
 
@@ -89,6 +91,7 @@ public class ClassAttributes {
                             } else if (inType instanceof Class) {
                                 returnObject = (Class) inType;
                             } else {
+                                // TODO: 3/8/18 This is absurd and needs a better exception.
                                 throw new RuntimeException("BAD BAD BAD");
                             }
                             return returnObject;
@@ -99,11 +102,18 @@ public class ClassAttributes {
                 }
             }
         }
-        possibleConstructors = Arrays.asList(clazz.getConstructors());
+        this.possibleConstructors = Arrays.asList(clazz.getConstructors());
+        this.dependencyTree = parentClassAttribute == null ? new DependencyTree(clazz) : parentClassAttribute.dependencyTree;
     }
 
     private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, List<Class> genericTypeHint) {
         this(classAttributes, clazz, genericTypeHint, false);
+    }
+
+    private void updateDependencyTree() {
+        if (parentClassAttribute != null) {
+            this.dependencyTree.addNode(getFieldNameOfClass(), clazz);
+        }
     }
 
     /**
@@ -162,7 +172,10 @@ public class ClassAttributes {
     }
 
     public void setFieldNameOfClass(String fieldNameOfClass) {
-        if (this.fieldNameOfClass == null) this.fieldNameOfClass = fieldNameOfClass;
+        if (this.fieldNameOfClass == null) {
+            this.fieldNameOfClass = fieldNameOfClass;
+            updateDependencyTree();
+        }
         else throw new RuntimeException("Cannot overwrite fieldNameOfClass from : " + this.fieldNameOfClass);
     }
 
@@ -321,6 +334,10 @@ public class ClassAttributes {
 
     public List<Class> getGenericHints() {
         return genericHints;
+    }
+
+    public ClassAttributes getParentClassAttribute() {
+        return parentClassAttribute;
     }
 
     /**
