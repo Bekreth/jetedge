@@ -1,6 +1,6 @@
 package com.rainbowpunch.jetedge.core.limiters.common.java;
 
-import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
 import java.math.BigInteger;
 import java.util.Random;
@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 /**
  * A limiter for BigInteger data fields.
  */
-public class BigIntegerLimiter implements Limiter<BigInteger> {
+public class BigIntegerLimiter extends SimpleAbstractLimiter<BigInteger> {
 
     private final Integer bits;
     private final Integer offset;

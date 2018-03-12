@@ -3,13 +3,13 @@ package com.rainbowpunch.jetedge.core;
 import com.rainbowpunch.jetedge.core.limiters.DefaultLimiters;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.RequiresDefaultLimiter;
+import com.rainbowpunch.jetedge.core.limiters.special.CorrelationLimiter;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
+import com.rainbowpunch.jetedge.spi.PojoGeneratorBuilder;
 
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Looks through all the consumers that have been configured for a POJO and creates appropriate data to fill them.  The data generated is what has
@@ -18,16 +18,17 @@ import java.util.Random;
 public class FieldDataGenerator<T> {
 
     /**
-     * Populates a PojoAttribute with appropriate date.
+     * Populates a PojoAttribute with appropriate data.
      * @param attributes
      *          The PojoAttribute to be populated.
      */
     public static <T> void populateSuppliers(PojoAttributes<T> attributes) {
+        FuturesContainer futuresContainer = attributes.getFuturesContainer();
+
         Random random = new Random(attributes.getRandomSeed());
         Map<String, Limiter<?>> limiters = attributes.getLimiters();
 
         attributes.fieldSetterStream()
-                .sorted(FieldDataGenerator::alphabetical)
                 .map(entry -> {
                     ClassAttributes classAttributes = entry.getValue().getClassAttributes();
                     String entryName = classAttributes.getFieldNameOfClass();
@@ -45,9 +46,17 @@ public class FieldDataGenerator<T> {
                             limiter = ((RequiresDefaultLimiter) limiter).reconcile(defaultLimiter);
                         }
                     }
-                    return new StreamContainer(limiter, entry.getValue(), entryName);
+                    CompletableFuture future = futuresContainer.getCompletableFuture(entryName);
+                    return new StreamContainer(limiter, future, entry.getValue(), entryName);
                 })
-                .forEach(container -> container.getFieldSetter().setSupplier(container.getLimiter().generateSupplier(random)));
+                .forEach(container -> {
+                    if (container.getLimiter() instanceof CorrelationLimiter) {
+                        CorrelationLimiter limiter = (CorrelationLimiter) container.getLimiter();
+                        String dependency = limiter.getDependencyName();
+                        limiter.supplyFuture(attributes.getFuturesContainer().getCompletableFuture(dependency));
+                    }
+                    container.completeFuture(random);
+                });
     }
 
     private static <T> int alphabetical(Map.Entry<String, FieldSetter<T, ?>> entry1, Map.Entry<String, FieldSetter<T, ?>> entry2) {
@@ -65,13 +74,30 @@ public class FieldDataGenerator<T> {
 
     private static class StreamContainer {
         private Limiter limiter;
+        private CompletableFuture<Tuple<Limiter<?>, Random>> future;
         private FieldSetter fieldSetter;
         private String name;
 
-        public StreamContainer(Limiter limiter, FieldSetter fieldSetter, String name) {
+        public StreamContainer(Limiter limiter, CompletableFuture future, FieldSetter fieldSetter, String name) {
             this.limiter = limiter;
+            this.future = future;
             this.fieldSetter = fieldSetter;
             this.name = name;
+        }
+
+        public void completeFuture(Random random) {
+            PojoGeneratorBuilder.getExecutorService().execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Random clonedRandom = RandomCloner.cloneRandom(random);
+                        fieldSetter.setSupplier(limiter.generateSupplier(clonedRandom));
+                        limiter.generateFuture(future, clonedRandom);
+                    } catch (Exception e) {
+                        throw new RuntimeException("Something is amiss");
+                    }
+                }
+            });
         }
 
         public Limiter getLimiter() {
@@ -99,7 +125,5 @@ public class FieldDataGenerator<T> {
         }
     }
 
-    private static int comparator(StreamContainer container1, StreamContainer container2) {
-        return 1;
-    }
+
 }

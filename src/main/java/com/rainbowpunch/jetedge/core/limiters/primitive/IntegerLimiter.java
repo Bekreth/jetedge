@@ -1,6 +1,6 @@
 package com.rainbowpunch.jetedge.core.limiters.primitive;
 
-import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
 import java.util.Random;
 import java.util.function.Supplier;
@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 /**
  * Limiter for integers
  */
-public class IntegerLimiter implements Limiter<Integer> {
+public class IntegerLimiter extends SimpleAbstractLimiter<Integer> {
 
     private final Integer range;
     private final Integer offset;

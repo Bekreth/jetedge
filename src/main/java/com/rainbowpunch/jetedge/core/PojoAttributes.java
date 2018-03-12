@@ -21,6 +21,7 @@ public class PojoAttributes<T> implements Cloneable {
     private Class<T> pojoClazz;
     private List<ConstructorParameter> constructorObjectList;
     private PojoAnalyzer pojoAnalyzer;
+    private FuturesContainer futuresContainer;
     private int randomSeed;
     private boolean activeEvaluation;
 
@@ -34,9 +35,10 @@ public class PojoAttributes<T> implements Cloneable {
 
     }
 
-    public PojoAttributes(Class<T> clazz, PojoAnalyzer pojoAnalyzer, int randomSeed) {
+    public PojoAttributes(Class<T> clazz, PojoAnalyzer pojoAnalyzer, FuturesContainer futuresContainer, int randomSeed) {
         this.pojoClazz = requireNonNull(clazz);
         this.pojoAnalyzer = requireNonNull(pojoAnalyzer);
+        this.futuresContainer = requireNonNull(futuresContainer);
         this.randomSeed = randomSeed;
         this.activeEvaluation = true;
 
@@ -110,8 +112,12 @@ public class PojoAttributes<T> implements Cloneable {
         this.pojoAnalyzer = pojoAnalyzer;
     }
 
+    public FuturesContainer getFuturesContainer() {
+        return futuresContainer;
+    }
+
     public void setEvaluationState(boolean isActivelyEvaluating) {
-        this.activeEvaluation = isActivelyEvaluating;;
+        this.activeEvaluation = isActivelyEvaluating;
     }
 
     @Override

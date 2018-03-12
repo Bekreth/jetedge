@@ -1,6 +1,6 @@
 package com.rainbowpunch.jetedge.core.limiters.primitive;
 
-import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
 import java.util.Random;
 import java.util.function.Supplier;
@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 /**
  * A limiter for Boolean data fields.
  */
-public class BooleanLimiter implements Limiter<Boolean> {
+public class BooleanLimiter extends SimpleAbstractLimiter<Boolean> {
 
     private Boolean expectedBoolean;
 

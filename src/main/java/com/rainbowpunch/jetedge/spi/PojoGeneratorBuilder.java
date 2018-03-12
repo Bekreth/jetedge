@@ -2,10 +2,13 @@ package com.rainbowpunch.jetedge.spi;
 
 import com.rainbowpunch.jetedge.core.FieldDataGenerator;
 import com.rainbowpunch.jetedge.core.FieldSetter;
+import com.rainbowpunch.jetedge.core.FuturesContainer;
 import com.rainbowpunch.jetedge.core.PojoAttributes;
 import com.rainbowpunch.jetedge.core.analyzer.Analyzers;
 import com.rainbowpunch.jetedge.core.analyzer.PojoAnalyzer;
+import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
 import com.rainbowpunch.jetedge.core.reflection.ConstructorParameter;
 import com.rainbowpunch.jetedge.core.reflection.FieldAttributes;
@@ -15,6 +18,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Provides a fluent API to describe how a POJO of type <code>T</code> should be generated.
@@ -49,6 +56,7 @@ import java.util.Random;
 public final class PojoGeneratorBuilder<T> implements Cloneable {
 
     private static DefaultDataLimiter baseDataLimiters;
+    private static ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     private final Class<T> clazz;
     private List<Class> genericHints;
@@ -79,7 +87,7 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
      *          A predefined way to analyze your POJOs structure and determine how to build.
      */
     public PojoGeneratorBuilder(Class<T> clazz, PojoAnalyzer pojoAnalyzer) {
-        this(clazz, new Random().nextInt(), pojoAnalyzer);
+        this(clazz, pojoAnalyzer, new FuturesContainer(), new Random().nextInt());
     }
 
     /**
@@ -91,21 +99,31 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
      *          duplication if provided with the same seed and class.
      */
     public PojoGeneratorBuilder(Class<T> clazz, int randomSeed) {
-        this(clazz, randomSeed, Analyzers.DEFAULT);
+        this(clazz, Analyzers.DEFAULT, new FuturesContainer(), randomSeed);
     }
 
     /**
      * Creates a builder object for the PojoGenerator with the defined class
      * @param clazz
      *          The class of objects that the PojoGenerator should create.
+     * @param pojoAnalyzer
+     * @param futuresContainer
      * @param randomSeed
      *          The starting seed that Jetedge should use when creating your objects.  POJO generation is handled in a way to guarantee exact
      *          duplication if provided with the same seed and class.
-     * @param pojoAnalyzer
-     *          A predefined way to analyze your POJOs structure and determine how to build.
      */
-    public PojoGeneratorBuilder(Class<T> clazz, int randomSeed, PojoAnalyzer pojoAnalyzer) {
-        this(clazz, new PojoAttributes<>(clazz, pojoAnalyzer, randomSeed));
+    public PojoGeneratorBuilder(Class<T> clazz, PojoAnalyzer pojoAnalyzer, FuturesContainer futuresContainer, int randomSeed) {
+        this(clazz, new PojoAttributes<>(clazz, pojoAnalyzer, futuresContainer, randomSeed));
+    }
+
+    // ---------------------- Static Methods ----------------------
+
+    /**
+     * Provides access to the ExecutorService that will be used to asynchronously run the CompleteableFutures of the Limiter.
+     * @return
+     */
+    public static ExecutorService getExecutorService() {
+        return executorService;
     }
 
     /**
@@ -123,6 +141,8 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
         }
         baseDataLimiters = defaultDataLimiter;
     }
+
+    // ------------------------- Instance Methods -----------------
 
     /**
      * Declares what values are acceptable for a specific field.
@@ -158,7 +178,15 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
      * @return a reference of this object
      */
     public PojoGeneratorBuilder<T> andLimitAllFieldsOf(Limiter<?> limiter) {
-        Class clazz = ((Class) ((ParameterizedType) limiter.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0]);
+        Class limiterClass = limiter.getClass();
+        ParameterizedType limiterType = null;
+        Class clazz = null;
+        // Checks if the incoming limiter is an extension of the SimpleAbstractLimiter, or more generically an implementation of the Limiter interface
+        if (limiter instanceof SimpleAbstractLimiter) {
+            clazz = (Class) ((ParameterizedType) limiterClass.getGenericSuperclass()).getActualTypeArguments()[0];
+        } else {
+            clazz = (Class) ((ParameterizedType) limiterClass.getGenericInterfaces()[0]).getActualTypeArguments()[0];
+        }
         pojoAttributes.putAllFieldLimiter(clazz, limiter);
         return this;
     }
@@ -248,6 +276,16 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
                 .forEach(this::createFieldSetters);
 
         FieldDataGenerator.populateSuppliers(pojoAttributes);
+
+        // If the provided ClassAttribute is the foundational layer, this has it pause and wait for all thread to finish with their completables.
+        if (classAttributes.getParentClassAttribute() == null) {
+            CompletableFuture runningLimiterPopulation = pojoAttributes.getFuturesContainer().finishedPopulating();
+            try {
+                runningLimiterPopulation.get();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         return () -> {
             try {

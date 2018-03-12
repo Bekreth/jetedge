@@ -1,6 +1,6 @@
 package com.rainbowpunch.jetedge.core.limiters.common;
 
-import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 /**
  * This limiter is used to specify a list of objects to get an Object from to populate a field.
  */
-public abstract class ObjectLimiter<T> implements Limiter<T> {
+public abstract class ObjectLimiter<T> extends SimpleAbstractLimiter<T> {
 
     protected List<T> acceptableObjectList;
 

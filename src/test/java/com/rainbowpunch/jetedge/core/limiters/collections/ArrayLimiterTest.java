@@ -3,6 +3,7 @@ package com.rainbowpunch.jetedge.core.limiters.collections;
 import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.exception.PojoConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.IntegerLimiter;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ public class ArrayLimiterTest {
 
     @Test(expected = PojoConstructionException.class)
     public void testBadInternalLimiter() {
-        Limiter<Integer> exceptionLimiter = new Limiter<Integer>() {
+        Limiter<Integer> exceptionLimiter = new SimpleAbstractLimiter<Integer>() {
             @Override
             public Supplier<Integer> generateSupplier(Random random) {
                 return () -> {
