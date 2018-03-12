@@ -1,6 +1,5 @@
 package com.rainbowpunch.jetedge.core.reflection;
 
-import com.rainbowpunch.jetedge.core.DependencyTree;
 import com.rainbowpunch.jetedge.core.exception.ConfusedGenericException;
 
 import java.lang.reflect.Constructor;
@@ -36,7 +35,6 @@ public class ClassAttributes {
     private final Map<String, Class> genericTypeMap = new HashMap<>();
     private final List<Class> genericHints;
 
-    private DependencyTree dependencyTree;
     private ClassAttributes parentClassAttribute;
     private boolean isArray = false;
     private List<Constructor> possibleConstructors;
@@ -103,17 +101,10 @@ public class ClassAttributes {
             }
         }
         this.possibleConstructors = Arrays.asList(clazz.getConstructors());
-        this.dependencyTree = parentClassAttribute == null ? new DependencyTree(clazz) : parentClassAttribute.dependencyTree;
     }
 
     private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, List<Class> genericTypeHint) {
         this(classAttributes, clazz, genericTypeHint, false);
-    }
-
-    private void updateDependencyTree() {
-        if (parentClassAttribute != null) {
-            this.dependencyTree.addNode(getFieldNameOfClass(), clazz);
-        }
     }
 
     /**
@@ -174,7 +165,6 @@ public class ClassAttributes {
     public void setFieldNameOfClass(String fieldNameOfClass) {
         if (this.fieldNameOfClass == null) {
             this.fieldNameOfClass = fieldNameOfClass;
-            updateDependencyTree();
         }
         else throw new RuntimeException("Cannot overwrite fieldNameOfClass from : " + this.fieldNameOfClass);
     }

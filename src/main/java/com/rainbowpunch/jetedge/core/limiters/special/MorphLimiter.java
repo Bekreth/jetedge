@@ -1,6 +1,7 @@
 package com.rainbowpunch.jetedge.core.limiters.special;
 
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -13,7 +14,7 @@ import java.util.function.Supplier;
  * @param <T> The type of the provided Limiter's output
  * @param <U> The type of the output of the provided function which takes in type T
  */
-public class MorphLimiter<T, U> implements Limiter<U> {
+public class MorphLimiter<T, U> extends SimpleAbstractLimiter<U> {
 
     private Limiter<T> dataCreator;
     private Function<T, U> morphingFunction;

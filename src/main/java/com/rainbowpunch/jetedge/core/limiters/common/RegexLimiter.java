@@ -1,7 +1,7 @@
 package com.rainbowpunch.jetedge.core.limiters.common;
 
 import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
-import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 import com.rainbowpunch.jetedge.util.ReadableCharList;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 /**
  * This Limiter takes simplified Regex expression, and reverse engineers a string that matches it.
  */
-public class RegexLimiter implements Limiter<String> {
+public class RegexLimiter extends SimpleAbstractLimiter<String> {
 
     private List<EncodedChar> encodedChars;
 

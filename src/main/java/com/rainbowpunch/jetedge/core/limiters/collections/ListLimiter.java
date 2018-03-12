@@ -4,6 +4,7 @@ import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.exception.PojoConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.RequiresDefaultLimiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
 import java.util.List;
 import java.util.Random;
@@ -14,7 +15,7 @@ import java.util.stream.IntStream;
 /**
  * A Limiter for creating lists.
  */
-public class ListLimiter implements Limiter<List<Object>>, RequiresDefaultLimiter<ListLimiter> {
+public class ListLimiter extends SimpleAbstractLimiter<List<Object>> implements RequiresDefaultLimiter<ListLimiter> {
 
     private final int range;
     private final int offset;

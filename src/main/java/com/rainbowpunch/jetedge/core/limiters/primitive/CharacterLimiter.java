@@ -1,6 +1,5 @@
 package com.rainbowpunch.jetedge.core.limiters.primitive;
 
-import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.common.ObjectLimiter;
 import com.rainbowpunch.jetedge.util.ReadableCharList;
 
@@ -11,7 +10,7 @@ import java.util.function.Supplier;
 /**
  * A limiter for Character data fields.
  */
-public class CharacterLimiter extends ObjectLimiter<Character> implements Limiter<Character> {
+public class CharacterLimiter extends ObjectLimiter<Character> {
 
     @Override
     protected List<Character> configureObjectList() {

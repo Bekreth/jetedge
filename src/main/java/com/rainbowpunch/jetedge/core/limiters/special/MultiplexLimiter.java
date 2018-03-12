@@ -2,13 +2,12 @@ package com.rainbowpunch.jetedge.core.limiters.special;
 
 import com.rainbowpunch.jetedge.core.exception.ValueGenerationException;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
  *      e.g. an Integer between 0-10 or 20-30.
  * @param <T>
  */
-public class MultiplexLimiter<U extends Limiter<T>, T> implements Limiter<T> {
+public class MultiplexLimiter<U extends Limiter<T>, T> extends SimpleAbstractLimiter<T> {
 
 
     private final List<Function<Integer, Limiter<T>>> limiterPicker;

@@ -1,7 +1,7 @@
 package com.rainbowpunch.jetedge.core.limiters.common.java;
 
 import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
-import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
 import java.util.Date;
 import java.util.Random;
@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  * Default origin is 0L (January 1, 1970 12:00:00 AM)
  * Default bound is 4102444800000L (January 1, 2100 12:00:00 AM)
  */
-public class DateLimiter implements Limiter<Date> {
+public class DateLimiter extends SimpleAbstractLimiter<Date> {
 
     private final static Long DEFAULT_ORIGIN = 0L;
     private final static Long DEFAULT_BOUND = 4102444800000L;

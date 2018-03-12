@@ -1,18 +1,17 @@
 package com.rainbowpunch.jetedge.core.limiters.primitive;
 
 import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
-import com.rainbowpunch.jetedge.core.limiters.Limiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
 import java.util.Random;
 import java.util.function.Supplier;
-import java.util.stream.LongStream;
 
 /**
  * A limiter for Long data fields.
  * origin is inclusive left bound which is 0L by default
  * bound is exclusive right bound which is Long.MAX_VALUE by default
  */
-public class LongLimiter implements Limiter<Long> {
+public class LongLimiter extends SimpleAbstractLimiter<Long> {
 
     private final Long origin;
     private final Long bound;

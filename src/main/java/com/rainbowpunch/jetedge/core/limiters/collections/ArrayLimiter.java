@@ -4,6 +4,7 @@ import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.exception.PojoConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.RequiresDefaultLimiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
 import java.lang.reflect.Array;
 import java.util.Random;
@@ -12,7 +13,7 @@ import java.util.function.Supplier;
 /**
  * A limiter for arrays
  */
-public class ArrayLimiter implements Limiter<Object[]>, RequiresDefaultLimiter<ArrayLimiter> {
+public class ArrayLimiter extends SimpleAbstractLimiter<Object[]> implements RequiresDefaultLimiter<ArrayLimiter> {
 
     private final int range;
     private final int offset;

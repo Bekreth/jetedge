@@ -7,6 +7,7 @@ import com.rainbowpunch.jetedge.core.limiters.collections.ListLimiter;
 import com.rainbowpunch.jetedge.core.limiters.common.ConstantValueLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.IntegerLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.StringLimiter;
+import com.rainbowpunch.jetedge.core.limiters.special.CorrelationLimiter;
 import com.rainbowpunch.jetedge.core.limiters.special.MultiplexLimiter;
 import com.rainbowpunch.jetedge.spi.DefaultDataLimiter;
 import com.rainbowpunch.jetedge.spi.PojoGenerator;
@@ -16,7 +17,6 @@ import com.rainbowpunch.jetedge.test.Pojos.Extra;
 import com.rainbowpunch.jetedge.test.Pojos.Person;
 import com.rainbowpunch.jetedge.test.Pojos.Superhero;
 import com.rainbowpunch.jetedge.test.Pojos.Vehicle;
-
 import com.rainbowpunch.jetedge.util.ReadableCharList;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -25,8 +25,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.rainbowpunch.jetedge.test.Assertions.assertPojosShallowEqual;
-import static com.rainbowpunch.jetedge.test.Pojos.*;
-import static com.rainbowpunch.jetedge.test.Pojos.Power.*;
+import static com.rainbowpunch.jetedge.test.Pojos.ClassExtendsSomeGenerics;
+import static com.rainbowpunch.jetedge.test.Pojos.ClassExtendsWithNoGenerics;
+import static com.rainbowpunch.jetedge.test.Pojos.ClassExtendsWithSpecificGeneric;
+import static com.rainbowpunch.jetedge.test.Pojos.ParameterConstructor;
+import static com.rainbowpunch.jetedge.test.Pojos.Power.FLIGHT;
+import static com.rainbowpunch.jetedge.test.Pojos.Power.MONEY;
+import static com.rainbowpunch.jetedge.test.Pojos.Power.SPEED;
+import static com.rainbowpunch.jetedge.test.Pojos.Storyline;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -53,8 +59,8 @@ public class PojoGeneratorIntegrationTest {
                 .build()
                 .generatePojo();
 
-        assertEquals(-1771985870, generated.getAge());
-        assertEquals("ya,f,0(TDja_(!DkOIfD[$(ntus7.1", generated.getName());
+        assertEquals(-1170105035, generated.getAge());
+        assertEquals("h1<t\"c!>ya,f,0(TDja_(!DkOIfD[$", generated.getName());
     }
 
     @Test
@@ -64,8 +70,8 @@ public class PojoGeneratorIntegrationTest {
                 .build()
                 .generatePojo();
 
-        assertEquals(389401069, generated.getAge());
-        assertEquals("ya,f,0(TDja_(!DkOIfD[$(ntus7.1", generated.getName());
+        assertEquals(-1170105035, generated.getAge());
+        assertEquals("h1<t\"c!>ya,f,0(TDja_(!DkOIfD[$", generated.getName());
 
         // also verify that direct fields are picked up
         assertNotNull(generated.getSuperPowers());
@@ -79,7 +85,7 @@ public class PojoGeneratorIntegrationTest {
                 .build()
                 .generatePojo();
 
-        List<Pojos.Power> powers = asList(SPEED, SPEED, FLIGHT, MONEY, SPIDER_SENSE, FLIGHT);
+        List<Pojos.Power> powers = asList(MONEY, MONEY, SPEED, FLIGHT, FLIGHT, FLIGHT);
         assertEquals(powers, generated.getSuperPowers());
     }
 
@@ -485,5 +491,40 @@ public class PojoGeneratorIntegrationTest {
         fail("Should have thrown a class cast exception");
     }
 
+    // Correlation limiter
+    @Test
+    public void testCorrelationLimiter_constantValue() {
+        PojoGenerator<Person> generator = new PojoGeneratorBuilder<>(Person.class)
+                .andLimitField("name", new CorrelationLimiter<Integer, String>((random, age) -> {
+                    return "Jimmy is " + age.get();
+                }, "age"))
+                .andLimitField("age", new ConstantValueLimiter<>(14))
+                .build();
+
+        Person person = generator.generatePojo();
+
+        assertEquals(14, person.getAge());
+        assertEquals("Jimmy is 14" , person.getName());
+    }
+
+    @Test
+    public void testCorrelationLimiter_variableData() {
+        PojoGenerator<Person> generator = new PojoGeneratorBuilder<>(Person.class)
+                .andLimitField("name", new CorrelationLimiter<Integer, String>((random, age) -> {
+                    String output = "" + age.get() * 2;
+                    return output;
+                }, "age"))
+                .andLimitField("age", new IntegerLimiter(10, 10))
+                .lazilyEvaluate()
+                .build();
+
+        for (int i = 0; i < 100; i ++) {
+            Person person = generator.generatePojo();
+            int age = person.getAge();
+            assertTrue(age >= 10 && age < 20);
+            int stringAge = Integer.valueOf(person.getName());
+            assertTrue(stringAge == (2 * age));
+        }
+    }
 
 }

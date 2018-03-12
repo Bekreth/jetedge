@@ -5,7 +5,7 @@ import com.rainbowpunch.jetedge.spi.PojoGenerator;
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class PojoGeneratorLimiter<T> implements Limiter<T> {
+public class PojoGeneratorLimiter<T> extends SimpleAbstractLimiter<T> {
 
     private PojoGenerator<T> generator;
 

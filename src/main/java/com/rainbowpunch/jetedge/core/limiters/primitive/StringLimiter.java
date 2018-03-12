@@ -1,6 +1,5 @@
 package com.rainbowpunch.jetedge.core.limiters.primitive;
 
-import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.common.ObjectLimiter;
 import com.rainbowpunch.jetedge.util.ReadableCharList;
 
@@ -13,7 +12,7 @@ import java.util.stream.IntStream;
 /**
  * A limiter for String data fields.
  */
-public class StringLimiter extends ObjectLimiter<String> implements Limiter<String> {
+public class StringLimiter extends ObjectLimiter<String> {
 
     private final Integer length;
 
