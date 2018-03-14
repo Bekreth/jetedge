@@ -495,7 +495,7 @@ public class PojoGeneratorIntegrationTest {
     @Test
     public void testCorrelationLimiter_constantValue() {
         PojoGenerator<Person> generator = new PojoGeneratorBuilder<>(Person.class)
-                .andLimitField("name", new CorrelationLimiter<Integer, String>((random, age) -> {
+                .andLimitField("name", new CorrelationLimiter<>((random, age) -> {
                     return "Jimmy is " + age.get();
                 }, "age"))
                 .andLimitField("age", new ConstantValueLimiter<>(14))
@@ -510,8 +510,9 @@ public class PojoGeneratorIntegrationTest {
     @Test
     public void testCorrelationLimiter_variableData() {
         PojoGenerator<Person> generator = new PojoGeneratorBuilder<>(Person.class)
-                .andLimitField("name", new CorrelationLimiter<Integer, String>((random, age) -> {
-                    String output = "" + age.get() * 2;
+                .andLimitField("name", new CorrelationLimiter<>((random, age) -> {
+                    Integer supplierOutput = (Integer) age.get();
+                    String output = "" + supplierOutput * 2;
                     return output;
                 }, "age"))
                 .andLimitField("age", new IntegerLimiter(10, 10))
@@ -525,6 +526,40 @@ public class PojoGeneratorIntegrationTest {
             int stringAge = Integer.valueOf(person.getName());
             assertTrue(stringAge == (2 * age));
         }
+    }
+
+    @Test
+    public void testCorrelationLimiter_multipleDependencies() {
+        PojoGenerator<Vehicle> generator = new PojoGeneratorBuilder<>(Vehicle.class)
+                .lazilyEvaluate()
+                .andLimitField("maxSpeed" , new IntegerLimiter(20, 50))
+                .andLimitField("numWheels", MultiplexLimiter.generateFlatDistribution(new ConstantValueLimiter<>(2), new ConstantValueLimiter<>(4)))
+                .andLimitField("name", new CorrelationLimiter<String>((random, supplierMap) -> {
+                    int wheels = (Integer) supplierMap.get("numWheels").get();
+                    int speed = (Integer) supplierMap.get("maxSpeed").get();
+
+                    String vehicleType = wheels == 2 ? "Motorcycle" : "Car";
+                    String speedType = speed < 60 ? "Slow " : "Fast ";
+
+                    return speedType + vehicleType;
+                }, Arrays.asList("maxSpeed", "numWheels")))
+                .build();
+
+        for (int i = 0; i < 100 ; i ++) {
+            Vehicle vehicle = generator.generatePojo();
+            String output = vehicle.getName();
+            if (vehicle.getMaxSpeed() < 60) {
+                assertTrue(output.startsWith("Slow "));
+            } else {
+                assertTrue(output.startsWith("Fast "));
+            }
+            if (vehicle.getNumWheels() == 2) {
+                assertTrue(output.endsWith("Motorcycle"));
+            } else {
+                assertTrue(output.endsWith("Car"));
+            }
+        }
+
     }
 
 }

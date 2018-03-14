@@ -6,6 +6,7 @@ import com.rainbowpunch.jetedge.core.limiters.RequiresDefaultLimiter;
 import com.rainbowpunch.jetedge.core.limiters.special.CorrelationLimiter;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -51,9 +52,13 @@ public class FieldDataGenerator<T> {
                 })
                 .forEach(container -> {
                     if (container.getLimiter() instanceof CorrelationLimiter) {
-                        CorrelationLimiter limiter = (CorrelationLimiter) container.getLimiter();
-                        String dependency = limiter.getDependencyName();
-                        limiter.supplyFuture(attributes.getFuturesContainer().getCompletableFuture(dependency));
+                        CorrelationLimiter<?> limiter = (CorrelationLimiter) container.getLimiter();
+
+                        limiter.getFieldDependencies()
+                                .forEach(dependency -> {
+                                    String lowerCase = dependency.toLowerCase();
+                                    limiter.supplyFuture(dependency, attributes.getFuturesContainer().getCompletableFuture(lowerCase));
+                                });
                     }
                     container.completeFuture(random);
                 });
