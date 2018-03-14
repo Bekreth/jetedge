@@ -19,9 +19,11 @@ public class CorrelationLimiter<U, T> implements Limiter<T> {
     private String fieldDependencies;
     private CompletableFuture<Tuple<Limiter<U>, Random>> listenerObject;
 
+    private Tuple<Limiter<U>, Random> limiterTuple;
+
     public CorrelationLimiter(BiFunction<Random, Supplier<U>, T> correlator, String fieldDependencies) {
         this.correlator = correlator;
-        this.fieldDependencies = fieldDependencies;
+        this.fieldDependencies = fieldDependencies.toLowerCase();
         this.listenerObject = new CompletableFuture<>();
     }
 
@@ -35,25 +37,22 @@ public class CorrelationLimiter<U, T> implements Limiter<T> {
 
     @Override
     public Supplier<T> generateSupplier(Random random) {
-        try {
-            Tuple<Limiter<U>, Random> limiterTuple = listenerObject.get();
-            Random limiterRandomClone = RandomCloner.cloneRandom(limiterTuple.getU());
-
-            Supplier<U> dependentLimiterValue = limiterTuple.getT().generateSupplier(limiterRandomClone);
-            return () -> correlator.apply(random, dependentLimiterValue);
-        } catch (Exception e) {
-            throw new ValueGenerationException("Unable to attain value of correlated data.", e);
-        }
+        Random limiterRandomClone = RandomCloner.cloneRandom(limiterTuple.getU());
+        Supplier<U> dependentLimiterValue = limiterTuple.getT().generateSupplier(limiterRandomClone);
+        return () -> correlator.apply(random, dependentLimiterValue);
     }
 
     @Override
     public void generateFuture(CompletableFuture<Tuple<Limiter<T>, Random>> future, Random random) {
-        CorrelationLimiter<U, T> myself = this;
-        PojoGeneratorBuilder.getExecutorService().execute(new Runnable() {
-            @Override
-            public void run() {
-                future.complete(new Tuple<>(myself, random));
-            }
-        });
+        try {
+            CorrelationLimiter<U, T> myself = this;
+            listenerObject.thenAcceptAsync((tuple) -> {
+               this.limiterTuple = tuple;
+               future.complete(new Tuple<>(myself, random));
+            });
+
+        } catch (Exception e) {
+            throw new ValueGenerationException("Unable to attain value of correlated data.", e);
+        }
     }
 }

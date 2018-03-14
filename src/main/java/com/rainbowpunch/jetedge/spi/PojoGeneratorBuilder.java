@@ -6,7 +6,6 @@ import com.rainbowpunch.jetedge.core.FuturesContainer;
 import com.rainbowpunch.jetedge.core.PojoAttributes;
 import com.rainbowpunch.jetedge.core.analyzer.Analyzers;
 import com.rainbowpunch.jetedge.core.analyzer.PojoAnalyzer;
-import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
@@ -19,9 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Provides a fluent API to describe how a POJO of type <code>T</code> should be generated.
@@ -56,7 +52,6 @@ import java.util.concurrent.TimeUnit;
 public final class PojoGeneratorBuilder<T> implements Cloneable {
 
     private static DefaultDataLimiter baseDataLimiters;
-    private static ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     private final Class<T> clazz;
     private List<Class> genericHints;
@@ -117,14 +112,6 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     // ---------------------- Static Methods ----------------------
-
-    /**
-     * Provides access to the ExecutorService that will be used to asynchronously run the CompleteableFutures of the Limiter.
-     * @return
-     */
-    public static ExecutorService getExecutorService() {
-        return executorService;
-    }
 
     /**
      * This method should only be used to define system wide defaults.  This property can only be set once, and ALL generators EVERYWHERE

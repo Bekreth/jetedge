@@ -5,11 +5,11 @@ import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.RequiresDefaultLimiter;
 import com.rainbowpunch.jetedge.core.limiters.special.CorrelationLimiter;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
-import com.rainbowpunch.jetedge.spi.PojoGeneratorBuilder;
 
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 /**
  * Looks through all the consumers that have been configured for a POJO and creates appropriate data to fill them.  The data generated is what has
@@ -47,7 +47,7 @@ public class FieldDataGenerator<T> {
                         }
                     }
                     CompletableFuture future = futuresContainer.getCompletableFuture(entryName);
-                    return new StreamContainer(limiter, future, entry.getValue(), entryName);
+                    return new StreamContainer(futuresContainer.addFutureListener(), limiter, future, entry.getValue(), entryName);
                 })
                 .forEach(container -> {
                     if (container.getLimiter() instanceof CorrelationLimiter) {
@@ -73,12 +73,15 @@ public class FieldDataGenerator<T> {
     }
 
     private static class StreamContainer {
+        private Consumer<CompletableFuture<?>> futureConsumer;
         private Limiter limiter;
         private CompletableFuture<Tuple<Limiter<?>, Random>> future;
         private FieldSetter fieldSetter;
         private String name;
 
-        public StreamContainer(Limiter limiter, CompletableFuture future, FieldSetter fieldSetter, String name) {
+        public StreamContainer(Consumer<CompletableFuture<?>> futureConsumer, Limiter limiter, CompletableFuture future,
+                               FieldSetter fieldSetter, String name) {
+            this.futureConsumer = futureConsumer;
             this.limiter = limiter;
             this.future = future;
             this.fieldSetter = fieldSetter;
@@ -86,18 +89,15 @@ public class FieldDataGenerator<T> {
         }
 
         public void completeFuture(Random random) {
-            PojoGeneratorBuilder.getExecutorService().execute(new Runnable() {
+            random.nextInt(); // changes the random value from the previous limiter
+            Random clonedRandom = RandomCloner.cloneRandom(random);
+            limiter.generateFuture(future, clonedRandom);
+            futureConsumer.accept(future.thenRunAsync(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        Random clonedRandom = RandomCloner.cloneRandom(random);
-                        fieldSetter.setSupplier(limiter.generateSupplier(clonedRandom));
-                        limiter.generateFuture(future, clonedRandom);
-                    } catch (Exception e) {
-                        throw new RuntimeException("Something is amiss");
-                    }
+                    fieldSetter.setSupplier(limiter.generateSupplier(clonedRandom));
                 }
-            });
+            }));
         }
 
         public Limiter getLimiter() {
