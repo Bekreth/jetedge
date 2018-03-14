@@ -5,6 +5,7 @@ import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +40,10 @@ public class MultiplexLimiter<U extends Limiter<T>, T> extends SimpleAbstractLim
                 return shouldPick ? distribution.getLimiter() : null;
             });
         }
+    }
+
+    public static <U extends Limiter<T>, T> MultiplexLimiter<U, T> generateFlatDistribution(U... limiters) {
+        return generateFlatDistribution(Arrays.asList(limiters));
     }
 
     public static <U extends Limiter<T>, T> MultiplexLimiter<U, T> generateFlatDistribution(List<U> limiters) {
