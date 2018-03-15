@@ -6,7 +6,7 @@
 
   <groupId>com.rainbowpunch</groupId>
   <artifactId>jetedge</artifactId>
-  <version>0.9.0-SNAPSHOT</version>
+  <version>0.9.0</version>
 
   <name>Jetedge</name>
   <description>An application that is used to automatically populate POJOs with bounded random data</description>
