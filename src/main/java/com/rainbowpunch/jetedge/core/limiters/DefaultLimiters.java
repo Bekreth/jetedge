@@ -9,6 +9,7 @@ import com.rainbowpunch.jetedge.core.limiters.common.EnumLimiter;
 import com.rainbowpunch.jetedge.core.limiters.common.java.BigDecimalLimiter;
 import com.rainbowpunch.jetedge.core.limiters.common.java.BigIntegerLimiter;
 import com.rainbowpunch.jetedge.core.limiters.common.java.DateLimiter;
+import com.rainbowpunch.jetedge.core.limiters.maps.MapLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.BooleanLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.ByteLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.CharacterLimiter;
@@ -38,8 +39,8 @@ public class DefaultLimiters {
         Limiter<?> outputLimiter = null;
 
         if (classAttributes.isArray()) {
-            outputLimiter = multiplePojoLimiter(classAttributes, pojoAttributes,
-                    () -> classAttributes.getClazz(), ArrayLimiter::createArrayLimiter);
+            Limiter<?> singleObjectLimiter = multiplePojoLimiter(classAttributes, pojoAttributes, () -> classAttributes.getClazz());
+            outputLimiter = ArrayLimiter.createArrayLimiter(singleObjectLimiter);
         } else if (classAttributes.isCollection()) {
             Supplier<Class> classSupplier = () -> {
                 List<Class> genericList = classAttributes.getGenericHints();
@@ -48,9 +49,18 @@ public class DefaultLimiters {
                 }
                 return genericList.get(0);
             };
-            outputLimiter = multiplePojoLimiter(classAttributes, pojoAttributes,
-                    classSupplier, ListLimiter::createListLimiter);
+            Limiter<?> singleObjectLimiter = multiplePojoLimiter(classAttributes, pojoAttributes, classSupplier);
+            outputLimiter = new ListLimiter(singleObjectLimiter);
 
+        } else if (classAttributes.isMap()) {
+            List<Class> genericList = classAttributes.getGenericHints();
+            if (genericList.size() != 2) {
+                throw new ConfusedGenericException(classAttributes.getClazz().getName());
+            }
+            Limiter<?> keyLimiter = multiplePojoLimiter(classAttributes, pojoAttributes, () -> genericList.get(0));
+            Limiter<?> valueLimiter = multiplePojoLimiter(classAttributes, pojoAttributes, () -> genericList.get(1));
+
+            outputLimiter = new MapLimiter(keyLimiter, valueLimiter);
         } else if (classAttributes.isEnum()) {
             outputLimiter = EnumLimiter.createEnumLimiter(classAttributes.getClazz());
         } else {
@@ -65,11 +75,10 @@ public class DefaultLimiters {
     }
 
     private static Limiter<?> multiplePojoLimiter(ClassAttributes containingClassAttribute, PojoAttributes pojoAttributes,
-                                                  Supplier<Class> classToAccess, Function<Limiter, Limiter> limiterFunction) {
+                                                  Supplier<Class> classToAccess) {
         ClassAttributes attributes = ClassAttributes.create(containingClassAttribute.getParentClassAttribute(), classToAccess.get(), null);
         attributes.setFieldNameOfClass(containingClassAttribute.getFieldNameOfClass());
-        Limiter limiter = getDefaultLimiter(attributes, pojoAttributes);
-        return limiterFunction.apply(limiter);
+        return getDefaultLimiter(attributes, pojoAttributes);
     }
 
     private enum LimiterMapper {

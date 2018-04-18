@@ -13,17 +13,14 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * A Limiter for creating lists.
+ * A Limiter for creating lists. By default, it will generate between 3 and 7 objects.
  */
-public class ListLimiter extends SimpleAbstractLimiter<List<Object>> implements RequiresDefaultLimiter<ListLimiter> {
+public class ListLimiter extends SimpleAbstractLimiter<List<Object>>
+        implements RequiresDefaultLimiter<ListLimiter> {
 
     private final int range;
     private final int offset;
     private Limiter limiter;
-
-    public static ListLimiter createListLimiter(Limiter<?> limiter) {
-        return new ListLimiter(limiter);
-    }
 
     public ListLimiter(Limiter limiter) {
         this(limiter, 2, 5);
@@ -68,8 +65,9 @@ public class ListLimiter extends SimpleAbstractLimiter<List<Object>> implements 
         return () -> {
             try {
                 int count = range == 0 ? offset : random.nextInt(range) + offset;
+                Supplier valueSupplier = limiter.generateSupplier(random);
                 return IntStream.range(0, count)
-                        .mapToObj(i -> limiter.generateSupplier(random).get())
+                        .mapToObj(i -> valueSupplier.get())
                         .collect(Collectors.toList());
             } catch (Exception e) {
                 throw new PojoConstructionException("Failed to create object for ListLimiter: ", e);

@@ -23,8 +23,10 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static com.rainbowpunch.jetedge.test.Assertions.assertPojosShallowEqual;
+import static com.rainbowpunch.jetedge.test.Pojos.City;
 import static com.rainbowpunch.jetedge.test.Pojos.ClassExtendsSomeGenerics;
 import static com.rainbowpunch.jetedge.test.Pojos.ClassExtendsWithNoGenerics;
 import static com.rainbowpunch.jetedge.test.Pojos.ClassExtendsWithSpecificGeneric;
@@ -33,6 +35,7 @@ import static com.rainbowpunch.jetedge.test.Pojos.Power.FLIGHT;
 import static com.rainbowpunch.jetedge.test.Pojos.Power.MONEY;
 import static com.rainbowpunch.jetedge.test.Pojos.Power.SPEED;
 import static com.rainbowpunch.jetedge.test.Pojos.Storyline;
+import static com.rainbowpunch.jetedge.test.Pojos.SuperheroNetwork;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -557,6 +560,22 @@ public class PojoGeneratorIntegrationTest {
                 assertTrue(output.endsWith("Motorcycle"));
             } else {
                 assertTrue(output.endsWith("Car"));
+            }
+        }
+
+    }
+
+    // Map testing
+    @Test
+    public void testMapGeneration() {
+        PojoGenerator<SuperheroNetwork> networkPojoGenerator = new PojoGeneratorBuilder<>(SuperheroNetwork.class)
+                .build();
+
+        for (int i = 0; i < 100; i++) {
+            SuperheroNetwork network = networkPojoGenerator.generatePojo();
+            Map<City, Superhero> protectionMap = network.getProtectorMap();
+            for (City city : protectionMap.keySet()) {
+                Arrays.asList(City.values()).contains(city);
             }
         }
 
