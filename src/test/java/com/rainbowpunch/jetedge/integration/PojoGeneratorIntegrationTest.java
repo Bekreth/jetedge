@@ -82,6 +82,29 @@ public class PojoGeneratorIntegrationTest {
     }
 
     @Test
+    public void testInheritedGenerator() {
+        PojoGenerator<Person> personPojoGenerator = new PojoGeneratorBuilder<>(Person.class)
+                .andLimitField("name", new ConstantValueLimiter<>("Ryan"))
+                .build();
+        PojoGenerator<Superhero> superheroPojoGenerator = new PojoGeneratorBuilder<>(Superhero.class)
+                .andInheritLimiters(personPojoGenerator)
+                .build();
+        Superhero generatedHero = superheroPojoGenerator.generatePojo();
+        assertEquals("Ryan", generatedHero.getName());
+
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testInvalidInheritedGenerator() {
+        PojoGenerator<Vehicle> vehiclePojoGenerator = new PojoGeneratorBuilder<>(Vehicle.class).build();
+        PojoGenerator<Superhero> superheroPojoGenerator = new PojoGeneratorBuilder<>(Superhero.class)
+                .andInheritLimiters(vehiclePojoGenerator)
+                .build();
+        Superhero generatedHero = superheroPojoGenerator.generatePojo();
+        assertNull(generatedHero);
+    }
+
+    @Test
     public void testGeneratePojoWithListField() {
         Superhero generated = new PojoGeneratorBuilder<>(Superhero.class)
                 .andUseRandomSeed(RANDOM_SEED)
