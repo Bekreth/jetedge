@@ -1,5 +1,8 @@
 package com.rainbowpunch.jetedge.spi;
 
+import com.rainbowpunch.jetedge.core.PojoAttributes;
+import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
+
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -16,6 +19,10 @@ public interface PojoGenerator<T> {
      * @return A single POJO of type <code>T</code>
      */
     T generatePojo();
+
+    ClassAttributes getClassAttributes();
+
+    PojoAttributes<T> getPojoAttributes();
 
     /**
      * Generates an infinite stream of POJOs of type <code>T</code>

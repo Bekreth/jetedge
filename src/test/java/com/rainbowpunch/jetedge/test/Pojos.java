@@ -30,7 +30,12 @@ public final class Pojos {
     public static class Superhero extends Person {
         private List<Power> superPowers;
         private Person archNemesis;
+    }
 
+    @Data
+    public static class MarvelHero extends Superhero {
+        private List<Superhero> plotDependentFrenemies;
+        private MarvelHero crush;
     }
 
     public enum City {
@@ -44,7 +49,6 @@ public final class Pojos {
     public static class SuperheroNetwork {
         private String planetName;
         private Map<City, Superhero> protectorMap;
-
     }
 
     @Data

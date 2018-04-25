@@ -2,6 +2,7 @@ package com.rainbowpunch.jetedge.integration;
 
 import com.rainbowpunch.jetedge.core.analyzer.Analyzers;
 import com.rainbowpunch.jetedge.core.exception.ConfusedGenericException;
+import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.PojoGeneratorLimiter;
 import com.rainbowpunch.jetedge.core.limiters.collections.ListLimiter;
 import com.rainbowpunch.jetedge.core.limiters.common.ConstantValueLimiter;
@@ -79,6 +80,29 @@ public class PojoGeneratorIntegrationTest {
         // also verify that direct fields are picked up
         assertNotNull(generated.getSuperPowers());
         assertNotNull(generated.getArchNemesis());
+    }
+
+    @Test
+    public void testInheritedGenerator() {
+        PojoGenerator<Person> personPojoGenerator = new PojoGeneratorBuilder<>(Person.class)
+                .andLimitField("name", new ConstantValueLimiter<>("Ryan"))
+                .build();
+        PojoGenerator<Superhero> superheroPojoGenerator = new PojoGeneratorBuilder<>(Superhero.class)
+                .andInheritLimitersFrom(personPojoGenerator)
+                .build();
+        Superhero generatedHero = superheroPojoGenerator.generatePojo();
+        assertEquals("Ryan", generatedHero.getName());
+
+    }
+
+    @Test(expected = LimiterConstructionException.class)
+    public void testInvalidInheritedGenerator() {
+        PojoGenerator<Vehicle> vehiclePojoGenerator = new PojoGeneratorBuilder<>(Vehicle.class).build();
+        PojoGenerator<Superhero> superheroPojoGenerator = new PojoGeneratorBuilder<>(Superhero.class)
+                .andInheritLimitersFrom(vehiclePojoGenerator)
+                .build();
+        Superhero generatedHero = superheroPojoGenerator.generatePojo();
+        assertNull(generatedHero);
     }
 
     @Test

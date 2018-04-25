@@ -218,6 +218,12 @@ public class ClassAttributes {
                 .anyMatch(o -> o.isAssignableFrom(clazz));
     }
 
+    public boolean isParentClassOf(Class<?> ...others) {
+        return Arrays.stream(others)
+                .filter(Objects::nonNull)
+                .anyMatch(o -> clazz.isAssignableFrom(o));
+    }
+
     /**
      * @param others classes to compare against.
      * @return true if the Class object is exactly equal to any class in others.
