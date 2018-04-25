@@ -6,6 +6,7 @@ import com.rainbowpunch.jetedge.core.FuturesContainer;
 import com.rainbowpunch.jetedge.core.PojoAttributes;
 import com.rainbowpunch.jetedge.core.analyzer.Analyzers;
 import com.rainbowpunch.jetedge.core.analyzer.PojoAnalyzer;
+import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
@@ -131,9 +132,9 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
 
     // ------------------------- Instance Methods -----------------
 
-    public PojoGeneratorBuilder<T> andInheritLimiters(PojoGenerator parentGenerator) {
+    public PojoGeneratorBuilder<T> andInheritLimitersFrom(PojoGenerator parentGenerator) {
         if (!parentGenerator.getClassAttributes().isParentClassOf(this.clazz)) {
-            throw new RuntimeException(parentGenerator.getClassAttributes().getClazz().getName() +
+            throw new LimiterConstructionException(parentGenerator.getClassAttributes().getClazz().getName() +
                     " is not a parent of " + this.clazz);
         }
         parentGenerator.getPojoAttributes().getLimiters().forEach((key, val) -> {
@@ -287,7 +288,7 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
             }
         }
 
-        return new PojoGeneratorImpl<>(classAttributes, pojoAttributes);
+        return new StandardPojoGenerator<>(classAttributes, pojoAttributes);
     }
 
     /**

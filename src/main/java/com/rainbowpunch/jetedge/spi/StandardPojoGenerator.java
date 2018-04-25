@@ -3,12 +3,12 @@ package com.rainbowpunch.jetedge.spi;
 import com.rainbowpunch.jetedge.core.PojoAttributes;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
 
-class PojoGeneratorImpl<T> implements PojoGenerator<T> {
+class StandardPojoGenerator<T> implements PojoGenerator<T> {
 
     private final ClassAttributes classAttributes;
     private final PojoAttributes<T> pojoAttributes;
 
-    PojoGeneratorImpl(ClassAttributes classAttributes, PojoAttributes<T> pojoAttributes) {
+    StandardPojoGenerator(ClassAttributes classAttributes, PojoAttributes<T> pojoAttributes) {
         this.classAttributes = classAttributes;
         this.pojoAttributes = pojoAttributes;
     }
