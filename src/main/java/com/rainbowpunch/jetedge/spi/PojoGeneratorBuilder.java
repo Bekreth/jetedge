@@ -6,6 +6,7 @@ import com.rainbowpunch.jetedge.core.FuturesContainer;
 import com.rainbowpunch.jetedge.core.PojoAttributes;
 import com.rainbowpunch.jetedge.core.analyzer.Analyzers;
 import com.rainbowpunch.jetedge.core.analyzer.PojoAnalyzer;
+import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
@@ -130,6 +131,19 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     // ------------------------- Instance Methods -----------------
+
+    public PojoGeneratorBuilder<T> andInheritLimitersFrom(PojoGenerator parentGenerator) {
+        if (!parentGenerator.getClassAttributes().isParentClassOf(this.clazz)) {
+            throw new LimiterConstructionException(parentGenerator.getClassAttributes().getClazz().getName() +
+                    " is not a parent of " + this.clazz);
+        }
+        parentGenerator.getPojoAttributes().getLimiters().forEach((key, val) -> {
+            String fieldName = (String) key;
+            Limiter<?> limiter = (Limiter<?>) val;
+            pojoAttributes.putFieldLimiter(fieldName, limiter);
+        });
+        return this;
+    }
 
     /**
      * Declares what values are acceptable for a specific field.
@@ -274,15 +288,7 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
             }
         }
 
-        return () -> {
-            try {
-                T newInstance = classAttributes.<T>newInstance(pojoAttributes.getConstructorObjectList());
-                pojoAttributes.apply(newInstance);
-                return newInstance;
-            } catch (InstantiationException e) {
-                throw new RuntimeException(e);
-            }
-        };
+        return new StandardPojoGenerator<>(classAttributes, pojoAttributes);
     }
 
     /**

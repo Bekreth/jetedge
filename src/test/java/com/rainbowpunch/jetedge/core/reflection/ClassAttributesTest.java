@@ -6,14 +6,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-import static com.rainbowpunch.jetedge.test.Pojos.Extra;
-import static com.rainbowpunch.jetedge.test.Pojos.Person;
-import static com.rainbowpunch.jetedge.test.Pojos.Power;
-import static com.rainbowpunch.jetedge.test.Pojos.Superhero;
-import static com.rainbowpunch.jetedge.test.Pojos.SuperheroNetwork;
+import static com.rainbowpunch.jetedge.test.Pojos.*;
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -32,6 +26,15 @@ public class ClassAttributesTest {
         assertTrue(unitUnderTest.isSubclassOf(Person.class));
         assertTrue(unitUnderTest.isSubclassOf(Superhero.class));
         assertFalse(unitUnderTest.isSubclassOf(Extra.class));
+    }
+
+    @Test
+    public void testIsParentClassOf() {
+        assertTrue(unitUnderTest.isParentClassOf(MarvelHero.class));
+        assertTrue(unitUnderTest.isParentClassOf(Superhero.class));
+        assertFalse(unitUnderTest.isParentClassOf(Person.class));
+        assertFalse(unitUnderTest.isParentClassOf(Object.class));
+        assertFalse(unitUnderTest.isParentClassOf(Extra.class));
     }
 
     @Test
