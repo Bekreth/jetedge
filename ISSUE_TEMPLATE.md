@@ -30,7 +30,7 @@ The heavier your change is, the more details I expect to see on what the advanta
 
 -----------------------
 
-## I read your documentation, but, despite you're incredible control of the English language and abaility to coverse about complex Java stuffs via sarcastic comments, I'm incapable of understanding how this thing should work.
+## I read your documentation, but, despite you're incredible control of the English language and ability to converse about complex Java stuffs via sarcastic comments, I'm incapable of understanding how this thing should work.
 Coolio, questions are easy issues to close and make me feel good about myself
 
 ### Template
