@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.rainbowpunch</groupId>
@@ -54,6 +54,7 @@
     <maven.javadoc.version>2.9.1</maven.javadoc.version>
     <maven.gpg.version>1.5</maven.gpg.version>
     <sonatype.version>1.6.7</sonatype.version>
+    <checkstyle.version>3.0.0</checkstyle.version>
 
     <!-- Dependency versions -->
     <logback.version>1.2.3</logback.version>
@@ -64,6 +65,7 @@
     <junit.version>4.12</junit.version>
     <mockito.version>2.9.0</mockito.version>
 
+    <checkstyle.suppressions.location>checkstyle-suppressions.xml</checkstyle.suppressions.location>
   </properties>
 
   <dependencies>
@@ -129,9 +131,44 @@
           <autoReleaseAfterClose>true</autoReleaseAfterClose>
         </configuration>
       </plugin>
-
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.version}</version>
+        <executions>
+          <execution>
+            <id>validate</id>
+            <phase>validate</phase>
+            <configuration>
+              <consoleOutput>true</consoleOutput>
+              <failsOnError>false</failsOnError>
+              <linkXRef>false</linkXRef>
+            </configuration>
+            <goals>
+              <!-- if this is 'check' then it will fail the build if there are any errors -->
+              <goal>checkstyle</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>checkstyle</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 
   <profiles>
     <profile>
