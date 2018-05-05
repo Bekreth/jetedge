@@ -64,7 +64,7 @@ public class PojoGeneratorIntegrationTest {
                 .generatePojo();
 
         assertEquals(205897768, generated.getAge());
-        assertEquals("<t\"c!>ya,f,0(TDja_(!DkOIfD[$(n", generated.getName());
+        assertEquals("xL9/9<y}JT?h:1+Wd~H-0s<S9_cI ]", generated.getName());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class PojoGeneratorIntegrationTest {
                 .generatePojo();
 
         assertEquals(-248792245, generated.getAge());
-        assertEquals("t\"c!>ya,f,0(TDja_(!DkOIfD[$(nt", generated.getName());
+        assertEquals("L9/9<y}JT?h:1+Wd~H-0s<S9_cI ]%", generated.getName());
 
         // also verify that direct fields are picked up
         assertNotNull(generated.getSuperPowers());
@@ -191,7 +191,7 @@ public class PojoGeneratorIntegrationTest {
                 .build()
                 .generatePojo();
 
-        assertEquals("1<t\"c!>ya,f,0(TDja_(!DkOIfD[$(", generated.getName());
+        assertEquals("<xL9/9<y}JT?h:1+Wd~H-0s<S9_cI ", generated.getName());
         assertEquals(0, generated.getAge());
     }
 
