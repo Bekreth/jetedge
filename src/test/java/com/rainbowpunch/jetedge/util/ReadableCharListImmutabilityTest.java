@@ -21,6 +21,7 @@ public class ReadableCharListImmutabilityTest {
         // obviously this could be an issue if someone adds a non char list
         // field but I think it's safe to cross that bridge when we get there.
         return Arrays.stream(ReadableCharList.class.getDeclaredFields())
+                .filter(f -> !f.getName().equals("$jacocoData"))
                 .map(f -> {
                     List<Character> cs = null;
                     try {
