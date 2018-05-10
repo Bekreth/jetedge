@@ -24,6 +24,7 @@ public class ReadableCharListImmutabilityTest {
                 .map(f -> {
                     List<Character> cs = null;
                     try {
+                        f.setAccessible(true); // a little hackery in the name of testing
                         cs = (List<Character>) f.get(ReadableCharList.class);
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
