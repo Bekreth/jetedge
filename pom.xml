@@ -8,6 +8,7 @@
   <artifactId>jetedge</artifactId>
   <version>0.10.0</version>
 
+
   <name>Jetedge</name>
   <description>An application that is used to automatically populate POJOs with bounded random data</description>
   <url>https://github.com/Bekreth/jetedge</url>
