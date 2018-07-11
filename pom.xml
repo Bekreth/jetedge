@@ -6,7 +6,7 @@
 
   <groupId>com.rainbowpunch</groupId>
   <artifactId>jetedge</artifactId>
-  <version>0.10.0</version>
+  <version>0.10.1-SNAPSHOT</version>
 
 
   <name>Jetedge</name>
