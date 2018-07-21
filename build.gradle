@@ -24,6 +24,7 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-core', version:'2.9.0'
 }
 
+/*
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from sourceSets.main.allSource
@@ -86,7 +87,7 @@ uploadArchives {
         }
     }
 }
-
+*/
 task wrapper(type: Wrapper) {
     gradleVersion = '4.8.1'
 }
