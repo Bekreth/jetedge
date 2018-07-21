@@ -1,6 +1,6 @@
 package com.rainbowpunch.jetedge.core.limiters;
 
-import com.rainbowpunch.jetedge.spi.PojoGenerator;
+import com.rainbowpunch.jetedge.spi.pojo.PojoGenerator;
 
 import java.util.Random;
 import java.util.function.Supplier;

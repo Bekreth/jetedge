@@ -4,8 +4,8 @@ import com.rainbowpunch.jetedge.core.PojoAttributes;
 import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
-import com.rainbowpunch.jetedge.spi.PojoGenerator;
-import com.rainbowpunch.jetedge.spi.PojoGeneratorBuilder;
+import com.rainbowpunch.jetedge.spi.pojo.PojoGenerator;
+import com.rainbowpunch.jetedge.spi.pojo.PojoGeneratorBuilder;
 
 import java.util.Map;
 import java.util.Random;
