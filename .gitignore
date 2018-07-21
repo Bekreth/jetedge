@@ -30,3 +30,4 @@ _config.yml
 hs_err_pid*
 src/main/resources/
 .gradle/
+build/
