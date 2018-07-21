@@ -1,4 +1,4 @@
-package com.rainbowpunch.jetedge.spi;
+package com.rainbowpunch.jetedge.spi.pojo;
 
 import com.rainbowpunch.jetedge.core.PojoAttributes;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
