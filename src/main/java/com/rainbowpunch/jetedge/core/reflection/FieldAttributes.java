@@ -64,25 +64,25 @@ public class FieldAttributes {
      */
     public <T, U> BiConsumer<T, U> getSetter() {
         final Field f = field; // limit closure
-        return (instance, value) -> {
+        return (instance, v) -> {
+            Object assignment;
+            if (requiresPrimitiveMapping(v, f)) {
+                Class rootClass  = v.getClass().getComponentType();
+                if (rootClass.equals(Boolean.class)) assignment = booleanArrayInversion((Boolean[]) v);
+                else if (rootClass.equals(Byte.class)) assignment =  byteArrayInversion((Byte[]) v);
+                else if (rootClass.equals(Character.class)) assignment = charArrayInversion((Character[]) v);
+                else if (rootClass.equals(Double.class)) assignment = doubleArrayInversion((Double[]) v);
+                else if (rootClass.equals(Float.class)) assignment = floatArrayInversion((Float[]) v);
+                else if (rootClass.equals(Integer.class)) assignment = intArrayInversion((Integer[]) v);
+                else if (rootClass.equals(Long.class)) assignment = longArrayInversion((Long[]) v);
+                else if (rootClass.equals(Short.class)) assignment = shortArrayInversion((Short[]) v);
+                else throw new PojoConstructionException("Unable to determine primitive type for mapping");
+            } else {
+                assignment = v;
+            }
             f.setAccessible(true);
             try {
-                if (requiresPrimitiveMapping(value, f)) {
-                    Class rootClass  = value.getClass().getComponentType();
-
-                    if (rootClass.equals(Boolean.class)) f.set(instance, booleanArrayInversion((Boolean[]) value));
-                    else if (rootClass.equals(Byte.class)) f.set(instance, byteArrayInversion((Byte[]) value));
-                    else if (rootClass.equals(Character.class)) f.set(instance, charArrayInversion((Character[]) value));
-                    else if (rootClass.equals(Double.class)) f.set(instance, doubleArrayInversion((Double[]) value));
-                    else if (rootClass.equals(Float.class)) f.set(instance, floatArrayInversion((Float[]) value));
-                    else if (rootClass.equals(Integer.class)) f.set(instance, intArrayInversion((Integer[]) value));
-                    else if (rootClass.equals(Long.class)) f.set(instance, longArrayInversion((Long[]) value));
-                    else if (rootClass.equals(Short.class)) f.set(instance, shortArrayInversion((Short[]) value));
-                    else throw new PojoConstructionException("Failed to map primitive array inversion");
-
-                } else {
-                    f.set(instance, value);
-                }
+                f.set(instance, assignment);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
@@ -109,16 +109,14 @@ public class FieldAttributes {
     }
 
     private boolean requiresPrimitiveMapping(Object obj, Field field) {
-        Class objClazz = obj.getClass();
-        if (objClazz.isArray()) {
-            if (objClazz.getComponentType() != field.getType().getComponentType()) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
+        if (obj == null) {
             return false;
         }
+        final Class cls = obj.getClass();
+        if (!cls.isArray()) {
+            return false;
+        }
+        return cls.getComponentType() != field.getType().getComponentType();
     }
 
     private boolean[] booleanArrayInversion(Boolean[] input) {
@@ -184,6 +182,4 @@ public class FieldAttributes {
         }
         return output;
     }
-
-
 }

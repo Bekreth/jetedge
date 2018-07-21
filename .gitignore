@@ -30,3 +30,7 @@ hs_err_pid*
 src/main/resources/
 .gradle/
 build/
+/.classpath
+/.project
+/.settings/
+

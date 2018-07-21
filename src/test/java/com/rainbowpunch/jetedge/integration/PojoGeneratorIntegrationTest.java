@@ -1,8 +1,28 @@
 package com.rainbowpunch.jetedge.integration;
 
+import static com.rainbowpunch.jetedge.test.Assertions.assertPojosShallowEqual;
+import static com.rainbowpunch.jetedge.test.Pojos.Power.FLIGHT;
+import static com.rainbowpunch.jetedge.test.Pojos.Power.MONEY;
+import static com.rainbowpunch.jetedge.test.Pojos.Power.SPEED;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.function.Supplier;
+import java.util.concurrent.CompletableFuture;
+
+import com.rainbowpunch.jetedge.core.Tuple;
 import com.rainbowpunch.jetedge.core.analyzer.Analyzers;
 import com.rainbowpunch.jetedge.core.exception.ConfusedGenericException;
 import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
+import com.rainbowpunch.jetedge.core.limiters.Limiter;
 import com.rainbowpunch.jetedge.core.limiters.PojoGeneratorLimiter;
 import com.rainbowpunch.jetedge.core.limiters.collections.ListLimiter;
 import com.rainbowpunch.jetedge.core.limiters.common.ConstantValueLimiter;
@@ -14,35 +34,21 @@ import com.rainbowpunch.jetedge.spi.pojo.DefaultDataLimiter;
 import com.rainbowpunch.jetedge.spi.pojo.PojoGenerator;
 import com.rainbowpunch.jetedge.spi.pojo.PojoGeneratorBuilder;
 import com.rainbowpunch.jetedge.test.Pojos;
+import com.rainbowpunch.jetedge.test.Pojos.City;
+import com.rainbowpunch.jetedge.test.Pojos.ClassExtendsSomeGenerics;
+import com.rainbowpunch.jetedge.test.Pojos.ClassExtendsWithNoGenerics;
+import com.rainbowpunch.jetedge.test.Pojos.ClassExtendsWithSpecificGeneric;
 import com.rainbowpunch.jetedge.test.Pojos.Extra;
+import com.rainbowpunch.jetedge.test.Pojos.ParameterConstructor;
 import com.rainbowpunch.jetedge.test.Pojos.Person;
+import com.rainbowpunch.jetedge.test.Pojos.Storyline;
 import com.rainbowpunch.jetedge.test.Pojos.Superhero;
+import com.rainbowpunch.jetedge.test.Pojos.SuperheroNetwork;
 import com.rainbowpunch.jetedge.test.Pojos.Vehicle;
 import com.rainbowpunch.jetedge.util.ReadableCharList;
+
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import static com.rainbowpunch.jetedge.test.Assertions.assertPojosShallowEqual;
-import static com.rainbowpunch.jetedge.test.Pojos.City;
-import static com.rainbowpunch.jetedge.test.Pojos.ClassExtendsSomeGenerics;
-import static com.rainbowpunch.jetedge.test.Pojos.ClassExtendsWithNoGenerics;
-import static com.rainbowpunch.jetedge.test.Pojos.ClassExtendsWithSpecificGeneric;
-import static com.rainbowpunch.jetedge.test.Pojos.ParameterConstructor;
-import static com.rainbowpunch.jetedge.test.Pojos.Power.FLIGHT;
-import static com.rainbowpunch.jetedge.test.Pojos.Power.MONEY;
-import static com.rainbowpunch.jetedge.test.Pojos.Power.SPEED;
-import static com.rainbowpunch.jetedge.test.Pojos.Storyline;
-import static com.rainbowpunch.jetedge.test.Pojos.SuperheroNetwork;
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public class PojoGeneratorIntegrationTest {
     private static final int RANDOM_SEED = 42;
@@ -605,4 +611,15 @@ public class PojoGeneratorIntegrationTest {
 
     }
 
+    @Test
+    public void testNullValuesEmittedFromLimiter() {
+        PojoGenerator<Person> generator = new PojoGeneratorBuilder<>(Person.class)
+                .andLimitField("name", (Limiter<String>) rng -> () -> null)
+                .andLimitField("secretName", rng -> () -> null)
+                .build();
+
+        Person p = generator.generatePojo();
+        assertEquals(null, p.getName());
+        assertEquals(null, p.getSecretName());
+    }
 }
