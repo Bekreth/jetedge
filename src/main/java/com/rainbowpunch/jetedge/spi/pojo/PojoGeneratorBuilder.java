@@ -1,4 +1,4 @@
-package com.rainbowpunch.jetedge.spi;
+package com.rainbowpunch.jetedge.spi.pojo;
 
 import com.rainbowpunch.jetedge.core.FieldDataGenerator;
 import com.rainbowpunch.jetedge.core.FieldSetter;
