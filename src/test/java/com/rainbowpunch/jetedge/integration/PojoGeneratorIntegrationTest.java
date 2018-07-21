@@ -4,6 +4,7 @@ import com.rainbowpunch.jetedge.core.analyzer.Analyzers;
 import com.rainbowpunch.jetedge.core.exception.ConfusedGenericException;
 import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.PojoGeneratorLimiter;
+import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 import com.rainbowpunch.jetedge.core.limiters.collections.ListLimiter;
 import com.rainbowpunch.jetedge.core.limiters.common.ConstantValueLimiter;
 import com.rainbowpunch.jetedge.core.limiters.primitive.IntegerLimiter;
@@ -25,6 +26,8 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.function.Supplier;
 
 import static com.rainbowpunch.jetedge.test.Assertions.assertPojosShallowEqual;
 import static com.rainbowpunch.jetedge.test.Pojos.City;
@@ -602,7 +605,27 @@ public class PojoGeneratorIntegrationTest {
                 Arrays.asList(City.values()).contains(city);
             }
         }
-
     }
 
+    @Test
+    public void testNullValuesFromLimiters() {
+        final Person p = new PojoGeneratorBuilder<>(Person.class)
+                .andLimitField("name", new SimpleAbstractLimiter<String>() {
+                    @Override
+                    public Supplier<String> generateSupplier(Random random) {
+                        return () -> null;
+                    }
+                })
+                .andLimitField("secretName", new SimpleAbstractLimiter<char[]>() {
+                    @Override
+                    public Supplier<char[]> generateSupplier(Random random) {
+                        return () -> null;
+                    }
+                })
+                .build()
+                .generatePojo();
+
+        assertEquals(null, p.getName());
+        assertEquals(null, p.getSecretName());
+    }
 }

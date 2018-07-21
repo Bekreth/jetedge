@@ -28,6 +28,19 @@ public class FieldAttributesTest {
     }
 
     @Test
+    public void testFieldSetterAcceptsNullValue() {
+        FieldAttributes fieldAttributes =
+                ClassAttributes.create(Person.class)
+                        .getFields().stream()
+                        .filter(f -> "name".equals(f.getName()))
+                        .findFirst().orElseThrow(AssertionFailedError::new);
+        BiConsumer setter = fieldAttributes.getSetter();
+        Person instance = new Person();
+        setter.accept(instance, null);
+        assertEquals(null, instance.getName());
+    }
+
+    @Test
     public void testFieldGetter() {
         FieldAttributes fieldAttributes =
                 ClassAttributes.create(Person.class)
