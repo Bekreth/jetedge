@@ -16,6 +16,11 @@ public class NormalDistributionTest {
         assertEquals(2.18, dist.getStddev());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructNormalDistributionWithInvalidArguments() {
+        NormalDistribution.of(0, -2);
+    }
+
     @Test
     public void testConstructNormalDistributionOfDefaults() {
         final NormalDistribution dist = NormalDistribution.ofDefaults();
