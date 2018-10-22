@@ -55,8 +55,11 @@
             <property name="scope" value="protected"/>
             <property name="allowMissingParamTags" value="true"/>
             <property name="allowMissingThrowsTags" value="true"/>
+            <property name="allowMissingReturnTag" value="true"/>
         </module>
-        <module name="JavadocType"/>
+        <module name="JavadocType">
+            <property name="allowMissingParamTags" value="true"/>
+        </module>
         <!--<module name="JavadocVariable"/>-->
         <module name="JavadocStyle">
             <property name="checkFirstSentence" value="false"/>
@@ -162,7 +165,8 @@
         <module name="FinalClass"/>
         <module name="HideUtilityClassConstructor"/>
         <module name="InterfaceIsType"/>
-        <module name="VisibilityModifier"/>
+        <!--TODO : Uncomment VisibilityModifier-->
+        <!--<module name="VisibilityModifier"/>-->
 
 
         <!-- Miscellaneous other checks.                   -->

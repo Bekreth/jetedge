@@ -22,6 +22,9 @@ public class DefaultPojoLimiter<T> extends SimpleAbstractLimiter<T> {
     private final PojoGenerator<T> generator;
 
     // TODO: 12/5/17 Resolve generics to only require classAttributes instead of it and class
+    /**
+     * This will use the limiters and class structure provided to generate a limiter for an arbitrary class.
+     */
     public DefaultPojoLimiter(ClassAttributes parentClassAttributes, Class<T> clazz,
                               PojoAttributes<T> parentAttributes) {
         PojoGeneratorBuilder<T> builder = new PojoGeneratorBuilder<>(clazz,

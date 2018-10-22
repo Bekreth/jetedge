@@ -26,6 +26,10 @@ public class MultiplexLimiter<U extends Limiter<T>, T> extends SimpleAbstractLim
 
     private final List<Function<Integer, Limiter<T>>> limiterPicker;
 
+    /**
+     * Takes a collection of LimiterDistributions and prepares them to be proportionally selected for balanced
+     *      distribution.
+     */
     public MultiplexLimiter(Collection<LimiterDistribution> collectionOfLimiterDistribution) {
         limiterPicker = new ArrayList<>();
         float pickChance = 0;
@@ -72,6 +76,9 @@ public class MultiplexLimiter<U extends Limiter<T>, T> extends SimpleAbstractLim
     }
 
 
+    /**
+     * A class to set what percentage of the multiplexer should be populated with any given limiter.
+     */
     public static class LimiterDistribution {
         private Limiter limiter;
         private float distribution;

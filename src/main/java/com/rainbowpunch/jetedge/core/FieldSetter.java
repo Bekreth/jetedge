@@ -9,12 +9,15 @@ import java.util.function.Supplier;
 /**
  * This class aligns data generators with the consumers that apply the data to the appropriate field within the POJO.
  */
-public class FieldSetter<T, U> {
+public final class FieldSetter<T, U> {
 
     private final ClassAttributes classAttributes;
     private final BiConsumer<T, U> consumer;
     private Supplier<U> supplier;
 
+    /**
+     * Creates a FieldSetter with the correct generic type information
+     */
     @SuppressWarnings("unchecked")
     public static <T> FieldSetter create(ClassAttributes classAttributes, BiConsumer<T, ?> consumer) {
         if (classAttributes.is(Integer.class))

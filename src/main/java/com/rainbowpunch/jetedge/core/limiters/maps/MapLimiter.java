@@ -38,9 +38,6 @@ public class MapLimiter<T, U> extends SimpleAbstractLimiter<Map<T, U>>
 
     /**
      * Get a MapLimiterBuilder to aide in constructing a MapLimiter.
-     * @param <T> Type of Key
-     * @param <U> Type of Value
-     * @return
      */
     public static <T, U> MapLimiterBuilder<T, U> builder() {
         return new MapLimiterBuilder<>();
@@ -155,10 +152,16 @@ public class MapLimiter<T, U> extends SimpleAbstractLimiter<Map<T, U>>
     }
 
 
+    /**
+     * A generic interface that will set rules on how to handle different forms of collision in Maps during generation.
+     */
     public interface ConflictResolver {
         void applyRules(Map consumingMap, Map.Entry entry, Supplier keySupplier, Supplier valueSupplier);
     }
 
+    /**
+     * A set of default ConflictResolutionStrategies.
+     */
     @SuppressWarnings("unchecked")
     public enum ConflictResolutionStrategy implements ConflictResolver {
         DROP_ENTRY {
@@ -204,6 +207,9 @@ public class MapLimiter<T, U> extends SimpleAbstractLimiter<Map<T, U>>
         }
     }
 
+    /**
+     * Builder to be used creatinga MapLimiter.
+     */
     private static final class MapLimiterBuilder<T, U> {
         private int range;
         private int offset;

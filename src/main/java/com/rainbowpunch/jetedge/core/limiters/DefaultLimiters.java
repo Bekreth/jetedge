@@ -37,6 +37,9 @@ public final class DefaultLimiters {
 
     }
 
+    /**
+     * Scans the given ClassAttributes structure to populate any missing generators with default Limiters.
+     */
     @SuppressWarnings("unchecked")
     public static Limiter<?> getDefaultLimiter(ClassAttributes classAttributes, PojoAttributes pojoAttributes) {
         Limiter<?> outputLimiter = null;
@@ -86,6 +89,9 @@ public final class DefaultLimiters {
         return getDefaultLimiter(attributes, pojoAttributes);
     }
 
+    /**
+     * Contains mappings between a given class, and natively provided Limiters for those classes.
+     */
     private enum LimiterMapper {
         // Primitives
         INTEGER(Integer.class, new IntegerLimiter()),

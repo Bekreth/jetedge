@@ -20,7 +20,8 @@ public class LimiterConstructionException extends RuntimeException {
         super(cause);
     }
 
-    protected LimiterConstructionException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected LimiterConstructionException(String message, Throwable cause, boolean enableSuppression,
+                                           boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

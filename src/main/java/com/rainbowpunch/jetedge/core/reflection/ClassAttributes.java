@@ -1,6 +1,8 @@
 package com.rainbowpunch.jetedge.core.reflection;
 
 import com.rainbowpunch.jetedge.core.exception.ConfusedGenericException;
+import com.rainbowpunch.jetedge.util.PrimitiveToObjectMapper;
+import lombok.ToString;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -23,6 +25,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * Friendly wrapper around the Java reflection API.
  */
+@ToString
 public final class ClassAttributes {
 
     // This extracts out all of the standard Object.class methods that Jetedge shouldn't attempt to resolve.
@@ -126,10 +129,10 @@ public final class ClassAttributes {
         Class mappedClass = null;
         List<Class> genericHints = genericTypeHint == null ? new ArrayList<>() : genericTypeHint;
         if (clazz.isArray()) {
-            mappedClass = mapPrimitiveToObject(clazz.getComponentType());
+            mappedClass = PrimitiveToObjectMapper.mapPrimitiveToObject(clazz.getComponentType());
             output = new ClassAttributes(classAttributes, mappedClass, genericHints, true);
         } else {
-            mappedClass = mapPrimitiveToObject(clazz);
+            mappedClass = PrimitiveToObjectMapper.mapPrimitiveToObject(clazz);
             output = new ClassAttributes(classAttributes, mappedClass, genericHints);
         }
         return output;
@@ -141,7 +144,7 @@ public final class ClassAttributes {
      * @return a wrapped attributes object for clazz.
      */
     public static ClassAttributes create(Class<?> clazz) {
-        return create(null, mapPrimitiveToObject(clazz), null);
+        return create(null, PrimitiveToObjectMapper.mapPrimitiveToObject(clazz), null);
     }
 
     /**
@@ -280,11 +283,10 @@ public final class ClassAttributes {
         return isSubclassOf(Enum.class);
     }
 
-    @Override
-    public String toString() {
-        return String.format("Class[%s]", getName());
-    }
-
+    /**
+     *
+     * Creates a new instance of of class T with the provided constructor properties.
+     */
     public <T> T newInstance(List<ConstructorParameter> constructorObjectList) throws InstantiationException {
         try {
             T output = null;
@@ -295,7 +297,7 @@ public final class ClassAttributes {
                         .filter(con -> con.getParameterCount() == constructorObjectList.size())
                         .filter(innerConstructor -> {
                             List<Type> classes = Arrays.stream(innerConstructor.getParameters())
-                                    .map(parameter -> mapPrimitiveToObject(parameter.getType()))
+                                    .map(parameter -> PrimitiveToObjectMapper.mapPrimitiveToObject(parameter.getType()))
                                     .collect(Collectors.toList());
                             boolean returnValue = true;
 
@@ -342,28 +344,6 @@ public final class ClassAttributes {
 
     public ClassAttributes getParentClassAttribute() {
         return parentClassAttribute;
-    }
-
-    /**
-     * If an incoming class is of a primitive type, this maps it to its corresponding Object type, else, it returns
-     *      the object
-     * @param clazz
-     *          The class that will have a primitive type check run against it.
-     * @return An object class type
-     */
-    public static Class<?> mapPrimitiveToObject(Class<?> clazz) {
-        Class outputClass = clazz;
-
-        if (clazz.equals(int.class)) outputClass = Integer.class;
-        else if (clazz.equals(boolean.class)) outputClass = Boolean.class;
-        else if (clazz.equals(short.class)) outputClass = Short.class;
-        else if (clazz.equals(long.class)) outputClass = Long.class;
-        else if (clazz.equals(float.class)) outputClass = Float.class;
-        else if (clazz.equals(double.class)) outputClass = Double.class;
-        else if (clazz.equals(char.class)) outputClass = Character.class;
-        else if (clazz.equals(byte.class)) outputClass = Byte.class;
-
-        return outputClass;
     }
 
 }

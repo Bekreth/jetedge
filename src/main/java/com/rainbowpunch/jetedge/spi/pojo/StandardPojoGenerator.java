@@ -3,6 +3,10 @@ package com.rainbowpunch.jetedge.spi.pojo;
 import com.rainbowpunch.jetedge.core.PojoAttributes;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
 
+/**
+ * Basic implementation of PojoGenerator
+ * @param <T>
+ */
 class StandardPojoGenerator<T> implements PojoGenerator<T> {
 
     private final ClassAttributes classAttributes;

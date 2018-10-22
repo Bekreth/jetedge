@@ -17,6 +17,10 @@ import java.util.function.Consumer;
  */
 public final class FieldDataGenerator<T> {
 
+    private FieldDataGenerator() {
+
+    }
+
     /**
      * Populates a PojoAttribute with appropriate data.
      * @param attributes
@@ -79,15 +83,18 @@ public final class FieldDataGenerator<T> {
         }
     }
 
-    private static class StreamContainer {
+    /**
+     * A container to hold the information required to build a generator
+     */
+    private static final class StreamContainer {
         private Consumer<CompletableFuture<?>> futureConsumer;
         private Limiter limiter;
         private CompletableFuture<Tuple<Limiter<?>, Random>> future;
         private FieldSetter fieldSetter;
         private String name;
 
-        public StreamContainer(Consumer<CompletableFuture<?>> futureConsumer, Limiter limiter, CompletableFuture future,
-                               FieldSetter fieldSetter, String name) {
+        private StreamContainer(Consumer<CompletableFuture<?>> futureConsumer, Limiter limiter,
+                                CompletableFuture future, FieldSetter fieldSetter, String name) {
             this.futureConsumer = futureConsumer;
             this.limiter = limiter;
             this.future = future;
@@ -95,7 +102,7 @@ public final class FieldDataGenerator<T> {
             this.name = name;
         }
 
-        public void completeFuture(Random random) {
+        private void completeFuture(Random random) {
             random.nextInt(); // changes the random value from the previous limiter
             Random clonedRandom = RandomCloner.cloneRandom(random);
             limiter.generateFuture(future, clonedRandom);

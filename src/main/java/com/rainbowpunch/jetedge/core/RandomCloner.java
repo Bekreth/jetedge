@@ -12,6 +12,10 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public final class RandomCloner {
 
+    private RandomCloner() {
+
+    }
+
     private static final Field FIELD;
 
     static {
@@ -25,8 +29,6 @@ public final class RandomCloner {
 
     /**
      * This method takes in a Random and returns a clone of it.
-     * @param randomToClone
-     * @return
      */
     public static Random cloneRandom(Random randomToClone) {
         try {

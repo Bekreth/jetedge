@@ -139,6 +139,10 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
 
     // ------------------------- Instance Methods -----------------
 
+    /**
+     * Takes all of the mappings from a given parent generator and stores them in the PojoGenerator being built.
+     * @param parentGenerator The PojoGenerator to get from mappings from
+     */
     public PojoGeneratorBuilder<T> andInheritLimitersFrom(PojoGenerator parentGenerator) {
         if (!parentGenerator.getClassAttributes().isParentClassOf(this.clazz)) {
             throw new LimiterConstructionException(parentGenerator.getClassAttributes().getClazz().getName()

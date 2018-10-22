@@ -30,10 +30,18 @@ public class BigDecimalLimiter extends SimpleAbstractLimiter<BigDecimal> {
         this(DEFAULT_UPPERBOUND);
     }
 
+    /**
+     * Constructor to be provided with Strings of numbers in the format desires.  e.g. 100.000 for numbers with 3
+     *      decimal places of accuracy.
+     */
     public BigDecimalLimiter(String upperValueTemplate) {
         this(upperValueTemplate, null);
     }
 
+    /**
+     * Constructor to be provided with Strings of numbers in the format desires.  e.g. 100.000 for numbers with 3
+     *      decimal places of accuracy.
+     */
     public BigDecimalLimiter(String upperValueTemplate, String lowerValueTemplate) {
         if (lowerValueTemplate == null) {
             lowerValueTemplate = defaultLowerBound(upperValueTemplate);
@@ -61,7 +69,8 @@ public class BigDecimalLimiter extends SimpleAbstractLimiter<BigDecimal> {
             })
             .filter((inString) -> !ALLOWABLE_CHARACTERS.contains(inString)).findAny()
             .ifPresent((obj) -> {
-                throw new LimiterConstructionException("Provided String contains unallowed characters");
+                throw new LimiterConstructionException("Provided String contains unallowed characters. "
+                        + " Strings should be integers with desired precession ");
             });
         };
 

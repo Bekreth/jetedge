@@ -157,7 +157,13 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
 
 
     // ------------ Support Inner Classes ----------
+
+    /**
+     * Takes Flagged characters and sets possible values for them to be used in generating text.
+     */
     private class EncodedChar {
+        private static final int END_INT_RANDOM_OFFSET = 4;
+
         private final Flag flag;
         private List<Character> possibleCharacter;
         private Integer startInt;
@@ -215,7 +221,7 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
                 } else {
                     Random innerRandom = new Random(random);
                     if (endInt == null) {
-                        endInt = innerRandom.nextInt(4);
+                        endInt = innerRandom.nextInt(END_INT_RANDOM_OFFSET);
                     }
                     int endingInt = innerRandom.nextInt(endInt - startInt) + startInt;
                     for (int i = 1; i < startInt + endingInt; i++) {
@@ -237,6 +243,10 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
         }
     }
 
+    /**
+     * Contains information to parse out characters with special meaning.  These will then be used for generating rules
+     *      and reverse engineering strings from the provided regex.
+     */
     private enum Flag {
         SINGLE_CHARACTER(),
         DOT(".", ReadableCharList.LIST_OF_ALL_CHAR),

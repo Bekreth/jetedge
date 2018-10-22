@@ -12,6 +12,10 @@ public class MethodName {
     private final String accessorPrefix;
     private final String associatedFieldName;
 
+    /**
+     * This will get the useful name of a getter/setter method, stripping away getHelloWorld() to helloWorld.
+     * @param methodName
+     */
     public MethodName(String methodName) {
         Matcher matcher = METHOD_NAME_REGEX.matcher(methodName);
         String accessorSuffix;
