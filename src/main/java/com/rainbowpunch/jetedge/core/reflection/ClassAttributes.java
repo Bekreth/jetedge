@@ -23,10 +23,10 @@ import static java.util.stream.Collectors.toList;
 /**
  * Friendly wrapper around the Java reflection API.
  */
-public class ClassAttributes {
+public final class ClassAttributes {
 
     // This extracts out all of the standard Object.class methods that Jetedge shouldn't attempt to resolve.
-    private static final Set<String> methodNamesToIgnore = Arrays.asList(Object.class.getMethods())
+    private static final Set<String> METHOD_NAMES_TO_IGNORE = Arrays.asList(Object.class.getMethods())
             .stream()
             .map(inMethod -> inMethod.getName())
             .collect(Collectors.toSet());
@@ -49,7 +49,8 @@ public class ClassAttributes {
      *          class to wrap.
      * @param genericTypeHint an optional generic type hint.
      */
-    private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, List<Class> genericTypeHint, boolean isArray) {
+    private ClassAttributes(ClassAttributes classAttributes, Class<?> clazz, List<Class> genericTypeHint,
+                            boolean isArray) {
         this.parentClassAttribute = classAttributes;
         this.isArray = isArray;
         this.clazz = clazz;
@@ -65,8 +66,10 @@ public class ClassAttributes {
         Type superClass = clazz.getGenericSuperclass();
         if (genericsOnClass.size() == 0) {
             if (superClass instanceof ParameterizedType) {
-                List<TypeVariable> superGenerics = Arrays.asList(((Class) ((ParameterizedType) superClass).getRawType()).getTypeParameters());
-                List<Class> subGenericImpl = Arrays.asList(((ParameterizedType) superClass).getActualTypeArguments())
+                List<TypeVariable> superGenerics =
+                        Arrays.asList(((Class) ((ParameterizedType) superClass).getRawType()).getTypeParameters());
+                List<Class> subGenericImpl =
+                        Arrays.asList(((ParameterizedType) superClass).getActualTypeArguments())
                         .stream()
                         .sequential()
                         .map(inType -> (Class) inType)
@@ -78,8 +81,10 @@ public class ClassAttributes {
         } else {
             if (superClass instanceof ParameterizedType) {
                 Iterator<Class> iterator = genericTypeHint.iterator();
-                List<TypeVariable> superGenerics = Arrays.asList(((Class) ((ParameterizedType) superClass).getRawType()).getTypeParameters());
-                List<Class> subGenericImpl = Arrays.asList(((ParameterizedType) superClass).getActualTypeArguments())
+                List<TypeVariable> superGenerics =
+                        Arrays.asList(((Class) ((ParameterizedType) superClass).getRawType()).getTypeParameters());
+                List<Class> subGenericImpl =
+                        Arrays.asList(((ParameterizedType) superClass).getActualTypeArguments())
                         .stream()
                         .sequential()
                         .map(inType -> {
@@ -165,8 +170,9 @@ public class ClassAttributes {
     public void setFieldNameOfClass(String fieldNameOfClass) {
         if (this.fieldNameOfClass == null) {
             this.fieldNameOfClass = fieldNameOfClass;
+        } else {
+            throw new RuntimeException("Cannot overwrite fieldNameOfClass from : " + this.fieldNameOfClass);
         }
-        else throw new RuntimeException("Cannot overwrite fieldNameOfClass from : " + this.fieldNameOfClass);
     }
 
     /**
@@ -182,7 +188,7 @@ public class ClassAttributes {
     public List<MethodAttributes> getMethods() {
         if (methods == null) {
             methods = Arrays.stream(clazz.getMethods())
-                    .filter(inMethod -> !methodNamesToIgnore.contains(inMethod.getName()))
+                    .filter(inMethod -> !METHOD_NAMES_TO_IGNORE.contains(inMethod.getName()))
                     .map(m -> new MethodAttributes(this, m))
                     .collect(toList());
         }
@@ -212,13 +218,13 @@ public class ClassAttributes {
      * @return true if the Class object is a subclass of any class in others.
      * @throws NullPointerException if any class in others is null.
      */
-    public boolean isSubclassOf(Class<?> ...others) {
+    public boolean isSubclassOf(Class<?>... others) {
         return Arrays.stream(others)
                 .filter(Objects::nonNull)
                 .anyMatch(o -> o.isAssignableFrom(clazz));
     }
 
-    public boolean isParentClassOf(Class<?> ...others) {
+    public boolean isParentClassOf(Class<?>... others) {
         return Arrays.stream(others)
                 .filter(Objects::nonNull)
                 .anyMatch(o -> clazz.isAssignableFrom(o));
@@ -229,7 +235,7 @@ public class ClassAttributes {
      * @return true if the Class object is exactly equal to any class in others.
      * @throws NullPointerException if any class in others is null.
      */
-    public boolean is(Class<?> ...others) {
+    public boolean is(Class<?>... others) {
         return Arrays.stream(others)
                 .filter(Objects::nonNull)
                 .anyMatch(o -> {
@@ -270,7 +276,9 @@ public class ClassAttributes {
     /**
      * @return true if the Class object is an Enum type.
      */
-    public boolean isEnum() { return isSubclassOf(Enum.class); }
+    public boolean isEnum() {
+        return isSubclassOf(Enum.class);
+    }
 
     @Override
     public String toString() {
@@ -337,7 +345,8 @@ public class ClassAttributes {
     }
 
     /**
-     * If an incoming class is of a primitive type, this maps it to its corresponding Object type, else, it returns the object
+     * If an incoming class is of a primitive type, this maps it to its corresponding Object type, else, it returns
+     *      the object
      * @param clazz
      *          The class that will have a primitive type check run against it.
      * @return An object class type

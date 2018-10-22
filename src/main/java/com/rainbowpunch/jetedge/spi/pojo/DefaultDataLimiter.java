@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * This Class allows for users to create a list of Limiters that should be used by default.
  */
-public class DefaultDataLimiter {
+public final class DefaultDataLimiter {
     private Collection<Limiter> defaultLimiters;
 
     public DefaultDataLimiter() {

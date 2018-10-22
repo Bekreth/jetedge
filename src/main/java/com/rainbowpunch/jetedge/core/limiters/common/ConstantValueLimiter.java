@@ -58,7 +58,6 @@ public class ConstantValueLimiter<T> extends ObjectLimiter<T> {
      * Construct a new {@link ConstantValueLimiter} with your own {@link Supplier}.  This
      * supplier will be called each time a new value is required when populating the POJOs.
      *
-     * @return a new instance configured to use the supplied supplier
      * @param supplier the supplier to use when populating the POJO attributes
      */
     public ConstantValueLimiter(Supplier<T> supplier) {
@@ -71,7 +70,6 @@ public class ConstantValueLimiter<T> extends ObjectLimiter<T> {
      * for generating random values.  This allows you to construct consistently random values from the
      * seeded random object.
      *
-     * @return a new instance configured to use the supplied function
      * @param function The function to call when
      */
     public ConstantValueLimiter(Function<Random, T> function) {
@@ -93,7 +91,7 @@ public class ConstantValueLimiter<T> extends ObjectLimiter<T> {
      * @param name the argument name to return in the error if supplier is null
      * @return a function that accepts a random object and calls {@link Supplier#get()}
      */
-    private static final <S> Function<Random,S> functionFromSupplier(Supplier<S> supplier, String name) {
+    private static <S> Function<Random, S> functionFromSupplier(Supplier<S> supplier, String name) {
         Supplier<S> s = required(supplier, name);
         return (random -> s.get());
     }
@@ -104,7 +102,7 @@ public class ConstantValueLimiter<T> extends ObjectLimiter<T> {
      * @param name the argument name to include in the exception message
      * @return the value if non-null
      */
-    private static final <X> X required(X val, String name) {
+    private static <X> X required(X val, String name) {
         if (val == null) {
             throw new IllegalArgumentException(name + " cannot be null");
         }

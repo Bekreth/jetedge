@@ -110,7 +110,8 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
 
     private void escapeEncoding(char c) {
         openEscape = false;
-        Flag flag = Flag.getFlag(c) == Flag.DOT ? null : Flag.getFlag(c); //Because dot has special meaning when escaped, it's treated specially
+        //Because dot has special meaning when escaped, it's treated specially
+        Flag flag = Flag.getFlag(c) == Flag.DOT ? null : Flag.getFlag(c);
         EncodedChar encodedChar = flag == null
                 ? new EncodedChar(c)
                 : new EncodedChar(flag);
@@ -135,7 +136,8 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
         if ((int) c1 >= (int) c2) {
             throw new LimiterConstructionException("The provide char range is inverted.");
         }
-        LimiterConstructionException exception = new LimiterConstructionException("Cannot construct Regex Limiter.  Char range is invalid");
+        LimiterConstructionException exception = new LimiterConstructionException("Cannot construct Regex Limiter.  "
+                + "Char range is invalid");
         if (ReadableCharList.LIST_OF_CHAR_DIGITS.contains(c1)) {
             if (!ReadableCharList.LIST_OF_CHAR_DIGITS.contains(c2)) {
                 throw exception;
@@ -183,7 +185,7 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
                         .collect(Collectors.toList());
             } else if (flag.equals(Flag.QUANTITY)) {
                 StringBuilder builder = new StringBuilder(characters.size());
-                for(Character ch: characters) {
+                for (Character ch: characters) {
                     builder.append(ch);
                 }
                 String quantity = builder.toString();

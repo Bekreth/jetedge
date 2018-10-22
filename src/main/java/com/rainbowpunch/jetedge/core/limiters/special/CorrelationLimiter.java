@@ -8,9 +8,7 @@ import com.rainbowpunch.jetedge.core.limiters.Limiter;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -23,9 +21,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * The CorrelationLimiter allows users to define how a given field should be limited based on the values of other fields.  As an example,
- *      a POJO may exist with an effective date and expiration date where the expiration date needs to be 30-35 days afterwards.
- *      In psuedo-code
+ * The CorrelationLimiter allows users to define how a given field should be limited based on the values of other
+ *      fields.  As an example, a POJO may exist with an effective date and expiration date where the expiration date
+ *      needs to be 30-35 days afterwards. In psuedo-code
  *
  *      <code>
  *          new CorrelationLimiter((random, dateLimiter) -> {
@@ -36,7 +34,7 @@ import java.util.stream.Collectors;
  *
  *      </code>
  *
- *      If a CorrelationLimiter need a to listen for multiple other limiters, then the BiFunction needs to take in a Map.
+ *      If a CorrelationLimiter need a to listen for multiple other limiters, then the BiFunction needs to take in a Map
  *
  *      <code>
  *          new CorrelationLimiter((random, limiters) -> {
@@ -59,11 +57,13 @@ public class CorrelationLimiter<T> implements Limiter<T> {
     /**
      * Creates a limiter that listens for the output of several other limiters
      * @param correlatorMap
-     *          A BiFunction that takes in a Random and a Map of String, Supplier for all of the limiters this is listening too.
+     *          A BiFunction that takes in a Random and a Map of String, Supplier for all of the limiters this is
+     *          listening too.
      * @param fieldDependencies
      *          A collection of the string names that this object is listening too.
      */
-    public CorrelationLimiter(BiFunction<Random, Map<String, Supplier<?>>, T> correlatorMap, Collection<String> fieldDependencies) {
+    public CorrelationLimiter(BiFunction<Random, Map<String, Supplier<?>>, T> correlatorMap,
+                              Collection<String> fieldDependencies) {
         if (correlatorMap == null || fieldDependencies == null || fieldDependencies.size() == 0) {
             throw new LimiterConstructionException("Null and empty values can't be provided to the CorrelationLimiter");
         }
@@ -75,7 +75,8 @@ public class CorrelationLimiter<T> implements Limiter<T> {
     /**
      * Creates a limiter that listens for the output of another listener
      * @param correlator
-     *          A BiFunction that takes in a random number and the supplier of the listen this CorrelationLimiter is listening too.
+     *          A BiFunction that takes in a random number and the supplier of the listen this CorrelationLimiter is
+     *          listening too.
      * @param fieldDependency
      *          The dot-delimited path that this object is listening too.
      */
@@ -135,7 +136,8 @@ public class CorrelationLimiter<T> implements Limiter<T> {
                             limiterTuples = listenerObjects.entrySet().stream()
                                     .map(entry -> {
                                         try {
-                                            return new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().get());
+                                            return new AbstractMap.SimpleEntry<>(entry.getKey(),
+                                                    entry.getValue().get());
                                         } catch (Exception e) {
                                             throw new RuntimeException(e);
                                         }

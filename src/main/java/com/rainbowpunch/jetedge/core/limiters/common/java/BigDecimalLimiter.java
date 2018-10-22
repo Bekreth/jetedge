@@ -48,7 +48,7 @@ public class BigDecimalLimiter extends SimpleAbstractLimiter<BigDecimal> {
 
         String[] valueHalves = regexBase.split("\\.");
         this.topLimiter = new IntegerLimiter(Integer.valueOf(valueHalves[0]));
-        if(valueHalves.length == 2) {
+        if (valueHalves.length == 2) {
             this.bottomLimiter = new IntegerLimiter(Integer.valueOf("1" + valueHalves[1]));
         }
     }
@@ -74,7 +74,8 @@ public class BigDecimalLimiter extends SimpleAbstractLimiter<BigDecimal> {
                 int upperPrecision = upperValueTemplate.split("\\.")[1].length();
                 int lowerPrecision = lowerValueTemplate.split("\\.")[1].length();
                 if (upperPrecision != lowerPrecision) {
-                    throw new LimiterConstructionException("Upper and lower bounds require the same amount of precision");
+                    throw new LimiterConstructionException("Upper and lower bounds require "
+                            + "the same amount of precision");
                 }
             } catch (Exception e) {
                 throw new LimiterConstructionException("Upper and lower bounds require the same amount of precision");

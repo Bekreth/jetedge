@@ -12,12 +12,12 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public final class RandomCloner {
 
-    private static final Field field;
+    private static final Field FIELD;
 
     static {
         try {
-            field = Random.class.getDeclaredField("seed");
-            field.setAccessible(true);
+            FIELD = Random.class.getDeclaredField("seed");
+            FIELD.setAccessible(true);
         } catch (Exception e) {
             throw new CriticalJetedgeException(e); // TODO: 3/12/18 Come up with a better exception
         }
@@ -30,9 +30,9 @@ public final class RandomCloner {
      */
     public static Random cloneRandom(Random randomToClone) {
         try {
-            long longSeed = ((AtomicLong) field.get(randomToClone)).get();
+            long longSeed = ((AtomicLong) FIELD.get(randomToClone)).get();
             Random limiterRandomClone = new Random();
-            field.set(limiterRandomClone, new AtomicLong(longSeed));
+            FIELD.set(limiterRandomClone, new AtomicLong(longSeed));
 
             return limiterRandomClone;
         } catch (Exception e) {

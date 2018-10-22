@@ -15,6 +15,10 @@ import static java.util.Collections.unmodifiableList;
  */
 public final class ReadableCharList {
 
+    private ReadableCharList() {
+
+    }
+
     /**
      * all characters in the unicode range 0x20 (32) - 0x7E (126) inclusive
      */
@@ -56,6 +60,7 @@ public final class ReadableCharList {
     public static final List<Character> LIST_OF_ALPHA_NUMERIC_CHAR;
 
     static {
+        //BEGIN ALLOWED MAGIC NUMBERS
         // see https://en.wikipedia.org/wiki/List_of_Unicode_characters#Basic_Latin
         final int lowerBound = 0x20; // latin ' ' space
         final int upperBound = 0x7E; // latin '~' tilde
@@ -77,10 +82,12 @@ public final class ReadableCharList {
 
 
         LIST_OF_ALPHA_CHAR = unmodifiableList(
-                Stream.concat(LIST_OF_UPPER_CASE_CHAR.stream(), LIST_OF_LOWER_CASE_CHAR.stream()).collect(Collectors.toList()));
+                Stream.concat(LIST_OF_UPPER_CASE_CHAR.stream(), LIST_OF_LOWER_CASE_CHAR.stream())
+                        .collect(Collectors.toList()));
 
         LIST_OF_ALPHA_NUMERIC_CHAR = unmodifiableList(
                 Stream.concat(LIST_OF_ALPHA_CHAR.stream(), LIST_OF_CHAR_DIGITS.stream()).collect(Collectors.toList()));
+        //END ALLOWED MAGIC NUMBERS
     }
 
 }

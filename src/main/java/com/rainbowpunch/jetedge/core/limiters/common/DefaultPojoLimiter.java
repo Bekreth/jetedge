@@ -22,9 +22,12 @@ public class DefaultPojoLimiter<T> extends SimpleAbstractLimiter<T> {
     private final PojoGenerator<T> generator;
 
     // TODO: 12/5/17 Resolve generics to only require classAttributes instead of it and class
-    public DefaultPojoLimiter(ClassAttributes parentClassAttributes, Class<T> clazz, PojoAttributes<T> parentAttributes) {
+    public DefaultPojoLimiter(ClassAttributes parentClassAttributes, Class<T> clazz,
+                              PojoAttributes<T> parentAttributes) {
         PojoGeneratorBuilder<T> builder = new PojoGeneratorBuilder<>(clazz,
-                parentAttributes.getParentPojoAnalyzer(), parentAttributes.getFuturesContainer(), parentAttributes.getRandomSeed());
+                parentAttributes.getParentPojoAnalyzer(),
+                parentAttributes.getFuturesContainer(),
+                parentAttributes.getRandomSeed());
 
         parentAttributes.getLimiters().entrySet().stream()
                 .forEach(entry -> addToBuilder(entry, builder));

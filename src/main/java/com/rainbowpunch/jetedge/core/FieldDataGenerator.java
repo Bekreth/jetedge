@@ -6,17 +6,16 @@ import com.rainbowpunch.jetedge.core.limiters.RequiresDefaultLimiter;
 import com.rainbowpunch.jetedge.core.limiters.special.CorrelationLimiter;
 import com.rainbowpunch.jetedge.core.reflection.ClassAttributes;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
- * Looks through all the consumers that have been configured for a POJO and creates appropriate data to fill them.  The data generated is what has
- *      been specified by the PojoGeneratorBuilder.
+ * Looks through all the consumers that have been configured for a POJO and creates appropriate data to fill them.
+ *      The data generated is what has been specified by the PojoGeneratorBuilder.
  */
-public class FieldDataGenerator<T> {
+public final class FieldDataGenerator<T> {
 
     /**
      * Populates a PojoAttribute with appropriate data.
@@ -48,7 +47,8 @@ public class FieldDataGenerator<T> {
                         }
                     }
                     CompletableFuture future = futuresContainer.getCompletableFuture(entryName);
-                    return new StreamContainer(futuresContainer.addFutureListener(), limiter, future, entry.getValue(), entryName);
+                    return new StreamContainer(futuresContainer.addFutureListener(), limiter,
+                            future, entry.getValue(), entryName);
                 })
                 .forEach(container -> {
                     if (container.getLimiter() instanceof CorrelationLimiter) {
@@ -57,14 +57,16 @@ public class FieldDataGenerator<T> {
                         limiter.getFieldDependencies()
                                 .forEach(dependency -> {
                                     String lowerCase = dependency.toLowerCase();
-                                    limiter.supplyFuture(dependency, attributes.getFuturesContainer().getCompletableFuture(lowerCase));
+                                    limiter.supplyFuture(dependency,
+                                            attributes.getFuturesContainer().getCompletableFuture(lowerCase));
                                 });
                     }
                     container.completeFuture(random);
                 });
     }
 
-    private static <T> int alphabetical(Map.Entry<String, FieldSetter<T, ?>> entry1, Map.Entry<String, FieldSetter<T, ?>> entry2) {
+    private static <T> int alphabetical(Map.Entry<String, FieldSetter<T, ?>> entry1,
+                                        Map.Entry<String, FieldSetter<T, ?>> entry2) {
         return String.CASE_INSENSITIVE_ORDER.compare(entry1.getKey(), entry2.getKey());
     }
 

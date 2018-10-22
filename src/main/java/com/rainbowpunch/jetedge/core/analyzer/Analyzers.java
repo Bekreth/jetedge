@@ -28,5 +28,7 @@ public final class Analyzers {
 
     public static final PojoAnalyzer ALL_FIELDS = classAttributes -> classAttributes.getFields().stream();
 
-    private Analyzers() {}
+    private Analyzers() {
+
+    }
 }

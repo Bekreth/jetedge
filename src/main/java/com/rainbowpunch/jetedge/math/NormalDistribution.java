@@ -6,7 +6,7 @@ import java.util.function.Function;
 /**
  * A function that generates values from a normal distribution.
  */
-public class NormalDistribution implements Function<Random, Double> {
+public final class NormalDistribution implements Function<Random, Double> {
     private final double mean;
     private final double stddev;
 
@@ -40,7 +40,8 @@ public class NormalDistribution implements Function<Random, Double> {
     }
 
     /**
-     * @return a standard normal distribution. That is, a normal distribution with a mean of 0 and a standard deviation of 1.
+     * @return a standard normal distribution. That is, a normal distribution with a mean of 0 and a standard
+     *      deviation of 1.
      */
     public static NormalDistribution ofDefaults() {
         return of(0, 1);

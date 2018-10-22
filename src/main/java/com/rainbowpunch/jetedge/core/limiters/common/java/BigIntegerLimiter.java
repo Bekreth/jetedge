@@ -11,6 +11,8 @@ import java.util.function.Supplier;
  */
 public class BigIntegerLimiter extends SimpleAbstractLimiter<BigInteger> {
 
+    private static final int DEFAULT_BIT_COUNT = 20;
+
     private final Integer bits;
     private final Integer offset;
 
@@ -18,7 +20,7 @@ public class BigIntegerLimiter extends SimpleAbstractLimiter<BigInteger> {
      * Default BigIntegerLimiter is 20 bits with 0 offset. 0 - 1048576
      */
     public BigIntegerLimiter() {
-        this(20, 0);
+        this(DEFAULT_BIT_COUNT, 0);
     }
 
     /**

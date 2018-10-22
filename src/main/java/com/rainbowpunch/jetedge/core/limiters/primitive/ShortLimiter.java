@@ -49,8 +49,8 @@ public class ShortLimiter extends SimpleAbstractLimiter<Short> {
 
     @Override
     public Supplier<Short> generateSupplier(Random random) {
-        return range == null ?
-                () -> (short) random.nextInt() :
-                () -> (short) (random.nextInt(range) + offset);
+        return range == null
+                ? () -> (short) random.nextInt()
+                : () -> (short) (random.nextInt(range) + offset);
     }
 }

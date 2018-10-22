@@ -1,9 +1,8 @@
 package com.rainbowpunch.jetedge.core;
 
 /**
- * This is a generic tuple to contain objects.  It exists to avoid using the anti-pattern of having Map.Entries be used as a Tuple.
- * @param <T>
- * @param <U>
+ * This is a generic tuple to contain objects.  It exists to avoid using the anti-pattern of having Map.Entries
+ *      be used as a Tuple.
  */
 public class Tuple<T, U> {
     private T t;

@@ -37,13 +37,16 @@ import java.util.concurrent.CompletableFuture;
  * <br>
  * <br>
  *
- * Each of the methods in this class provides a way to edit and alter the range of acceptable values that Jetedge should use when creating your
- * objects.
+ * Each of the methods in this class provides a way to edit and alter the range of acceptable values that Jetedge should
+ * use when creating your objects.
  * <br>
- * The majority of the features available here require the use of field names in order to specify how data creation/manipulation should be handled.
- * For nested objects, use a dot-delimited string to reference the field you are wanting to control. e.g. topPojo.innerObject.someValue
+ * The majority of the features available here require the use of field names in order to specify how data
+ * creation/manipulation should be handled.
+ * For nested objects, use a dot-delimited string to reference the field you are wanting to control.
+ * e.g. topPojo.innerObject.someValue
  * <br>
- * Unless otherwise specified, field and type discovery for POJOs is done by looking for set/get method (public or private) for all fields in a
+ * Unless otherwise specified, field and type discovery for POJOs is done by looking for set/get method
+ * (public or private) for all fields in a
  * class.  e.g. setName(String aString) and getName() for the field called name.  This behavior can be easily changed,
  * but it is the default if not otherwise specified.
  *
@@ -91,7 +94,8 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
      * @param clazz
      *          The class of objects that the PojoGenerator should create.
      * @param randomSeed
-     *          The starting seed that Jetedge should use when creating your objects.  POJO generation is handled in a way to guarantee exact
+     *          The starting seed that Jetedge should use when creating your objects.  POJO generation is handled
+     *          in a way to guarantee exact
      *          duplication if provided with the same seed and class.
      */
     public PojoGeneratorBuilder(Class<T> clazz, int randomSeed) {
@@ -105,19 +109,21 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
      * @param pojoAnalyzer
      * @param futuresContainer
      * @param randomSeed
-     *          The starting seed that Jetedge should use when creating your objects.  POJO generation is handled in a way to guarantee exact
+     *          The starting seed that Jetedge should use when creating your objects.  POJO generation is handled
+     *          in a way to guarantee exact
      *          duplication if provided with the same seed and class.
      */
-    public PojoGeneratorBuilder(Class<T> clazz, PojoAnalyzer pojoAnalyzer, FuturesContainer futuresContainer, int randomSeed) {
+    public PojoGeneratorBuilder(Class<T> clazz, PojoAnalyzer pojoAnalyzer, FuturesContainer futuresContainer,
+                                int randomSeed) {
         this(clazz, new PojoAttributes<>(clazz, pojoAnalyzer, futuresContainer, randomSeed));
     }
 
     // ---------------------- Static Methods ----------------------
 
     /**
-     * This method should only be used to define system wide defaults.  This property can only be set once, and ALL generators EVERYWHERE
-     *      will use the defaults provided here.  The properties can be individually overwritten, as always, but this allows users to
-     *      set very basic limiters for the entire system.
+     * This method should only be used to define system wide defaults.  This property can only be set once, and
+     *      ALL generators EVERYWHERE will use the defaults provided here.  The properties can be individually
+     *      overwritten, as always, but this allows users to set very basic limiters for the entire system.
      * @throws RuntimeException
      *      If this field is called more than once, a RuntimeException will be thrown
      * @param defaultDataLimiter
@@ -125,7 +131,8 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     public static void setAllGeneratorsDefaultDataGenerators(DefaultDataLimiter defaultDataLimiter) {
         if (baseDataLimiters != null) {
             // TODO: 1/25/18 Replace this with a specific error and update javadoc.
-            throw new RuntimeException("The PojoGeneratorBuilder has already been seeded with system wide base limiters");
+            throw new RuntimeException("The PojoGeneratorBuilder has already been seeded "
+                    + "with system wide base limiters");
         }
         baseDataLimiters = defaultDataLimiter;
     }
@@ -134,8 +141,8 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
 
     public PojoGeneratorBuilder<T> andInheritLimitersFrom(PojoGenerator parentGenerator) {
         if (!parentGenerator.getClassAttributes().isParentClassOf(this.clazz)) {
-            throw new LimiterConstructionException(parentGenerator.getClassAttributes().getClazz().getName() +
-                    " is not a parent of " + this.clazz);
+            throw new LimiterConstructionException(parentGenerator.getClassAttributes().getClazz().getName()
+                    + " is not a parent of " + this.clazz);
         }
         parentGenerator.getPojoAttributes().getLimiters().forEach((key, val) -> {
             String fieldName = (String) key;
@@ -170,10 +177,11 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     /**
-     * This method defines what the default behaviour should be for a given data type.  By default, all of the most permissive Limiters are used.
-     *      With this method, a new base line can be set so as to avoid having to do basic limitations for every single field.
-     *      As an example, the standard IntLimiter effectively acts as <code>Random.nextInt()</code> for every integer found in a given class
-     *      structure.  Using this method, the default behaviour for <code>this</code> generator can be adjusted for <code>Random.nextInt(10)</code>
+     * This method defines what the default behaviour should be for a given data type.  By default, all of the most
+     *      permissive Limiters are used. With this method, a new base line can be set so as to avoid having to do
+     *      basic limitations for every single field.As an example, the standard IntLimiter effectively acts as
+     *      <code>Random.nextInt()</code> for every integer found in a given class structure.  Using this method,
+     *      the default behaviour for <code>this</code> generator can be adjusted for <code>Random.nextInt(10)</code>
      * @param limiter
      *          The new default limiter (type will automatically be inferred)
      * @return a reference of this object
@@ -182,7 +190,8 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
         Class limiterClass = limiter.getClass();
         ParameterizedType limiterType = null;
         Class clazz = null;
-        // Checks if the incoming limiter is an extension of the SimpleAbstractLimiter, or more generically an implementation of the Limiter interface
+        // Checks if the incoming limiter is an extension of the SimpleAbstractLimiter,
+        // or more generically an implementation of the Limiter interface
         if (limiter instanceof SimpleAbstractLimiter) {
             clazz = (Class) ((ParameterizedType) limiterClass.getGenericSuperclass()).getActualTypeArguments()[0];
         } else {
@@ -193,9 +202,10 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     /**
-     * This method allows the user to define a collection of Limiters to be used in place of the standard Limiters.  In effect, it
-     *      repetitively calls the <code>andLimitAllFieldsOf()</code> method with the provided collection of limiters.  This allows for
-     *      reuse of the same default limiters in multiple generators without having to reapply all of the defaults.
+     * This method allows the user to define a collection of Limiters to be used in place of the standard Limiters.
+     *      In effect, it repetitively calls the <code>andLimitAllFieldsOf()</code> method with the provided collection
+     *      of limiters.  This allows for reuse of the same default limiters in multiple generators without having to
+     *      reapply all of the defaults.
      * @param defaultDataLimiter
      *          A collection of limiters to be used in place of the standard default data generators
      * @return a reference of this object
@@ -218,10 +228,11 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     /**
-     * Defines a random seed to be used for POJO creation.  This same effect can be realized by providing a random seed in the constructor.
+     * Defines a random seed to be used for POJO creation.  This same effect can be realized by providing a random seed
+     *      in the constructor.
      * @param randomSeed
-     *          The starting seed that Jetedge should use when creating your objects.  POJO generation is handled in a way to guarantee exact
-     *          duplication if provided with the same seed and class.
+     *          The starting seed that Jetedge should use when creating your objects.  POJO generation is handled in a
+     *          way to guarantee exact duplication if provided with the same seed and class.
      * @return a reference of this object
      */
     public PojoGeneratorBuilder<T> andUseRandomSeed(int randomSeed) {
@@ -230,7 +241,8 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     /**
-     * This method will make Jetedge only evaluate fields that have been specified by limiters.  All other will be left uninstantiated.
+     * This method will make Jetedge only evaluate fields that have been specified by limiters.  All other will be left
+     *      uninstantiated.
      * @return a reference of this object
      */
     public PojoGeneratorBuilder<T> lazilyEvaluate() {
@@ -239,9 +251,9 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     /**
-     * This method allows the user to pass in objects to be used in the construction of their object.  It is highly recommended for the
-     *      user to use this in conjunction with <code>lazilyEvaluate()</code> or appropriate <code>andIgnoreField()</code> in order to
-     *      prevent their values from being overwritten by Jetedge
+     * This method allows the user to pass in objects to be used in the construction of their object.  It is highly
+     *      recommended for the user to use this in conjunction with <code>lazilyEvaluate()</code> or appropriate
+     *      <code>andIgnoreField()</code> in order to prevent their values from being overwritten by Jetedge
      * @param objects
      * @return a reference of this object
      */
@@ -255,8 +267,8 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
     }
 
     /**
-     * Users that are attempting to create Pojos with generics in their class declarations should use this method to specify what all of
-     *      the appropriate classes should be.  Order matters
+     * Users that are attempting to create Pojos with generics in their class declarations should use this method to
+     *      specify what all of the appropriate classes should be.  Order matters
      * @param classes
      * @return a reference of this object.
      */
@@ -278,7 +290,8 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
 
         FieldDataGenerator.populateSuppliers(pojoAttributes);
 
-        // If the provided ClassAttribute is the foundational layer, this has it pause and wait for all thread to finish with their completables.
+        // If the provided ClassAttribute is the foundational layer, this has it pause and wait
+        // for all thread to finish with their completables.
         if (classAttributes.getParentClassAttribute() == null) {
             CompletableFuture runningLimiterPopulation = pojoAttributes.getFuturesContainer().finishedPopulating();
             try {
@@ -303,7 +316,7 @@ public final class PojoGeneratorBuilder<T> implements Cloneable {
         pojoAttributes.putFieldSetter(f.getName(), FieldSetter.create(f.getType(), f.getSetter()));
     }
 
-    private boolean filterFields (ClassAttributes classAttributes, FieldAttributes fieldAttributes) {
+    private boolean filterFields(ClassAttributes classAttributes, FieldAttributes fieldAttributes) {
         String classPrepender = classAttributes.getFieldNameOfClass();
         String fieldName = fieldAttributes.getName().toLowerCase();
         String qualifiedFieldName = !classPrepender.isEmpty() ? classPrepender + "." + fieldName : fieldName;

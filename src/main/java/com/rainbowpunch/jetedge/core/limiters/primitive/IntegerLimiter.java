@@ -49,9 +49,9 @@ public class IntegerLimiter extends SimpleAbstractLimiter<Integer> {
 
     @Override
     public Supplier<Integer> generateSupplier(Random random) {
-        return range == null ?
-             () -> (Integer) random.nextInt() :
-             () -> (Integer) (random.nextInt(range) + offset);
+        return range == null
+                ? () -> (Integer) random.nextInt()
+                : () -> (Integer) (random.nextInt(range) + offset);
     }
 
 }
