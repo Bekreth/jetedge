@@ -1,8 +1,11 @@
 package com.rainbowpunch.jetedge.core.limiters.common;
 
+import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
 import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
@@ -40,11 +43,15 @@ public abstract class ObjectLimiter<T> extends SimpleAbstractLimiter<T> {
     /**
      * Converts a list of objects into an simple ObjectLimiter.
      */
-    public static <U> ObjectLimiter<U> ofObjects(List<U> objects) {
+    public static <U> ObjectLimiter<U> ofObjects(Collection<U> objects) {
         return new ObjectLimiter<U>() {
             @Override
             protected List<U> configureObjectList() {
-                return objects;
+                if (objects.size() == 0) {
+                    throw new LimiterConstructionException("ObjectLimiter can't be constructed with an "
+                            + "empty collection");
+                }
+                return new ArrayList<>(objects);
             }
         };
     }
