@@ -14,10 +14,11 @@ import java.util.stream.IntStream;
  */
 public class StringLimiter extends ObjectLimiter<String> {
 
+    private static final int DEFAULT_LENGTH = 30;
     private final Integer length;
 
     public StringLimiter() {
-        length = 30;
+        length = DEFAULT_LENGTH;
     }
 
     /**
@@ -35,7 +36,7 @@ public class StringLimiter extends ObjectLimiter<String> {
      *          List of characters that the String should be made of.
      */
     public StringLimiter(List<Character> charList) {
-        this(charList, 30);
+        this(charList, DEFAULT_LENGTH);
     }
 
     /**

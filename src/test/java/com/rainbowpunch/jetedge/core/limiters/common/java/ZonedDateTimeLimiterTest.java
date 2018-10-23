@@ -21,7 +21,8 @@ public class ZonedDateTimeLimiterTest {
     private static final Long DEFAULT_BOUND = 10000000000L;
     private static final Date DEFAULT_BOUND_DATE = new Date(10000000000L);
     private static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("UTC");
-    private static final Set<String> DEFAULT_ZONE_ID_COLLECTION = new HashSet<>(Arrays.asList("America/Costa_Rica", "Asia/Katmandu"));
+    private static final Set<String> DEFAULT_ZONE_ID_COLLECTION =
+            new HashSet<>(Arrays.asList("America/Costa_Rica", "Asia/Katmandu"));
     private Random random = new Random();
 
     @Test
@@ -115,7 +116,8 @@ public class ZonedDateTimeLimiterTest {
     public void testZonedDateTimeLimiterWithLongOriginAndLongBoundAndCollectionOfZoneIdStrings() {
         ZonedDateTime origin = ZonedDateTime.ofInstant(Instant.ofEpochMilli(DEFAULT_ORIGIN), DEFAULT_ZONE_ID);
         ZonedDateTime bound = ZonedDateTime.ofInstant(Instant.ofEpochMilli(DEFAULT_BOUND), DEFAULT_ZONE_ID);
-        ZonedDateTimeLimiter zonedDateTimeLimiter = new ZonedDateTimeLimiter(DEFAULT_ORIGIN, DEFAULT_BOUND, DEFAULT_ZONE_ID_COLLECTION);
+        ZonedDateTimeLimiter zonedDateTimeLimiter =
+                new ZonedDateTimeLimiter(DEFAULT_ORIGIN, DEFAULT_BOUND, DEFAULT_ZONE_ID_COLLECTION);
 
         for (int i = 0; i < 100; i++) {
             ZonedDateTime zonedDateTime = zonedDateTimeLimiter.generateSupplier(random).get();
@@ -129,7 +131,8 @@ public class ZonedDateTimeLimiterTest {
     public void testZonedDateTimeLimiterWithLongOriginAndLongBoundAndZoneId() {
         ZonedDateTime origin = ZonedDateTime.ofInstant(Instant.ofEpochMilli(DEFAULT_ORIGIN), DEFAULT_ZONE_ID);
         ZonedDateTime bound = ZonedDateTime.ofInstant(Instant.ofEpochMilli(DEFAULT_BOUND), DEFAULT_ZONE_ID);
-        ZonedDateTimeLimiter zonedDateTimeLimiter = new ZonedDateTimeLimiter(DEFAULT_ORIGIN, DEFAULT_BOUND, DEFAULT_ZONE_ID);
+        ZonedDateTimeLimiter zonedDateTimeLimiter =
+                new ZonedDateTimeLimiter(DEFAULT_ORIGIN, DEFAULT_BOUND, DEFAULT_ZONE_ID);
 
         for (int i = 0; i < 100; i++) {
             ZonedDateTime zonedDateTime = zonedDateTimeLimiter.generateSupplier(random).get();
@@ -165,7 +168,8 @@ public class ZonedDateTimeLimiterTest {
     @Test
     public void testZonedDateTimeLimiterWithDateBoundAndCollectionOfZoneIdStrings() {
         ZonedDateTime bound = ZonedDateTime.ofInstant(DEFAULT_BOUND_DATE.toInstant(), DEFAULT_ZONE_ID);
-        ZonedDateTimeLimiter zonedDateTimeLimiter = new ZonedDateTimeLimiter(DEFAULT_BOUND_DATE, DEFAULT_ZONE_ID_COLLECTION);
+        ZonedDateTimeLimiter zonedDateTimeLimiter =
+                new ZonedDateTimeLimiter(DEFAULT_BOUND_DATE, DEFAULT_ZONE_ID_COLLECTION);
 
         for (int i = 0; i < 100; i++) {
             ZonedDateTime zonedDateTime = zonedDateTimeLimiter.generateSupplier(random).get();
@@ -203,7 +207,8 @@ public class ZonedDateTimeLimiterTest {
     public void testZonedDateTimeLimiterWithDateOriginAndDateBoundAndRandomZoneId() {
         ZonedDateTime origin = ZonedDateTime.ofInstant(DEFAULT_ORIGIN_DATE.toInstant(), DEFAULT_ZONE_ID);
         ZonedDateTime bound = ZonedDateTime.ofInstant(DEFAULT_BOUND_DATE.toInstant(), DEFAULT_ZONE_ID);
-        ZonedDateTimeLimiter zonedDateTimeLimiter = new ZonedDateTimeLimiter(DEFAULT_ORIGIN_DATE, DEFAULT_BOUND_DATE, true);
+        ZonedDateTimeLimiter zonedDateTimeLimiter =
+                new ZonedDateTimeLimiter(DEFAULT_ORIGIN_DATE, DEFAULT_BOUND_DATE, true);
 
         for (int i = 0; i < 100; i++) {
             ZonedDateTime zonedDateTime = zonedDateTimeLimiter.generateSupplier(random).get();
@@ -217,7 +222,8 @@ public class ZonedDateTimeLimiterTest {
     public void testZonedDateTimeLimiterWithDateOriginAndDateBoundAndCollectionOfZoneIdStrings() {
         ZonedDateTime origin = ZonedDateTime.ofInstant(DEFAULT_ORIGIN_DATE.toInstant(), DEFAULT_ZONE_ID);
         ZonedDateTime bound = ZonedDateTime.ofInstant(DEFAULT_BOUND_DATE.toInstant(), DEFAULT_ZONE_ID);
-        ZonedDateTimeLimiter zonedDateTimeLimiter = new ZonedDateTimeLimiter(DEFAULT_ORIGIN_DATE, DEFAULT_BOUND_DATE, DEFAULT_ZONE_ID_COLLECTION);
+        ZonedDateTimeLimiter zonedDateTimeLimiter =
+                new ZonedDateTimeLimiter(DEFAULT_ORIGIN_DATE, DEFAULT_BOUND_DATE, DEFAULT_ZONE_ID_COLLECTION);
 
         for (int i = 0; i < 100; i++) {
             ZonedDateTime zonedDateTime = zonedDateTimeLimiter.generateSupplier(random).get();
@@ -231,7 +237,8 @@ public class ZonedDateTimeLimiterTest {
     public void testZonedDateTimeLimiterWithDateOriginAndDateBoundAndZoneId() {
         ZonedDateTime origin = ZonedDateTime.ofInstant(DEFAULT_ORIGIN_DATE.toInstant(), DEFAULT_ZONE_ID);
         ZonedDateTime bound = ZonedDateTime.ofInstant(DEFAULT_BOUND_DATE.toInstant(), DEFAULT_ZONE_ID);
-        ZonedDateTimeLimiter zonedDateTimeLimiter = new ZonedDateTimeLimiter(DEFAULT_ORIGIN_DATE, DEFAULT_BOUND_DATE, DEFAULT_ZONE_ID);
+        ZonedDateTimeLimiter zonedDateTimeLimiter =
+                new ZonedDateTimeLimiter(DEFAULT_ORIGIN_DATE, DEFAULT_BOUND_DATE, DEFAULT_ZONE_ID);
 
         for (int i = 0; i < 100; i++) {
             ZonedDateTime zonedDateTime = zonedDateTimeLimiter.generateSupplier(random).get();

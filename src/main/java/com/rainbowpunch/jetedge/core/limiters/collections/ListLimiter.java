@@ -18,12 +18,15 @@ import java.util.stream.IntStream;
 public class ListLimiter extends SimpleAbstractLimiter<List<Object>>
         implements RequiresDefaultLimiter<ListLimiter> {
 
+    private static final int DEFAULT_RANGE = 2;
+    private static final int DEFAULT_OFFSET = 5;
+
     private final int range;
     private final int offset;
     private Limiter limiter;
 
     public ListLimiter(Limiter limiter) {
-        this(limiter, 2, 5);
+        this(limiter, DEFAULT_RANGE, DEFAULT_OFFSET);
     }
 
     public ListLimiter(int range, int offset) {
@@ -43,7 +46,8 @@ public class ListLimiter extends SimpleAbstractLimiter<List<Object>>
 
     private void validate() {
         if (range < 0 || offset < 0) {
-            throw new LimiterConstructionException("Error creating ListLimiter : Offset and Range cannot be less than 0");
+            throw new LimiterConstructionException("Error creating ListLimiter : "
+                    + "Offset and Range cannot be less than 0");
         }
     }
 

@@ -60,7 +60,7 @@ public class LongLimiterTest {
     }
 
     @Test(expected = LimiterConstructionException.class)
-    public void testBoundSmallerThanOrigin(){
+    public void testBoundSmallerThanOrigin() {
         new LongLimiter(Long.MAX_VALUE, Long.MIN_VALUE);
     }
 }

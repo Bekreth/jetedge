@@ -11,7 +11,7 @@ public class EnumLimiterTest {
     public void testEnum() {
         Random random = new Random();
         EnumLimiter<BreakfastFood> foodEnumLimiter = new EnumLimiter<>(BreakfastFood.class);
-        for (int i = 0; i < 10; i ++) {
+        for (int i = 0; i < 10; i++) {
             BreakfastFood food = foodEnumLimiter.generateSupplier(random).get();
             Arrays.asList(BreakfastFood.values()).contains(food);
         }

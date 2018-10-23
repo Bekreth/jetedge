@@ -29,7 +29,7 @@ public class MapLimiterTest {
 
         Supplier<Map<Integer, String>> mapSupplier = mapLimiter.generateSupplier(new Random());
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             Map<Integer, String> map = mapSupplier.get();
             assertTrue(map.size() >= 3 && map.size() <= 7);
         }
@@ -41,11 +41,12 @@ public class MapLimiterTest {
         int low = 10;
         IntegerLimiter integerLimiter = new IntegerLimiter();
         StringLimiter stringLimiter = new StringLimiter();
-        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(integerLimiter, stringLimiter, 5, 10, MapLimiter.ConflictResolutionStrategy.DROP_ENTRY);
+        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(integerLimiter, stringLimiter, 5, 10,
+                MapLimiter.ConflictResolutionStrategy.DROP_ENTRY);
 
         Supplier<Map<Integer, String>> mapSupplier = mapLimiter.generateSupplier(new Random());
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             Map<Integer, String> map = mapSupplier.get();
             assertTrue(map.size() >= low && map.size() <= high);
         }
@@ -69,7 +70,8 @@ public class MapLimiterTest {
             Queue<String> stringStack = new ArrayDeque<>();
             @Override
             public Supplier<String> generateSupplier(Random random) {
-                IntStream.range(97, 122).sequential().mapToObj(i -> Character.toString((char) i)).forEach(stringStack::add);
+                IntStream.range(97, 122).sequential().mapToObj(i -> Character.toString((char) i))
+                        .forEach(stringStack::add);
                 return () -> {
                     String value = stringStack.remove();
                     stringStack.add(value);
@@ -77,7 +79,8 @@ public class MapLimiterTest {
                 };
             }
         };
-        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(keyLimiter, valueLimiter, 0, 10, MapLimiter.ConflictResolutionStrategy.DROP_ENTRY);
+        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(keyLimiter, valueLimiter, 0, 10,
+                MapLimiter.ConflictResolutionStrategy.DROP_ENTRY);
 
         Supplier<Map<Integer, String>> mapSupplier = mapLimiter.generateSupplier(new Random());
 
@@ -109,7 +112,8 @@ public class MapLimiterTest {
             Queue<String> stringStack = new ArrayDeque<>();
             @Override
             public Supplier<String> generateSupplier(Random random) {
-                IntStream.range(97, 122).sequential().mapToObj(i -> Character.toString((char) i)).forEach(stringStack::add);
+                IntStream.range(97, 122).sequential().mapToObj(i -> Character.toString((char) i))
+                        .forEach(stringStack::add);
                 return () -> {
                     String value = stringStack.remove();
                     stringStack.add(value);
@@ -117,7 +121,8 @@ public class MapLimiterTest {
                 };
             }
         };
-        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(keyLimiter, valueLimiter, 0, 10, MapLimiter.ConflictResolutionStrategy.OVERWRITE_ENTRY);
+        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(keyLimiter, valueLimiter, 0, 10,
+                MapLimiter.ConflictResolutionStrategy.OVERWRITE_ENTRY);
 
         Supplier<Map<Integer, String>> mapSupplier = mapLimiter.generateSupplier(new Random());
 
@@ -137,7 +142,7 @@ public class MapLimiterTest {
             Queue<Integer> integerStack = new ArrayDeque<>();
             @Override
             public Supplier<Integer> generateSupplier(Random random) {
-                for(int i = 0; i < 10; i++) {
+                for (int i = 0; i < 10; i++) {
                     integerStack.add(i);
                     if (i % 2 == 0) {
                         integerStack.add(i);
@@ -154,7 +159,8 @@ public class MapLimiterTest {
             Queue<String> stringStack = new ArrayDeque<>();
             @Override
             public Supplier<String> generateSupplier(Random random) {
-                IntStream.range(97, 122).sequential().mapToObj(i -> Character.toString((char) i)).forEach(stringStack::add);
+                IntStream.range(97, 122).sequential().mapToObj(i -> Character.toString((char) i))
+                        .forEach(stringStack::add);
                 return () -> {
                     String value = stringStack.remove();
                     stringStack.add(value);
@@ -162,7 +168,8 @@ public class MapLimiterTest {
                 };
             }
         };
-        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(keyLimiter, valueLimiter, 0, 6, MapLimiter.ConflictResolutionStrategy.REMAKE_KEY);
+        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(keyLimiter, valueLimiter, 0, 6,
+                MapLimiter.ConflictResolutionStrategy.REMAKE_KEY);
 
         Supplier<Map<Integer, String>> mapSupplier = mapLimiter.generateSupplier(new Random());
 
@@ -182,7 +189,7 @@ public class MapLimiterTest {
             Queue<Integer> integerStack = new ArrayDeque<>();
             @Override
             public Supplier<Integer> generateSupplier(Random random) {
-                for(int i = 0; i < 10; i++) {
+                for (int i = 0; i < 10; i++) {
                     integerStack.add(i);
                     if (i % 2 == 0) {
                         integerStack.add(i);
@@ -199,7 +206,8 @@ public class MapLimiterTest {
             Queue<String> stringStack = new ArrayDeque<>();
             @Override
             public Supplier<String> generateSupplier(Random random) {
-                IntStream.range(97, 122).sequential().mapToObj(i -> Character.toString((char) i)).forEach(stringStack::add);
+                IntStream.range(97, 122).sequential().mapToObj(i -> Character.toString((char) i))
+                        .forEach(stringStack::add);
                 return () -> {
                     String value = stringStack.remove();
                     stringStack.add(value);
@@ -207,7 +215,8 @@ public class MapLimiterTest {
                 };
             }
         };
-        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(keyLimiter, valueLimiter, 0, 6, MapLimiter.ConflictResolutionStrategy.REMAKE_ENTRY);
+        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(keyLimiter, valueLimiter, 0, 6,
+                MapLimiter.ConflictResolutionStrategy.REMAKE_ENTRY);
 
         Supplier<Map<Integer, String>> mapSupplier = mapLimiter.generateSupplier(new Random());
 
@@ -225,7 +234,8 @@ public class MapLimiterTest {
     public void testConflictResolution_throwException() {
         Limiter<Integer> keyLimiter = new ConstantValueLimiter<>(5);
         Limiter<String> valueLimiter = new StringLimiter();
-        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(keyLimiter, valueLimiter, 0, 6, MapLimiter.ConflictResolutionStrategy.THROW_EXCEPTION);
+        MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(keyLimiter, valueLimiter, 0, 6,
+                MapLimiter.ConflictResolutionStrategy.THROW_EXCEPTION);
 
         Supplier<Map<Integer, String>> mapSupplier = mapLimiter.generateSupplier(new Random());
         mapSupplier.get();
@@ -238,18 +248,21 @@ public class MapLimiterTest {
 
     @Test(expected = LimiterConstructionException.class)
     public void testValidationError_negativeRange() {
-        new MapLimiter<>(new StringLimiter(), new StringLimiter(), -1, 5, MapLimiter.ConflictResolutionStrategy.DROP_ENTRY);
+        new MapLimiter<>(new StringLimiter(), new StringLimiter(), -1, 5,
+                MapLimiter.ConflictResolutionStrategy.DROP_ENTRY);
     }
 
     @Test(expected = LimiterConstructionException.class)
     public void testValidationError_negativeOffset() {
-        new MapLimiter<>(new StringLimiter(), new StringLimiter(), 4, -1, MapLimiter.ConflictResolutionStrategy.DROP_ENTRY);
+        new MapLimiter<>(new StringLimiter(), new StringLimiter(), 4, -1,
+                MapLimiter.ConflictResolutionStrategy.DROP_ENTRY);
     }
 
     @Test
     public void testReconcile() {
         MapLimiter<Integer, String> mapLimiter = new MapLimiter<>(null, null);
-        MapLimiter<Integer, String> reconcileMap = new MapLimiter<Integer, String>(new ConstantValueLimiter<>(1), new ConstantValueLimiter<>("hello"));
+        MapLimiter<Integer, String> reconcileMap = new MapLimiter<Integer, String>(new ConstantValueLimiter<>(1),
+                new ConstantValueLimiter<>("hello"));
 
         MapLimiter<Integer, String> testMapLimiter = mapLimiter.reconcile(reconcileMap);
 

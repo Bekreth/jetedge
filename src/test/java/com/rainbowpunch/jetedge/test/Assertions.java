@@ -14,7 +14,9 @@ import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 
 public final class Assertions {
-    private Assertions() {}
+    private Assertions() {
+
+    }
 
     private static final Set<String> OBJECT_FIELDS;
 

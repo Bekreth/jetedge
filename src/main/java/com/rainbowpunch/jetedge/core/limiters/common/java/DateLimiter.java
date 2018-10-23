@@ -15,20 +15,23 @@ import java.util.function.Supplier;
  */
 public class DateLimiter extends SimpleAbstractLimiter<Date> {
 
-    private final static Long DEFAULT_ORIGIN = 0L;
-    private final static Long DEFAULT_BOUND = 4102444800000L;
+    private static final Long DEFAULT_BOUND = 4102444800000L;
+    private static final Long DEFAULT_ORIGIN = 0L;
+
     private final Long origin;
     private final Long bound;
 
     /**
-     * This constructor will generate random date between January 1, 1970 12:00:00 AM(inclusive) and January 1, 2100 12:00:00 AM(exclusive)
+     * This constructor will generate random date between January 1, 1970 12:00:00 AM(inclusive) and January 1, 2100
+     *      12:00:00 AM(exclusive)
      */
     public DateLimiter() {
         this(DEFAULT_ORIGIN, DEFAULT_BOUND);
     }
 
     /**
-     * This constructor will generate random date between January 1, 1970 12:00:00 AM(inclusive) and boundDate(exclusive)
+     * This constructor will generate random date between January 1, 1970 12:00:00 AM(inclusive) and
+     *      boundDate(exclusive)
      *
      * @param boundDate exclusive right bound
      */
@@ -47,8 +50,8 @@ public class DateLimiter extends SimpleAbstractLimiter<Date> {
     }
 
     /**
-     * This constructor will create new Date with boundLong as epochmilisecond and generate random date between January 1, 1970 12:00:00 AM
-     * (inclusive) and new Date(boundLong)(exclusive)
+     * This constructor will create new Date with boundLong as epochmilisecond and generate random date between
+     *      January 1, 1970 12:00:00 AM (inclusive) and new Date(boundLong)(exclusive)
      *
      * @param boundLong exclusive right bound
      */
@@ -57,8 +60,8 @@ public class DateLimiter extends SimpleAbstractLimiter<Date> {
     }
 
     /**
-     * This constructor will create new Dates with originLong/boundLong as epochmilisecond and generate random date between new Date(originLong)
-     * (inclusive) and new Date(boundLong)(exclusive)
+     * This constructor will create new Dates with originLong/boundLong as epochmilisecond and generate random date
+     *      between new Date(originLong) (inclusive) and new Date(boundLong)(exclusive)
      *
      * @param originLong inclusive left bound
      * @param boundLong exclusive right bound

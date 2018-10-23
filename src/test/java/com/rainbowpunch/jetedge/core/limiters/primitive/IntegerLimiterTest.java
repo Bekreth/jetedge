@@ -38,7 +38,7 @@ public class IntegerLimiterTest {
     public void testRangeLimitationSuccess() {
         IntegerLimiter limiter = new IntegerLimiter(1000);
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             assertTrue(limiter.generateSupplier(random).get() < 1000);
         }
     }
@@ -47,7 +47,7 @@ public class IntegerLimiterTest {
     public void testRangeOffsetLimitationSuccess() {
         IntegerLimiter limiter = new IntegerLimiter(1000, 1000);
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             Integer output = limiter.generateSupplier(random).get();
             assertTrue(output >= 1000 && output < 2000);
         }
@@ -57,7 +57,7 @@ public class IntegerLimiterTest {
     public void testRangeOffsetLimitationSuccess_negativeValues() {
         IntegerLimiter limiter = new IntegerLimiter(1000, -1000);
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             Integer output = limiter.generateSupplier(random).get();
             assertTrue(output >= -1000 && output < 0);
         }

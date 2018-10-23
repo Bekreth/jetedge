@@ -37,6 +37,9 @@ public abstract class ObjectLimiter<T> extends SimpleAbstractLimiter<T> {
         return ofObjects(Arrays.asList(objects));
     }
 
+    /**
+     * Converts a list of objects into an simple ObjectLimiter.
+     */
     public static <U> ObjectLimiter<U> ofObjects(List<U> objects) {
         return new ObjectLimiter<U>() {
             @Override

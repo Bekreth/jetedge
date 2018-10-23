@@ -25,21 +25,28 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
  * A class containing the default behaviour for data generation.
  */
-public class DefaultLimiters {
+public final class DefaultLimiters {
 
+    private DefaultLimiters() {
+
+    }
+
+    /**
+     * Scans the given ClassAttributes structure to populate any missing generators with default Limiters.
+     */
     @SuppressWarnings("unchecked")
     public static Limiter<?> getDefaultLimiter(ClassAttributes classAttributes, PojoAttributes pojoAttributes) {
         Limiter<?> outputLimiter = null;
 
         if (classAttributes.isArray()) {
-            Limiter<?> singleObjectLimiter = multiplePojoLimiter(classAttributes, pojoAttributes, () -> classAttributes.getClazz());
+            Limiter<?> singleObjectLimiter = multiplePojoLimiter(classAttributes, pojoAttributes,
+                    () -> classAttributes.getClazz());
             outputLimiter = ArrayLimiter.createArrayLimiter(singleObjectLimiter);
         } else if (classAttributes.isCollection()) {
             Supplier<Class> classSupplier = () -> {
@@ -74,13 +81,17 @@ public class DefaultLimiters {
         return outputLimiter;
     }
 
-    private static Limiter<?> multiplePojoLimiter(ClassAttributes containingClassAttribute, PojoAttributes pojoAttributes,
-                                                  Supplier<Class> classToAccess) {
-        ClassAttributes attributes = ClassAttributes.create(containingClassAttribute.getParentClassAttribute(), classToAccess.get(), null);
+    private static Limiter<?> multiplePojoLimiter(ClassAttributes containingClassAttribute,
+                                                  PojoAttributes pojoAttributes, Supplier<Class> classToAccess) {
+        ClassAttributes attributes = ClassAttributes.create(containingClassAttribute.getParentClassAttribute(),
+                classToAccess.get(), null);
         attributes.setFieldNameOfClass(containingClassAttribute.getFieldNameOfClass());
         return getDefaultLimiter(attributes, pojoAttributes);
     }
 
+    /**
+     * Contains mappings between a given class, and natively provided Limiters for those classes.
+     */
     private enum LimiterMapper {
         // Primitives
         INTEGER(Integer.class, new IntegerLimiter()),

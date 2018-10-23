@@ -1,7 +1,6 @@
 package com.rainbowpunch.jetedge.core.limiters.common.java;
 
 import com.rainbowpunch.jetedge.core.exception.LimiterConstructionException;
-import com.rainbowpunch.jetedge.core.limiters.primitive.LongLimiter;
 import org.junit.Test;
 
 import java.util.Date;

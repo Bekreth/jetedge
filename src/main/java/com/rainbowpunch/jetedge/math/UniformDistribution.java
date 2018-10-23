@@ -6,7 +6,7 @@ import java.util.function.Function;
 /**
  * A function that generates values from a continuous uniform distribution.
  */
-public class UniformDistribution implements Function<Random, Double> {
+public final class UniformDistribution implements Function<Random, Double> {
     private final double min;
     private final double max;
 

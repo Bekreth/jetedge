@@ -13,8 +13,7 @@ public interface Limiter<T> {
 
     /**
      * This method should return a supplier that creates data based off of the provided Random number generator.
-     * @param random
-     * @return
+     * @param random Random value generator to be used.
      */
     Supplier<T> generateSupplier(Random random);
 

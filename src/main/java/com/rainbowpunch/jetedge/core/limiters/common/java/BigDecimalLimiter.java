@@ -30,10 +30,18 @@ public class BigDecimalLimiter extends SimpleAbstractLimiter<BigDecimal> {
         this(DEFAULT_UPPERBOUND);
     }
 
+    /**
+     * Constructor to be provided with Strings of numbers in the format desires.  e.g. 100.000 for numbers with 3
+     *      decimal places of accuracy.
+     */
     public BigDecimalLimiter(String upperValueTemplate) {
         this(upperValueTemplate, null);
     }
 
+    /**
+     * Constructor to be provided with Strings of numbers in the format desires.  e.g. 100.000 for numbers with 3
+     *      decimal places of accuracy.
+     */
     public BigDecimalLimiter(String upperValueTemplate, String lowerValueTemplate) {
         if (lowerValueTemplate == null) {
             lowerValueTemplate = defaultLowerBound(upperValueTemplate);
@@ -48,7 +56,7 @@ public class BigDecimalLimiter extends SimpleAbstractLimiter<BigDecimal> {
 
         String[] valueHalves = regexBase.split("\\.");
         this.topLimiter = new IntegerLimiter(Integer.valueOf(valueHalves[0]));
-        if(valueHalves.length == 2) {
+        if (valueHalves.length == 2) {
             this.bottomLimiter = new IntegerLimiter(Integer.valueOf("1" + valueHalves[1]));
         }
     }
@@ -61,7 +69,8 @@ public class BigDecimalLimiter extends SimpleAbstractLimiter<BigDecimal> {
             })
             .filter((inString) -> !ALLOWABLE_CHARACTERS.contains(inString)).findAny()
             .ifPresent((obj) -> {
-                throw new LimiterConstructionException("Provided String contains unallowed characters");
+                throw new LimiterConstructionException("Provided String contains unallowed characters. "
+                        + " Strings should be integers with desired precession ");
             });
         };
 
@@ -74,7 +83,8 @@ public class BigDecimalLimiter extends SimpleAbstractLimiter<BigDecimal> {
                 int upperPrecision = upperValueTemplate.split("\\.")[1].length();
                 int lowerPrecision = lowerValueTemplate.split("\\.")[1].length();
                 if (upperPrecision != lowerPrecision) {
-                    throw new LimiterConstructionException("Upper and lower bounds require the same amount of precision");
+                    throw new LimiterConstructionException("Upper and lower bounds require "
+                            + "the same amount of precision");
                 }
             } catch (Exception e) {
                 throw new LimiterConstructionException("Upper and lower bounds require the same amount of precision");

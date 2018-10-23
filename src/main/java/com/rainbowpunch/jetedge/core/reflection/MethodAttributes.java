@@ -1,5 +1,7 @@
 package com.rainbowpunch.jetedge.core.reflection;
 
+import lombok.ToString;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -11,6 +13,7 @@ import java.util.List;
 /**
  * A friendly wrapper for Method objects.
  */
+@ToString
 public class MethodAttributes {
     private final Method method;
     private final ClassAttributes parentClassAttributes;
@@ -20,6 +23,9 @@ public class MethodAttributes {
     private MethodName methodName = null;
     private List<ClassAttributes> parameterTypes = null;
 
+    /**
+     * This handles the generic type extraction for a the provided method.
+     */
     public MethodAttributes(ClassAttributes parentClassAttributes, Method method) {
         this.parentClassAttributes = parentClassAttributes;
         this.method = method;
@@ -76,11 +82,6 @@ public class MethodAttributes {
             methodName = new MethodName(getName());
         }
         return methodName;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Method[%s]", getName());
     }
 
 }

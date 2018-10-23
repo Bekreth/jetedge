@@ -110,7 +110,8 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
 
     private void escapeEncoding(char c) {
         openEscape = false;
-        Flag flag = Flag.getFlag(c) == Flag.DOT ? null : Flag.getFlag(c); //Because dot has special meaning when escaped, it's treated specially
+        //Because dot has special meaning when escaped, it's treated specially
+        Flag flag = Flag.getFlag(c) == Flag.DOT ? null : Flag.getFlag(c);
         EncodedChar encodedChar = flag == null
                 ? new EncodedChar(c)
                 : new EncodedChar(flag);
@@ -135,7 +136,8 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
         if ((int) c1 >= (int) c2) {
             throw new LimiterConstructionException("The provide char range is inverted.");
         }
-        LimiterConstructionException exception = new LimiterConstructionException("Cannot construct Regex Limiter.  Char range is invalid");
+        LimiterConstructionException exception = new LimiterConstructionException("Cannot construct Regex Limiter.  "
+                + "Char range is invalid");
         if (ReadableCharList.LIST_OF_CHAR_DIGITS.contains(c1)) {
             if (!ReadableCharList.LIST_OF_CHAR_DIGITS.contains(c2)) {
                 throw exception;
@@ -155,7 +157,13 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
 
 
     // ------------ Support Inner Classes ----------
+
+    /**
+     * Takes Flagged characters and sets possible values for them to be used in generating text.
+     */
     private class EncodedChar {
+        private static final int END_INT_RANDOM_OFFSET = 4;
+
         private final Flag flag;
         private List<Character> possibleCharacter;
         private Integer startInt;
@@ -183,7 +191,7 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
                         .collect(Collectors.toList());
             } else if (flag.equals(Flag.QUANTITY)) {
                 StringBuilder builder = new StringBuilder(characters.size());
-                for(Character ch: characters) {
+                for (Character ch: characters) {
                     builder.append(ch);
                 }
                 String quantity = builder.toString();
@@ -213,7 +221,7 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
                 } else {
                     Random innerRandom = new Random(random);
                     if (endInt == null) {
-                        endInt = innerRandom.nextInt(4);
+                        endInt = innerRandom.nextInt(END_INT_RANDOM_OFFSET);
                     }
                     int endingInt = innerRandom.nextInt(endInt - startInt) + startInt;
                     for (int i = 1; i < startInt + endingInt; i++) {
@@ -235,6 +243,10 @@ public class RegexLimiter extends SimpleAbstractLimiter<String> {
         }
     }
 
+    /**
+     * Contains information to parse out characters with special meaning.  These will then be used for generating rules
+     *      and reverse engineering strings from the provided regex.
+     */
     private enum Flag {
         SINGLE_CHARACTER(),
         DOT(".", ReadableCharList.LIST_OF_ALL_CHAR),

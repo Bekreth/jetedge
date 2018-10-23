@@ -20,7 +20,8 @@ public class PojoConstructionException extends RuntimeException {
         super(cause);
     }
 
-    protected PojoConstructionException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected PojoConstructionException(String message, Throwable cause, boolean enableSuppression,
+                                        boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

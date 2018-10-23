@@ -16,16 +16,19 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.IntStream;
 
-import static com.rainbowpunch.jetedge.core.limiters.maps.MapLimiter.ConflictResolutionStrategy.*;
+import static com.rainbowpunch.jetedge.core.limiters.maps.MapLimiter.ConflictResolutionStrategy.DROP_ENTRY;
 
 /**
- * A Limiter for a Map.  By default it will try to populate your map with between 3 and 7 values.  If there is a conflict with keys, it
- *      will use the DROP_VALUE strategy by default.
+ * A Limiter for a Map.  By default it will try to populate your map with between 3 and 7 values.
+ *      If there is a conflict with keys, it will use the DROP_VALUE strategy by default.
  * @param <T>
  * @param <U>
  */
 public class MapLimiter<T, U> extends SimpleAbstractLimiter<Map<T, U>>
         implements RequiresDefaultLimiter<MapLimiter<T, U>> {
+
+    private static final int DEFAULT_RANGE = 2;
+    private static final int DEFAULT_OFFSET = 5;
 
     private final int range;
     private final int offset;
@@ -35,9 +38,6 @@ public class MapLimiter<T, U> extends SimpleAbstractLimiter<Map<T, U>>
 
     /**
      * Get a MapLimiterBuilder to aide in constructing a MapLimiter.
-     * @param <T> Type of Key
-     * @param <U> Type of Value
-     * @return
      */
     public static <T, U> MapLimiterBuilder<T, U> builder() {
         return new MapLimiterBuilder<>();
@@ -53,26 +53,28 @@ public class MapLimiter<T, U> extends SimpleAbstractLimiter<Map<T, U>>
     }
 
     /**
-     * A constructor to configure what limiters should be provided to the Key and Value sets.  Leave an entry null to have it be automatically
-     *      populated by Jetedge during analysis.
+     * A constructor to configure what limiters should be provided to the Key and Value sets.
+     *      Leave an entry null to have it be automatically populated by Jetedge during analysis.
      * @param keyLimiter Limiter to generate keys
      * @param valueLimiter Limiter to generate values
      */
     public MapLimiter(Limiter<T> keyLimiter, Limiter<U> valueLimiter) {
-        this(keyLimiter, valueLimiter, 2, 5, DROP_ENTRY);
+        this(keyLimiter, valueLimiter, DEFAULT_RANGE, DEFAULT_OFFSET, DROP_ENTRY);
     }
 
     /**
-     * A constructor to configure all properties of the MapLimiter.  Provide null values to the Key-Value limiters to have them be automatically
-     *      populated by Jetedge during analysis.  Additionally, users can provide their own resolution strategy that should be used should
-     *      there be a key collision, or use one the predefined ones in MapLimiter.ConflictResolutionStrategy.
+     * A constructor to configure all properties of the MapLimiter.  Provide null values to the Key-Value limiters to
+     *      have them be automatically populated by Jetedge during analysis.  Additionally, users can provide their own
+     *      resolution strategy that should be used should there be a key collision, or use one the predefined ones in
+     *      MapLimiter.ConflictResolutionStrategy.
      * @param keyLimiter Limiter to generate keys
      * @param valueLimiter Limiter to generate values
      * @param range Range of count possibilities
      * @param offset Offset from 0
      * @param resolver The strategy to be used to resolve key collisions.
      */
-    public MapLimiter(Limiter<T> keyLimiter, Limiter<U> valueLimiter, int range, int offset, ConflictResolver resolver) {
+    public MapLimiter(Limiter<T> keyLimiter, Limiter<U> valueLimiter, int range, int offset,
+                      ConflictResolver resolver) {
         this.keyLimiter = keyLimiter;
         this.valueLimiter = valueLimiter;
         this.range = range;
@@ -85,7 +87,8 @@ public class MapLimiter<T, U> extends SimpleAbstractLimiter<Map<T, U>>
         if (resolver == null) {
             throw new LimiterConstructionException("Error creating MapLimiter : Resolver cannot be null");
         } else if (range < 0 || offset < 0) {
-            throw new LimiterConstructionException("Error creating MapLimiter : Offset and Range cannot be less than 0");
+            throw new LimiterConstructionException("Error creating MapLimiter : "
+                    + "Offset and Range cannot be less than 0");
         }
     }
 
@@ -149,10 +152,16 @@ public class MapLimiter<T, U> extends SimpleAbstractLimiter<Map<T, U>>
     }
 
 
+    /**
+     * A generic interface that will set rules on how to handle different forms of collision in Maps during generation.
+     */
     public interface ConflictResolver {
         void applyRules(Map consumingMap, Map.Entry entry, Supplier keySupplier, Supplier valueSupplier);
     }
 
+    /**
+     * A set of default ConflictResolutionStrategies.
+     */
     @SuppressWarnings("unchecked")
     public enum ConflictResolutionStrategy implements ConflictResolver {
         DROP_ENTRY {
@@ -192,12 +201,16 @@ public class MapLimiter<T, U> extends SimpleAbstractLimiter<Map<T, U>>
         THROW_EXCEPTION {
             @Override
             public void applyRules(Map consumingMap, Map.Entry entry, Supplier keySupplier, Supplier valueSupplier) {
-                throw new PojoConstructionException("Key Collision while tying to populate Map.  Consider widening the provided KeyLimiter");
+                throw new PojoConstructionException("Key Collision while tying to populate Map.  "
+                        + "Consider widening the provided KeyLimiter");
             }
         }
     }
 
-    private static class MapLimiterBuilder<T, U> {
+    /**
+     * Builder to be used creatinga MapLimiter.
+     */
+    private static final class MapLimiterBuilder<T, U> {
         private int range;
         private int offset;
         private Limiter<T> keyLimiter;

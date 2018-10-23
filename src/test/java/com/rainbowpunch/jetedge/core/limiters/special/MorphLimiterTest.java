@@ -24,19 +24,20 @@ public class MorphLimiterTest {
 
         Random random = new Random(seed);
         EnumLimiter<Flatware> flatwareLimiter = new EnumLimiter<>(Flatware.class);
-        for (int i = 0; i < testCount; i ++) {
+        for (int i = 0; i < testCount; i++) {
             flatware.add(flatwareLimiter.generateSupplier(random).get());
         }
 
         random = new Random(seed);
         MorphLimiter<Flatware, Integer> tineLimiter = new MorphLimiter<>(flatwareLimiter, (flat) -> flat.getTines());
-        for (int i = 0; i < testCount; i ++) {
+        for (int i = 0; i < testCount; i++) {
             tinesOfFlatware.add(tineLimiter.generateSupplier(random).get());
         }
 
         random = new Random(seed);
-        MorphLimiter<Flatware, String> fallSoundLimiter = new MorphLimiter<>(flatwareLimiter, (flat) -> flat.getSoundItMakesWhenDropped());
-        for (int i = 0; i < testCount; i ++) {
+        MorphLimiter<Flatware, String> fallSoundLimiter = new MorphLimiter<>(flatwareLimiter,
+                (flat) -> flat.getSoundItMakesWhenDropped());
+        for (int i = 0; i < testCount; i++) {
             fallSounds.add(fallSoundLimiter.generateSupplier(random).get());
         }
 

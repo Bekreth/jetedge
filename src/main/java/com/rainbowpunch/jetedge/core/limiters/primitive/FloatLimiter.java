@@ -2,7 +2,6 @@ package com.rainbowpunch.jetedge.core.limiters.primitive;
 
 import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Random;
@@ -74,7 +73,8 @@ public class FloatLimiter extends SimpleAbstractLimiter<Float> {
         }
 
         if (Math.abs(this.range.subtract(this.offset).floatValue()) <= 0) {
-            throw new IllegalArgumentException("Your offset cannot be >= the range (offset = " + this.offset + ", range=" + this.range + ", precision = " + this.precision);
+            throw new IllegalArgumentException("Your offset cannot be >= the range (offset = " + this.offset
+                    + ", range=" + this.range + ", precision = " + this.precision);
         }
     }
 

@@ -35,7 +35,11 @@ public class PojoAttributes<T> implements Cloneable {
 
     }
 
-    public PojoAttributes(Class<T> clazz, PojoAnalyzer pojoAnalyzer, FuturesContainer futuresContainer, int randomSeed) {
+    /**
+     * Standard constructor
+     */
+    public PojoAttributes(Class<T> clazz, PojoAnalyzer pojoAnalyzer,
+                          FuturesContainer futuresContainer, int randomSeed) {
         this.pojoClazz = requireNonNull(clazz);
         this.pojoAnalyzer = requireNonNull(pojoAnalyzer);
         this.futuresContainer = requireNonNull(futuresContainer);

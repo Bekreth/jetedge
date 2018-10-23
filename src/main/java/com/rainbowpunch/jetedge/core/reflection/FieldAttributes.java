@@ -22,6 +22,9 @@ public class FieldAttributes {
     private final List<Class> genericsOnClass;
     private final ClassAttributes parentClassAttributes;
 
+    /**
+     * Constructor that handles generics discovery of provided Field.
+     */
     public FieldAttributes(ClassAttributes parentClassAttributes, Field field) {
         this.field = field;
 

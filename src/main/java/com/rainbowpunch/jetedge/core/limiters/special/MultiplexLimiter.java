@@ -16,15 +16,20 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * This Limiter takes several limiters as input and returns a mixed set of values from them.  This allows for a limiter with "holes".
- *      e.g. an Integer between 0-10 or 20-30.
+ * This Limiter takes several limiters as input and returns a mixed set of values from them.
+ *      This allows for a limiter with "holes". e.g. an Integer between 0-10 or 20-30.
  * @param <T>
  */
 public class MultiplexLimiter<U extends Limiter<T>, T> extends SimpleAbstractLimiter<T> {
 
+    private static final float HUNDRED = 100f;
 
     private final List<Function<Integer, Limiter<T>>> limiterPicker;
 
+    /**
+     * Takes a collection of LimiterDistributions and prepares them to be proportionally selected for balanced
+     *      distribution.
+     */
     public MultiplexLimiter(Collection<LimiterDistribution> collectionOfLimiterDistribution) {
         limiterPicker = new ArrayList<>();
         float pickChance = 0;
@@ -33,7 +38,7 @@ public class MultiplexLimiter<U extends Limiter<T>, T> extends SimpleAbstractLim
             LimiterDistribution distribution = iterator.next();
             float lowBound = pickChance;
             //This makes sure any rounding errors are taken care of.
-            float highBound = iterator.hasNext() ? pickChance + distribution.getDistribution() : 100f;
+            float highBound = iterator.hasNext() ? pickChance + distribution.getDistribution() : HUNDRED;
             pickChance += distribution.getDistribution();
             limiterPicker.add((intObj) -> {
                 boolean shouldPick = intObj >= lowBound && intObj < highBound;
@@ -47,7 +52,7 @@ public class MultiplexLimiter<U extends Limiter<T>, T> extends SimpleAbstractLim
     }
 
     public static <U extends Limiter<T>, T> MultiplexLimiter<U, T> generateFlatDistribution(List<U> limiters) {
-        float distribution = 100f/limiters.size();
+        float distribution = HUNDRED / limiters.size();
         List<LimiterDistribution> limiterDistributions = limiters.stream()
                 .map(limiter -> new LimiterDistribution(limiter, distribution))
                 .collect(Collectors.toList());
@@ -58,7 +63,7 @@ public class MultiplexLimiter<U extends Limiter<T>, T> extends SimpleAbstractLim
     @Override
     public Supplier<T> generateSupplier(Random random) {
         return () -> {
-            int randomNumber = random.nextInt(100);
+            int randomNumber = random.nextInt((int) HUNDRED);
             Optional<Limiter<T>> limiter = limiterPicker.stream()
                     .map(func -> func.apply(randomNumber))
                     .filter((obj) -> obj != null)
@@ -71,6 +76,9 @@ public class MultiplexLimiter<U extends Limiter<T>, T> extends SimpleAbstractLim
     }
 
 
+    /**
+     * A class to set what percentage of the multiplexer should be populated with any given limiter.
+     */
     public static class LimiterDistribution {
         private Limiter limiter;
         private float distribution;

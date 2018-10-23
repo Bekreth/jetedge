@@ -15,6 +15,9 @@ import java.util.function.Supplier;
  */
 public class ArrayLimiter extends SimpleAbstractLimiter<Object[]> implements RequiresDefaultLimiter<ArrayLimiter> {
 
+    private static final int DEFAULT_RANGE = 2;
+    private static final int DEFAULT_OFFSET = 5;
+
     private final int range;
     private final int offset;
     private Limiter limiter;
@@ -24,7 +27,7 @@ public class ArrayLimiter extends SimpleAbstractLimiter<Object[]> implements Req
     }
 
     public ArrayLimiter(Limiter limiter) {
-        this(limiter, 2, 5);
+        this(limiter, DEFAULT_RANGE, DEFAULT_OFFSET);
     }
 
     public ArrayLimiter(int range, int offset) {
@@ -44,7 +47,8 @@ public class ArrayLimiter extends SimpleAbstractLimiter<Object[]> implements Req
 
     private void validate() {
         if (range < 0 || offset < 0) {
-            throw new LimiterConstructionException("Error creating ArrayLimiter : Offset and Range cannot be less than 0");
+            throw new LimiterConstructionException("Error creating ArrayLimiter : "
+                    + "Offset and Range cannot be less than 0");
         }
     }
 
@@ -66,7 +70,8 @@ public class ArrayLimiter extends SimpleAbstractLimiter<Object[]> implements Req
         return () -> {
             try {
                 int count = range == 0 ? offset : random.nextInt(range) + offset;
-                Object[] objectArray = (Object[]) Array.newInstance(limiter.generateSupplier(random).get().getClass(), count);
+                Object[] objectArray = (Object[]) Array.newInstance(limiter.generateSupplier(random).get().getClass(),
+                        count);
                 for (int i = 0; i < count; i++) {
                     objectArray[i] = limiter.generateSupplier(random).get();
                 }

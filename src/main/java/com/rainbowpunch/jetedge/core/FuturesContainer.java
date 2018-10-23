@@ -13,7 +13,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * This is a container for all of the CompleteableFutures to be generated. One instance of this will be created per PojoGeneratorBuilder
+ * This is a container for all of the CompleteableFutures to be generated. One instance of this will be created per
+ *      PojoGeneratorBuilder
  */
 public class FuturesContainer {
 
