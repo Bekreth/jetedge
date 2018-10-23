@@ -2,7 +2,9 @@ package com.rainbowpunch.jetedge.core.limiters.common;
 
 import com.rainbowpunch.jetedge.core.limiters.SimpleAbstractLimiter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
@@ -20,7 +22,7 @@ public abstract class ObjectLimiter<T> extends SimpleAbstractLimiter<T> {
 
     protected abstract List<T> configureObjectList();
 
-    public void updateObjectList(List<T> newList) {
+    public void updateObjectList(Collection<T> newList) {
         acceptableObjectList.clear();
         acceptableObjectList.addAll(newList);
     }
@@ -40,11 +42,11 @@ public abstract class ObjectLimiter<T> extends SimpleAbstractLimiter<T> {
     /**
      * Converts a list of objects into an simple ObjectLimiter.
      */
-    public static <U> ObjectLimiter<U> ofObjects(List<U> objects) {
+    public static <U> ObjectLimiter<U> ofObjects(Collection<U> objects) {
         return new ObjectLimiter<U>() {
             @Override
             protected List<U> configureObjectList() {
-                return objects;
+                return new ArrayList<U>(objects);
             }
         };
     }
