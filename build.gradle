@@ -28,14 +28,21 @@ dependencies {
 
 checkstyle {
     toolVersion = "8.13"
-    //TODO : Create a checkstyle for unit test
-    checkstyleTest.enabled = false
 }
 
 checkstyleMain {
     configFile = file("${rootDir}/config/checkstyle/checkstyle-main.xml")
 
     source 'src/main/java'
+    include '**/*.java'
+
+    classpath = files()
+}
+
+checkstyleTest {
+    configFile = file("${rootDir}/config/checkstyle/checkstyle-test.xml")
+
+    source 'test/main/java'
     include '**/*.java'
 
     classpath = files()

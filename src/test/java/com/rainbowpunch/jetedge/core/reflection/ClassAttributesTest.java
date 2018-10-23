@@ -72,7 +72,7 @@ public class ClassAttributesTest {
     @Test
     public void testIsArray() {
         assertFalse(unitUnderTest.isArray());
-        final int[] array = new int[] { };
+        final int[] array = new int[] {};
         ClassAttributes attributes = ClassAttributes.create(array.getClass());
         assertTrue(attributes.isArray());
         assertEquals(Integer.class, attributes.getClazz()); // check primitive erasure

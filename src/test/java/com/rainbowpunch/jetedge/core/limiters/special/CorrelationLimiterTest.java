@@ -22,7 +22,7 @@ public class CorrelationLimiterTest {
     public void testSingleSuccess() throws Exception {
         CorrelationLimiter<Integer> limiter = new CorrelationLimiter<Integer>((random, constLimiter) -> {
             return (Integer) constLimiter.get() + 1;
-        },"object1");
+        }, "object1");
 
         ConstantValueLimiter<Integer> constantValueLimiter = new ConstantValueLimiter<>(10);
         CompletableFuture future = new CompletableFuture<>();
@@ -76,7 +76,7 @@ public class CorrelationLimiterTest {
     public void testSingleSuccess_delayed() throws Exception {
         CorrelationLimiter<Integer> limiter = new CorrelationLimiter<Integer>((random, constLimiter) -> {
             return (Integer) constLimiter.get() + 1;
-        },"object1");
+        }, "object1");
 
         ConstantValueLimiter<Integer> constantValueLimiter = new TestLimiter<>(10);
         CompletableFuture future = new CompletableFuture<>();
@@ -129,11 +129,11 @@ public class CorrelationLimiterTest {
     public void dependcyLadderTest() throws Exception {
         CorrelationLimiter<Integer> limiterDependent = new CorrelationLimiter<Integer>((random, constLimiter) -> {
             return (Integer) constLimiter.get() + 1;
-        },"object1");
+        }, "object1");
 
         CorrelationLimiter<Integer> limiter = new CorrelationLimiter<Integer>((random, constLimiter) -> {
             return (Integer) constLimiter.get() + 1;
-        },"object2");
+        }, "object2");
 
 
         ConstantValueLimiter<Integer> constantValueLimiter = new ConstantValueLimiter<>(10);
@@ -164,11 +164,11 @@ public class CorrelationLimiterTest {
                 throw new RuntimeException(e);
             }
             return (Integer) constLimiter.get() + 1;
-        },"object1");
+        }, "object1");
 
         CorrelationLimiter<Integer> limiter = new CorrelationLimiter<Integer>((random, constLimiter) -> {
             return (Integer) constLimiter.get() + 1;
-        },"object2");
+        }, "object2");
 
 
         ConstantValueLimiter<Integer> constantValueLimiter = new ConstantValueLimiter<>(10);
@@ -239,7 +239,7 @@ public class CorrelationLimiterTest {
 
 
     private static class TestLimiter<T> extends ConstantValueLimiter<T> {
-        public TestLimiter(T object) {
+        TestLimiter(T object) {
             super(object);
         }
 

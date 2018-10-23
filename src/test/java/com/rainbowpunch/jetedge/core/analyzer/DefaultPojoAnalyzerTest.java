@@ -15,7 +15,8 @@ import static org.junit.Assert.assertEquals;
 public class DefaultPojoAnalyzerTest {
     @Test
     public void testDefaultPojoAnalyzer() {
-        Set<String> expectedFields = new HashSet<>(asList("hasTintedWindows", "name", "numWheels", "engineType", "owners", "maxSpeed", "salesPerson"));
+        Set<String> expectedFields = new HashSet<>(asList("hasTintedWindows", "name", "numWheels", "engineType",
+                "owners", "maxSpeed", "salesPerson"));
         Set<String> actualFields = Analyzers.DEFAULT.extractFields(ClassAttributes.create(Vehicle.class))
                 .map(FieldAttributes::getName)
                 .collect(toSet());

@@ -128,13 +128,16 @@ public class FloatLimiterTest {
                     final Stats stats = new Stats(args, randomFloats);
                     final long percentWithinStdDev = stats.percentWithinStdDevs(1);
 
-                    // we want at least {AT_LEAST_PERCENT_WITHIN_ONE_STDDEV}% to be within a single std dev (not normal, but still distributed ok
-                    String assertion = format("There should be at least %d percent of the values within one stddev, but was %d",
+                    // we want at least {AT_LEAST_PERCENT_WITHIN_ONE_STDDEV}% to be within a single std dev
+                    // (not normal, but still distributed ok
+                    String assertion = format("There should be at least %d percent of the values within one stddev, "
+                                    + "but was %d",
                             AT_LEAST_PERCENT_WITHIN_ONE_STDDEV, percentWithinStdDev);
                     assertTrue(assertion, percentWithinStdDev >= AT_LEAST_PERCENT_WITHIN_ONE_STDDEV);
 
                     // we don't want > {AT_MOST_PERCENT_WITHIN_ONE_STDDEV}% to be clumped in the center
-                    assertion = format("There should be at most %d percent of the values within one stddev, but was %d",
+                    assertion = format("There should be at most %d percent of the values within one stddev, "
+                                   +  "but was %d",
                             AT_MOST_PERCENT_WITHIN_ONE_STDDEV, percentWithinStdDev);
                     assertTrue(assertion, percentWithinStdDev < AT_MOST_PERCENT_WITHIN_ONE_STDDEV);
                 });
@@ -166,25 +169,29 @@ public class FloatLimiterTest {
         // we use the fl.getRange() and fl.getOffset because the float limiter
         // alters the values passed in to conform with the specified precision.
 
-        if (args.range != null && args.offset!= null) {
+        if (args.range != null && args.offset != null) {
             if (args.range < args.offset) {
                 assertTrue("with " + args + ", value " + generatedFloatValue + " should be within the range",
-                        generatedFloatValue > fl.getRange().floatValue() && generatedFloatValue <= fl.getOffset().floatValue());
+                        generatedFloatValue > fl.getRange().floatValue()
+                                && generatedFloatValue <= fl.getOffset().floatValue());
             } else {
                 assertTrue("with " + args + ", value " + generatedFloatValue + " should be within the range",
-                        generatedFloatValue >= fl.getOffset().floatValue() && generatedFloatValue < fl.getRange().floatValue());
+                        generatedFloatValue >= fl.getOffset().floatValue()
+                                && generatedFloatValue < fl.getRange().floatValue());
             }
         } else if (args.range != null) {
-            assertTrue("with " + args + ", range " + generatedFloatValue + " < " + fl.getRange(), Math.abs(generatedFloatValue) < Math.abs(fl.getRange().floatValue()));
-        }
-        else if (args.offset != null) {
-            assertTrue("with " + args + ", offset " + generatedFloatValue + " > " + fl.getOffset(), Math.abs(generatedFloatValue) >= Math.abs(fl.getOffset().floatValue()));
+            assertTrue("with " + args + ", range " + generatedFloatValue + " < " + fl.getRange(),
+                    Math.abs(generatedFloatValue) < Math.abs(fl.getRange().floatValue()));
+        } else if (args.offset != null) {
+            assertTrue("with " + args + ", offset " + generatedFloatValue + " > " + fl.getOffset(),
+                    Math.abs(generatedFloatValue) >= Math.abs(fl.getOffset().floatValue()));
         }
 
         if (args.precision != null) {
             String srf = Float.toString(generatedFloatValue);
             int decimalPoints = srf.length() - srf.indexOf('.') - 1;
-            assertTrue("with " + args + " " + generatedFloatValue + ", should have " + args.precision + " decimal points", decimalPoints <= args.precision);
+            assertTrue("with " + args + " " + generatedFloatValue + ", should have "
+                    + args.precision + " decimal points", decimalPoints <= args.precision);
         }
     }
 
@@ -206,7 +213,7 @@ public class FloatLimiterTest {
                     .toString();
         }
 
-        public ScenarioArguments(Float range, Float offset, Integer precision) {
+        ScenarioArguments(Float range, Float offset, Integer precision) {
             this.range = range;
             this.offset = offset;
             this.precision = precision;

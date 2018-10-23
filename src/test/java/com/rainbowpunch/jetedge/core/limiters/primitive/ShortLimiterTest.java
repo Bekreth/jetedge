@@ -40,7 +40,7 @@ public class ShortLimiterTest {
     public void testRangeLimitationSuccess() {
         ShortLimiter limiter = new ShortLimiter((short) 1000);
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             assertTrue(limiter.generateSupplier(random).get() < 1000);
         }
     }
@@ -49,7 +49,7 @@ public class ShortLimiterTest {
     public void testRangeOffsetLimitationSuccess() {
         ShortLimiter limiter = new ShortLimiter((short) 1000, (short) 1000);
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             Short output = limiter.generateSupplier(random).get();
             assertTrue(output >= 1000 && output < 2000);
         }
@@ -59,7 +59,7 @@ public class ShortLimiterTest {
     public void testRangeOffsetLimitationSuccess_negativeValues() {
         ShortLimiter limiter = new ShortLimiter((short) 1000, (short) -1000);
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             Short output = limiter.generateSupplier(random).get();
             assertTrue(output >= -1000 && output < 0);
         }

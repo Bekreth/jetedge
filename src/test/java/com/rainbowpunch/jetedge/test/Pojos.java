@@ -6,9 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 public final class Pojos {
-    private Pojos() {}
 
-    public static class Extra { }
+    private Pojos() {
+
+    }
+
+    public static class Extra {
+
+    }
 
     @Data
     public static class Person {

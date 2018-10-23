@@ -267,7 +267,8 @@ public class PojoGeneratorIntegrationTest {
 
     @Test
     public void testMultiplexLimiter() {
-        List<IntegerLimiter> limiters = Arrays.asList(new IntegerLimiter(10), new IntegerLimiter(10, 20), new IntegerLimiter(10, 40));
+        List<IntegerLimiter> limiters = Arrays.asList(new IntegerLimiter(10),
+                new IntegerLimiter(10, 20), new IntegerLimiter(10, 40));
 
         PojoGenerator<Person> generator = new PojoGeneratorBuilder<>(Person.class)
                 .andLimitField("age", MultiplexLimiter.generateFlatDistribution(limiters))
@@ -401,7 +402,8 @@ public class PojoGeneratorIntegrationTest {
     // Generic testing on Methods
     @Test
     public void testGenericInterfaceBeingPopulated() {
-        PojoGenerator<ClassExtendsWithSpecificGeneric> generator = new PojoGeneratorBuilder<>(ClassExtendsWithSpecificGeneric.class)
+        PojoGenerator<ClassExtendsWithSpecificGeneric> generator =
+                new PojoGeneratorBuilder<>(ClassExtendsWithSpecificGeneric.class)
                 .andLimitField("j", new ConstantValueLimiter<>("Hello World"))
                 .andLimitField("k", new ConstantValueLimiter<>(9876))
                 .build();
@@ -436,7 +438,8 @@ public class PojoGeneratorIntegrationTest {
 
     @Test
     public void testGenericWithPopulatedWithHint() {
-        PojoGenerator<ClassExtendsWithNoGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
+        PojoGenerator<ClassExtendsWithNoGenerics> generator =
+                new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
                 .andLimitField("j", new ConstantValueLimiter<>("Hello World"))
                 .andLimitField("k", new ConstantValueLimiter<>(9876))
                 .withGenericTypes(String.class, Integer.class)
@@ -449,7 +452,8 @@ public class PojoGeneratorIntegrationTest {
 
     @Test(expected = ConfusedGenericException.class)
     public void testGenericPopulatedWithHint_throwsException() {
-        PojoGenerator<ClassExtendsWithNoGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
+        PojoGenerator<ClassExtendsWithNoGenerics> generator =
+                new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
                 .andLimitField("j", new ConstantValueLimiter<>(1))
                 .withGenericTypes(String.class)
                 .build();
@@ -460,7 +464,8 @@ public class PojoGeneratorIntegrationTest {
     // Generic testing on Fields
     @Test
     public void testGenericInterfaceBeingPopulated_fieldAnalyzer() {
-        PojoGenerator<ClassExtendsWithSpecificGeneric> generator = new PojoGeneratorBuilder<>(ClassExtendsWithSpecificGeneric.class)
+        PojoGenerator<ClassExtendsWithSpecificGeneric> generator =
+                new PojoGeneratorBuilder<>(ClassExtendsWithSpecificGeneric.class)
                 .andUseAnalyzer(Analyzers.ALL_FIELDS)
                 .andLimitField("j", new ConstantValueLimiter<>("Hello World"))
                 .andLimitField("k", new ConstantValueLimiter<>(9876))
@@ -498,7 +503,8 @@ public class PojoGeneratorIntegrationTest {
 
     @Test
     public void testGenericWithPopulatedWithHint_fieldAnalyzer() {
-        PojoGenerator<ClassExtendsWithNoGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
+        PojoGenerator<ClassExtendsWithNoGenerics> generator =
+                new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
                 .andUseAnalyzer(Analyzers.ALL_FIELDS)
                 .andLimitField("j", new ConstantValueLimiter<>("Hello World"))
                 .andLimitField("k", new ConstantValueLimiter<>(9876))
@@ -512,7 +518,8 @@ public class PojoGeneratorIntegrationTest {
 
     @Test(expected = ConfusedGenericException.class)
     public void testGenericPopulatedWithHint_throwsException_fieldAnalyzer() {
-        PojoGenerator<ClassExtendsWithNoGenerics> generator = new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
+        PojoGenerator<ClassExtendsWithNoGenerics> generator =
+                new PojoGeneratorBuilder<>(ClassExtendsWithNoGenerics.class)
                 .andUseAnalyzer(Analyzers.ALL_FIELDS)
                 .andLimitField("j", new ConstantValueLimiter<>(1))
                 .withGenericTypes(String.class)
@@ -534,7 +541,7 @@ public class PojoGeneratorIntegrationTest {
         Person person = generator.generatePojo();
 
         assertEquals(14, person.getAge());
-        assertEquals("Jimmy is 14" , person.getName());
+        assertEquals("Jimmy is 14", person.getName());
     }
 
     @Test
@@ -549,7 +556,7 @@ public class PojoGeneratorIntegrationTest {
                 .lazilyEvaluate()
                 .build();
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             Person person = generator.generatePojo();
             int age = person.getAge();
             assertTrue(age >= 10 && age < 20);
@@ -562,8 +569,9 @@ public class PojoGeneratorIntegrationTest {
     public void testCorrelationLimiter_multipleDependencies() {
         PojoGenerator<Vehicle> generator = new PojoGeneratorBuilder<>(Vehicle.class)
                 .lazilyEvaluate()
-                .andLimitField("maxSpeed" , new IntegerLimiter(20, 50))
-                .andLimitField("numWheels", MultiplexLimiter.generateFlatDistribution(new ConstantValueLimiter<>(2), new ConstantValueLimiter<>(4)))
+                .andLimitField("maxSpeed", new IntegerLimiter(20, 50))
+                .andLimitField("numWheels", MultiplexLimiter.generateFlatDistribution(
+                        new ConstantValueLimiter<>(2), new ConstantValueLimiter<>(4)))
                 .andLimitField("name", new CorrelationLimiter<String>((random, supplierMap) -> {
                     int wheels = (Integer) supplierMap.get("numWheels").get();
                     int speed = (Integer) supplierMap.get("maxSpeed").get();
@@ -575,7 +583,7 @@ public class PojoGeneratorIntegrationTest {
                 }, Arrays.asList("maxSpeed", "numWheels")))
                 .build();
 
-        for (int i = 0; i < 100 ; i ++) {
+        for (int i = 0; i < 100; i++) {
             Vehicle vehicle = generator.generatePojo();
             String output = vehicle.getName();
             if (vehicle.getMaxSpeed() < 60) {

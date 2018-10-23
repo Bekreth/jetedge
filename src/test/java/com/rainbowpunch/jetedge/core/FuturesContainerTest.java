@@ -20,7 +20,7 @@ public class FuturesContainerTest {
     public void testFinishedPopulatingCheck_timeout() throws Exception {
         FuturesContainer container = new FuturesContainer();
         container.getCompletableFuture("hello.world");
-        container.getCompletableFuture( "goodnight.moon");
+        container.getCompletableFuture("goodnight.moon");
 
         CompletableFuture future = container.finishedPopulating();
         future.get(2, TimeUnit.SECONDS);
@@ -32,7 +32,7 @@ public class FuturesContainerTest {
         FuturesContainer container = new FuturesContainer();
 
         CompletableFuture<Tuple<Limiter<?>, Random>> future1 = container.getCompletableFuture("hello.world");
-        CompletableFuture<Tuple<Limiter<?>, Random>> future2 = container.getCompletableFuture( "goodnight.moon");
+        CompletableFuture<Tuple<Limiter<?>, Random>> future2 = container.getCompletableFuture("goodnight.moon");
 
         Random random1 = new Random();
         Random random2 = new Random();
@@ -51,7 +51,7 @@ public class FuturesContainerTest {
         FuturesContainer container = new FuturesContainer();
 
         CompletableFuture<Tuple<Limiter<?>, Random>> future1 = container.getCompletableFuture("hello.world");
-        CompletableFuture<Tuple<Limiter<?>, Random>> future2 = container.getCompletableFuture( "goodnight.moon");
+        CompletableFuture<Tuple<Limiter<?>, Random>> future2 = container.getCompletableFuture("goodnight.moon");
 
         Random random1 = new Random();
         Random random2 = new Random();
@@ -68,7 +68,7 @@ public class FuturesContainerTest {
     }
 
     private class TestTuple<T, U> extends Tuple<T, U> {
-        public TestTuple(T t, U u) {
+        TestTuple(T t, U u) {
             super(t, u);
             try {
                 Thread.sleep(1000);

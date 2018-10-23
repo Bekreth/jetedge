@@ -16,12 +16,12 @@ public class ArrayLimiterTest {
 
     @Test(expected = LimiterConstructionException.class)
     public void testNegativeRange() {
-        new ArrayLimiter(-1,4);
+        new ArrayLimiter(-1, 4);
     }
 
     @Test(expected = LimiterConstructionException.class)
     public void testNegativeOffset() {
-        new ArrayLimiter(1,-4);
+        new ArrayLimiter(1, -4);
     }
 
     @Test(expected = LimiterConstructionException.class)
@@ -58,7 +58,7 @@ public class ArrayLimiterTest {
         for (int i = 0; i < 10; i++) {
             Integer[] intList = ((Integer[]) intListLimiter.generateSupplier(new Random()).get());
             int size = intList.length;
-            assertTrue("Expected list size to be between 10-13, was " + size, size >=10 && size < 13);
+            assertTrue("Expected list size to be between 10-13, was " + size, size >= 10 && size < 13);
         }
     }
 

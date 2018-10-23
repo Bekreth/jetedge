@@ -42,7 +42,7 @@ public class BigDecimalLimiterTest {
         BigDecimal upperLimit = new BigDecimal("100.00");
         BigDecimal lowerLimit = new BigDecimal("000.00");
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             BigDecimal decimal = limiter.generateSupplier(random).get();
             assertTrue(decimal.compareTo(upperLimit) <= 0);
             assertTrue(decimal.compareTo(lowerLimit) >= 0);
@@ -55,7 +55,7 @@ public class BigDecimalLimiterTest {
         BigDecimal upperLimit = new BigDecimal("446.715");
         BigDecimal lowerLimit = new BigDecimal("000.000");
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             BigDecimal decimal = limiter.generateSupplier(random).get();
             assertTrue(decimal.compareTo(upperLimit) <= 0);
             assertTrue(decimal.compareTo(lowerLimit) >= 0);
@@ -68,7 +68,7 @@ public class BigDecimalLimiterTest {
         BigDecimal upperLimit = new BigDecimal("100.015");
         BigDecimal lowerLimit = new BigDecimal("-200.700");
 
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             BigDecimal decimal = limiter.generateSupplier(random).get();
             assertTrue(decimal.compareTo(upperLimit) <= 0);
             assertTrue(decimal.compareTo(lowerLimit) >= 0);

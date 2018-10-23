@@ -98,7 +98,6 @@ public class DefaultLimitersTest {
     }
 
     private enum InnerTestEnum {
-        ;
     }
 
 }
